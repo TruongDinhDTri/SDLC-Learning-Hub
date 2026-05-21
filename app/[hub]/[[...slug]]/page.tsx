@@ -412,7 +412,7 @@ function ArticleWithProgress({
           }}
         />
       </div>
-      <div ref={scrollRef} style={{ flex: 1, overflowY: 'auto', width: '100%', background: '#F7F3EC' }}>
+      <div ref={scrollRef} style={{ flex: 1, overflowY: 'auto', width: '100%' }}>
         {children}
       </div>
     </div>
@@ -631,12 +631,6 @@ export default function ArticlePage() {
             margin: '0 auto',
             padding: '0 48px',
             boxSizing: 'border-box',
-            background: 'var(--paper)',
-            borderLeft: '1px solid rgba(63,54,44,.06)',
-            borderRight: '1px solid rgba(63,54,44,.06)',
-            boxShadow: '0 0 48px rgba(40,30,24,.06)',
-            position: 'relative',
-            zIndex: 1,
           }}>
 
           {/* Article header */}
