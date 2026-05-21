@@ -412,7 +412,7 @@ function ArticleWithProgress({
           }}
         />
       </div>
-      <div ref={scrollRef} style={{ flex: 1, overflowY: 'auto' }}>
+      <div ref={scrollRef} style={{ flex: 1, overflowY: 'auto', width: '100%', background: '#F7F3EC' }}>
         {children}
       </div>
     </div>
@@ -594,12 +594,12 @@ export default function ArticlePage() {
       <MobileSidebarBackdrop />
       <Sidebar groups={SIDEBAR_GROUPS} collapsed={!showSidebar} />
 
-      <main style={{ flex: 1, minWidth: 0, height: '100vh', display: 'flex', overflow: 'hidden', position: 'relative' }}>
+      <main style={{ flex: 1, minWidth: 0, height: '100vh', display: 'flex', overflow: 'hidden', position: 'relative', background: 'var(--surface)' }}>
         {/* Sky gradient band */}
         <div style={{
-          position: 'absolute', top: 0, left: 0, right: 0, height: 140,
-          background: 'linear-gradient(180deg, #B6E9EE 0%, transparent 100%)',
-          zIndex: 0, pointerEvents: 'none', opacity: .7,
+          position: 'absolute', top: 0, left: 0, right: 0, height: 200,
+          background: 'linear-gradient(180deg, rgba(182,233,238,.35) 0%, transparent 100%)',
+          zIndex: 0, pointerEvents: 'none',
         }} />
 
         <ArticleWithProgress accentInk={a.ink}>
@@ -626,7 +626,18 @@ export default function ArticlePage() {
           </div>
 
           {/* Reading column — centered within the scrollable area */}
-          <div style={{ maxWidth: 1060, margin: '0 auto', padding: '0 40px', width: '100%', boxSizing: 'border-box' }}>
+          <div style={{
+            maxWidth: 1060,
+            margin: '0 auto',
+            padding: '0 48px',
+            boxSizing: 'border-box',
+            background: 'var(--paper)',
+            borderLeft: '1px solid rgba(63,54,44,.06)',
+            borderRight: '1px solid rgba(63,54,44,.06)',
+            boxShadow: '0 0 48px rgba(40,30,24,.06)',
+            position: 'relative',
+            zIndex: 1,
+          }}>
 
           {/* Article header */}
           <div style={{ padding: '32px 0 0' }}>
