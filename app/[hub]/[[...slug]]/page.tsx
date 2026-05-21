@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation'
-import { getHubs, getContentBySlug, getAllSlugs } from '@/lib/content'
+import { getHubs, getContentBySlug, getAllSlugs, getSearchEntries } from '@/lib/content'
 import { renderMdx } from '@/lib/mdx'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { TopBar } from '@/components/layout/TopBar'
@@ -39,6 +39,7 @@ export default async function ArticlePage({ params }: PageProps) {
 
   const hubs = getHubs()
   const tree = toTreeItems(hubs)
+  const searchEntries = getSearchEntries()
   const { content } = await renderMdx(data.raw)
   const fm = data.frontmatter
 
@@ -50,7 +51,7 @@ export default async function ArticlePage({ params }: PageProps) {
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh' }}>
-      <Sidebar tree={tree} currentPath={'/' + fullSlug.join('/')} />
+      <Sidebar tree={tree} currentPath={'/' + fullSlug.join('/')} searchEntries={searchEntries} />
 
       <div style={{ flex: 1, overflow: 'hidden', minWidth: 0 }}>
         <TopBar breadcrumb={breadcrumb} />

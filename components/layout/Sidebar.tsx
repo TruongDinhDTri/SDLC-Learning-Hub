@@ -1,13 +1,16 @@
 import { BrandMark } from './BrandMark'
 import { TreeNode, TreeItem } from './TreeNode'
 import { Icon } from '@/components/ui/Icon'
+import { SearchModal } from './SearchModal'
+import type { SearchEntry } from '@/lib/content'
 
 interface SidebarProps {
   tree: TreeItem[]
   currentPath?: string
+  searchEntries?: SearchEntry[]
 }
 
-export function Sidebar({ tree, currentPath = '' }: SidebarProps) {
+export function Sidebar({ tree, currentPath = '', searchEntries = [] }: SidebarProps) {
   return (
     <aside style={{
       width: 240,
@@ -32,30 +35,7 @@ export function Sidebar({ tree, currentPath = '' }: SidebarProps) {
 
       {/* Search */}
       <div style={{ padding: '0 12px 14px' }}>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 8,
-          background: 'rgba(255, 255, 255, 0.6)',
-          border: '1px solid var(--line)',
-          borderRadius: 8,
-          padding: '7px 10px',
-          fontSize: 12.5,
-          color: 'var(--ink-faint)',
-          cursor: 'pointer',
-        }}>
-          <Icon name="search" size={13} />
-          <span style={{ flex: 1 }}>Search the garden…</span>
-          <span style={{
-            fontSize: 10,
-            color: 'var(--ink-ghost)',
-            background: 'rgba(63,54,44,0.06)',
-            padding: '1px 5px',
-            borderRadius: 4,
-          }}>
-            ⌘K
-          </span>
-        </div>
+        <SearchModal entries={searchEntries} />
       </div>
 
       {/* Pinned section */}

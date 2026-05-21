@@ -93,6 +93,30 @@ export function getHubs(): ContentNode[] {
   })
 }
 
+export interface SearchEntry {
+  title: string
+  slug: string
+  description?: string
+  hub: string
+}
+
+export function getSearchEntries(): SearchEntry[] {
+  function flatten(nodes: ContentNode[], hubName: string): SearchEntry[] {
+    return nodes.flatMap(n => [
+      {
+        title: n.frontmatter.title ?? n.title,
+        slug: '/' + n.slug.join('/'),
+        description: n.frontmatter.description,
+        hub: hubName,
+      },
+      ...flatten(n.children, hubName),
+    ])
+  }
+  return getHubs().flatMap(hub =>
+    flatten([hub, ...hub.children], hub.frontmatter.title ?? hub.title)
+  )
+}
+
 export function getAllSlugs(): string[][] {
   function collect(nodes: ContentNode[]): string[][] {
     return nodes.flatMap(n => [n.slug, ...collect(n.children)])

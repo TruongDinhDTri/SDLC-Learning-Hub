@@ -1,4 +1,5 @@
 import { Breadcrumb, BreadcrumbItem } from './Breadcrumb'
+import { SeasonSwitcher } from './SeasonSwitcher'
 import { Avatar } from '@/components/ui/Avatar'
 
 interface TopBarProps {
@@ -33,6 +34,7 @@ export function TopBar({ breadcrumb = [], title }: TopBarProps) {
             {title}
           </span>
         )}
+        <SeasonSwitcher />
         <Avatar initials="T" />
       </div>
     </div>

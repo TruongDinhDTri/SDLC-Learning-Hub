@@ -1,4 +1,4 @@
-import { getHubs } from '@/lib/content'
+import { getHubs, getSearchEntries } from '@/lib/content'
 import { HubCard } from '@/components/dashboard/HubCard'
 import { StatCard } from '@/components/dashboard/StatCard'
 import { Sidebar } from '@/components/layout/Sidebar'
@@ -25,11 +25,12 @@ function countAllNodes(nodes: ContentNode[]): number {
 export default function Dashboard() {
   const hubs = getHubs()
   const tree = toTreeItems(hubs)
+  const searchEntries = getSearchEntries()
   const totalEntries = hubs.reduce((acc, h) => acc + countAllNodes(h.children), 0)
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh' }}>
-      <Sidebar tree={tree} />
+      <Sidebar tree={tree} searchEntries={searchEntries} />
 
       <div style={{ flex: 1, overflow: 'hidden', minWidth: 0 }}>
         <TopBar breadcrumb={[{ label: 'Garden' }]} title="おかえり" />
