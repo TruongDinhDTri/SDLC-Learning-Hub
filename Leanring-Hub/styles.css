@@ -1,0 +1,432 @@
+/* ============================================================
+   Hanami — Ghibli-inspired knowledge base
+   Design tokens & shared styles
+   ============================================================ */
+
+:root {
+  /* Palette — soft, dusty, warm */
+  --cream: #FBF6EE;
+  --cream-deep: #F5EDDF;
+  --paper: #FFFBF4;
+
+  --rose: #E8B4B0;
+  --rose-soft: #F5D6D2;
+  --rose-deep: #C4827E;
+
+  --peach: #F2C2A0;
+  --peach-soft: #FADFC9;
+  --peach-deep: #C68A63;
+
+  --sage: #B5C9A6;
+  --sage-soft: #D6E3CB;
+  --sage-deep: #7E9968;
+
+  --lavender: #C7BDD8;
+  --lavender-soft: #E2DCEB;
+
+  --sky: #B9D6E0;
+  --sky-soft: #DDEAEF;
+
+  /* Ink & neutrals — warm-toned, not pure black */
+  --ink: #3F362C;
+  --ink-soft: #6B5F52;
+  --ink-faint: #9C8E7E;
+  --ink-ghost: #C9BCAA;
+
+  /* Surfaces */
+  --line: rgba(63, 54, 44, 0.08);
+  --line-strong: rgba(63, 54, 44, 0.14);
+  --shadow-sm: 0 1px 2px rgba(120, 90, 60, 0.04), 0 2px 8px rgba(120, 90, 60, 0.06);
+  --shadow-md: 0 2px 6px rgba(120, 90, 60, 0.06), 0 10px 30px rgba(120, 90, 60, 0.08);
+  --shadow-lg: 0 4px 14px rgba(120, 90, 60, 0.08), 0 24px 60px rgba(120, 90, 60, 0.10);
+
+  /* Radii */
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-xl: 22px;
+  --r-2xl: 28px;
+
+  /* Type */
+  --font-display: 'Shippori Mincho', 'DM Serif Display', Georgia, serif;
+  --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-hand: 'Caveat', 'Comic Sans MS', cursive;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* ---------- Base artboard surface ---------- */
+.hanami-surface {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(1100px 700px at 92% -8%, rgba(232, 180, 176, 0.32), transparent 60%),
+    radial-gradient(900px 600px at -8% 110%, rgba(181, 201, 166, 0.28), transparent 60%),
+    radial-gradient(700px 500px at 50% 120%, rgba(242, 194, 160, 0.22), transparent 60%),
+    linear-gradient(180deg, #FCF5EC 0%, #FBF1E4 60%, #F8EAD8 100%);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.55;
+  overflow: hidden;
+  letter-spacing: -0.005em;
+}
+
+/* Meadow season — the new default (bright Ghibli sky + flower field) */
+:root[data-season="meadow"] .hanami-surface {
+  background:
+    radial-gradient(800px 500px at 80% 8%, rgba(255, 240, 200, 0.55), transparent 55%),
+    radial-gradient(900px 700px at 0% 100%, rgba(255, 180, 200, 0.18), transparent 65%),
+    linear-gradient(180deg, #6FD6E0 0%, #95E2EA 35%, #B9EDD9 65%, #CCEAB0 100%);
+}
+
+/* Pond season: deeper, cooler, mossier wash */
+:root[data-season="pond"] .hanami-surface {
+  background:
+    radial-gradient(900px 600px at 100% 0%, rgba(185, 214, 224, 0.55), transparent 60%),
+    radial-gradient(1100px 700px at -10% 110%, rgba(126, 153, 104, 0.32), transparent 60%),
+    radial-gradient(800px 600px at 60% 120%, rgba(123, 184, 180, 0.30), transparent 60%),
+    linear-gradient(180deg, #EEF4E8 0%, #E5EFDF 55%, #DCE9D4 100%);
+}
+:root[data-season="autumn"] .hanami-surface {
+  background:
+    radial-gradient(1100px 700px at 92% -8%, rgba(224, 169, 146, 0.35), transparent 60%),
+    radial-gradient(900px 600px at -8% 110%, rgba(201, 185, 138, 0.30), transparent 60%),
+    linear-gradient(180deg, #FBF3E5 0%, #F8EAD0 60%, #F3DCB7 100%);
+}
+:root[data-season="summer"] .hanami-surface {
+  background:
+    radial-gradient(1100px 700px at 92% -8%, rgba(185, 214, 224, 0.50), transparent 60%),
+    radial-gradient(900px 600px at -8% 110%, rgba(168, 207, 165, 0.30), transparent 60%),
+    linear-gradient(180deg, #EEF6F8 0%, #E8F1EE 60%, #DEEEDB 100%);
+}
+
+/* Paper grain overlay — soft canvas weave */
+.hb-paper .hanami-surface::after {
+  content: '';
+  position: absolute; inset: 0; pointer-events: none; z-index: 4;
+  background-image:
+    /* faint diagonal weave */
+    repeating-linear-gradient(45deg,
+      rgba(120, 95, 60, 0.025) 0 1px,
+      transparent 1px 3px),
+    repeating-linear-gradient(-45deg,
+      rgba(120, 95, 60, 0.018) 0 1px,
+      transparent 1px 4px);
+  mix-blend-mode: multiply;
+}
+.hb-paper .hanami-surface::before {
+  content: '';
+  position: absolute; inset: 0; pointer-events: none; z-index: 4;
+  background:
+    radial-gradient(140% 80% at 50% 0%, transparent 55%, rgba(80,60,40,.06) 100%),
+    radial-gradient(140% 80% at 50% 100%, transparent 55%, rgba(80,60,40,.05) 100%);
+  mix-blend-mode: multiply;
+}
+.hanami-surface * { box-sizing: border-box; }
+
+.hanami-surface .deco { position: absolute; pointer-events: none; z-index: 0; }
+.hanami-surface .deco svg { display: block; width: 100%; height: 100%; }
+.hanami-surface .deco--branch { opacity: var(--branch-opacity, 0.85); }
+.hanami-surface .deco--petals { opacity: var(--petal-opacity, 0.65); }
+
+/* ---------- Buttons & chips ---------- */
+.hb-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-body); font-weight: 500; font-size: 13px;
+  padding: 9px 14px; border-radius: 999px;
+  background: var(--paper);
+  border: 1px solid var(--line-strong);
+  color: var(--ink);
+  cursor: pointer;
+  transition: transform .15s, box-shadow .15s, background .15s;
+  box-shadow: var(--shadow-sm);
+}
+.hb-btn:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
+.hb-btn--primary {
+  background: linear-gradient(160deg, var(--peach) 0%, var(--rose) 100%);
+  border-color: transparent;
+  color: #4a2f23;
+  box-shadow: 0 6px 16px rgba(196, 130, 126, 0.32);
+}
+.hb-btn--ghost { background: transparent; border-color: var(--line); box-shadow: none; }
+.hb-btn--ghost:hover { background: rgba(255,255,255,0.5); box-shadow: var(--shadow-sm); }
+
+.hb-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11.5px; font-weight: 500; line-height: 1;
+  padding: 6px 10px; border-radius: 999px;
+  background: rgba(255,255,255,0.6);
+  border: 1px solid var(--line);
+  color: var(--ink-soft);
+  backdrop-filter: blur(6px);
+}
+
+/* ---------- Cards ---------- */
+.hb-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm);
+  position: relative;
+}
+.hb-card--soft {
+  background: rgba(255, 251, 244, 0.78);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* ---------- Status dots ---------- */
+.hb-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  display: inline-block; flex: 0 0 auto;
+}
+.hb-dot--rose   { background: var(--rose-deep); box-shadow: 0 0 0 3px rgba(228,180,176,.35); }
+.hb-dot--peach  { background: var(--peach-deep); box-shadow: 0 0 0 3px rgba(242,194,160,.4); }
+.hb-dot--sage   { background: var(--sage-deep); box-shadow: 0 0 0 3px rgba(181,201,166,.4); }
+.hb-dot--lav    { background: #9388A6; box-shadow: 0 0 0 3px rgba(199,189,216,.4); }
+.hb-dot--mute   { background: var(--ink-ghost); }
+.hb-dot--coral  { background: #D45A75; box-shadow: 0 0 0 3px rgba(255,143,163,.4); }
+.hb-dot--sun    { background: #E5A93C; box-shadow: 0 0 0 3px rgba(255,227,139,.5); }
+
+/* ---------- Progress bar (learning steps) ---------- */
+.hb-progress {
+  height: 6px; border-radius: 999px; background: rgba(63,54,44,.08);
+  position: relative; overflow: hidden;
+}
+.hb-progress__fill {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: linear-gradient(90deg, #FFB3C1, #FF8FA3 50%, #D45A75);
+  border-radius: 999px;
+  transition: width .6s cubic-bezier(.2,.7,.3,1);
+  box-shadow: 0 0 12px rgba(255,143,163,.5);
+}
+
+/* ---------- Pill chips (difficulty / time / etc) ---------- */
+.hb-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 600; letter-spacing: .04em;
+  padding: 5px 10px; border-radius: 999px;
+  background: rgba(255,255,255,.85);
+  border: 1px solid var(--line);
+  color: var(--ink-soft);
+}
+.hb-pill--coral  { background: rgba(255,143,163,.18); color: #B0445A; border-color: rgba(255,143,163,.3); }
+.hb-pill--sun    { background: rgba(255,227,139,.45); color: #8a6a18; border-color: rgba(229,169,60,.3); }
+.hb-pill--sky    { background: rgba(95,206,219,.22); color: #1d6975; border-color: rgba(95,206,219,.35); }
+.hb-pill--meadow { background: rgba(143,203,111,.25); color: #355a23; border-color: rgba(111,175,84,.35); }
+
+/* ---------- Margin note (handwritten) ---------- */
+.hb-margin-note {
+  font-family: var(--font-hand);
+  color: var(--rose-deep);
+  font-size: 17px; line-height: 1.2;
+  transform: rotate(-2deg);
+  display: inline-block;
+}
+
+/* ---------- Mono / code ---------- */
+.hb-mono { font-family: var(--font-mono); font-size: 12px; }
+.hb-code {
+  font-family: var(--font-mono); font-size: 12.5px;
+  background: #FFF7EC;
+  border: 1px dashed rgba(196,130,126,.35);
+  border-radius: var(--r-md);
+  padding: 14px 16px;
+  color: #5a4a3a;
+  line-height: 1.7;
+  white-space: pre;
+  overflow: hidden;
+}
+.hb-code .k { color: #B66B6B; }
+.hb-code .s { color: #7E9968; }
+.hb-code .c { color: var(--ink-faint); font-style: italic; }
+.hb-code .n { color: #C68A63; }
+
+/* ---------- Scrollbar (visual only, content is static) ---------- */
+.hb-scroll {
+  position: absolute; top: 12px; right: 6px; bottom: 12px; width: 4px;
+  background: rgba(63,54,44,0.04); border-radius: 4px;
+}
+.hb-scroll::after {
+  content: ''; position: absolute; left: 0; right: 0; top: 18%; height: 30%;
+  background: rgba(63,54,44,0.18); border-radius: 4px;
+}
+
+/* ---------- Phone frame ---------- */
+.hb-phone {
+  position: relative; width: 100%; height: 100%;
+  border-radius: 44px;
+  background: #2a241d;
+  padding: 12px;
+  box-shadow: 0 30px 80px rgba(80,60,40,.18), inset 0 0 0 1px rgba(255,255,255,.04);
+}
+.hb-phone__screen {
+  position: relative; width: 100%; height: 100%;
+  border-radius: 34px;
+  overflow: hidden;
+  background: var(--cream);
+}
+.hb-phone__notch {
+  position: absolute; top: 18px; left: 50%; transform: translateX(-50%);
+  width: 110px; height: 28px; border-radius: 999px;
+  background: #18130e; z-index: 50;
+}
+
+/* ---------- Decorative dividers ---------- */
+.hb-divider {
+  display: flex; align-items: center; gap: 10px; color: var(--ink-faint);
+  font-family: var(--font-hand); font-size: 16px;
+}
+.hb-divider::before, .hb-divider::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--line-strong), transparent);
+}
+
+/* ---------- Image placeholder ---------- */
+.hb-imgslot {
+  position: relative; overflow: hidden; border-radius: var(--r-lg);
+  background:
+    repeating-linear-gradient(135deg, rgba(196,130,126,.10) 0 10px, transparent 10px 20px),
+    linear-gradient(160deg, var(--rose-soft), var(--peach-soft));
+  border: 1px dashed rgba(196,130,126,.3);
+}
+.hb-imgslot__label {
+  position: absolute; inset: auto 10px 10px 10px;
+  font-family: var(--font-mono); font-size: 10px;
+  color: #6b4a44; opacity: .7;
+}
+
+/* ---------- Selection underline (hand drawn) ---------- */
+.hb-underline {
+  background-image: linear-gradient(transparent 62%, rgba(242,194,160,.55) 62%, rgba(242,194,160,.55) 90%, transparent 90%);
+  padding: 0 2px;
+}
+:root[data-season="pond"] .hb-underline {
+  background-image: linear-gradient(transparent 62%, rgba(123,184,180,.6) 62%, rgba(123,184,180,.6) 90%, transparent 90%);
+}
+
+/* ---------- Hub-card thumbnail slot ---------- */
+.hb-thumb {
+  width: 100%; height: 92px;
+  border-radius: 12px;
+  overflow: hidden;
+  background:
+    radial-gradient(140% 90% at 50% 100%, rgba(58,92,46,.35), transparent 60%),
+    linear-gradient(160deg, var(--peach-soft), var(--sage-soft));
+  position: relative;
+  border: 1px solid rgba(63,54,44,.05);
+  display: block;
+}
+.hb-thumb image-slot { width: 100%; height: 100%; display: block; }
+
+/* ---------- Painterly hero scene container ---------- */
+.hb-scene {
+  position: relative; border-radius: 20px; overflow: hidden;
+  box-shadow: var(--shadow-md);
+  background: linear-gradient(180deg, #cfe4ec, #7BB8B4);
+}
+.hb-scene image-slot { width: 100%; height: 100%; display: block; }
+.hb-scene__caption {
+  position: absolute; left: 18px; bottom: 14px;
+  font-family: var(--font-hand); color: white;
+  text-shadow: 0 1px 6px rgba(0,40,60,.45);
+  font-size: 20px; line-height: 1.1;
+}
+.hb-scene__meta {
+  position: absolute; right: 14px; top: 14px;
+  display: flex; gap: 6px;
+}
+
+/* Hide the scene block entirely when toggled off */
+.hb-no-scene .hb-scene-block { display: none !important; }
+
+/* ---------- Koi swim path (decorative) ---------- */
+@keyframes hb-koi-swim {
+  0%   { transform: translate(0, 0) rotate(0deg); }
+  25%  { transform: translate(20px, -8px) rotate(-6deg); }
+  50%  { transform: translate(40px, 0) rotate(0deg); }
+  75%  { transform: translate(20px, 8px) rotate(6deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+.hb-koi { animation: hb-koi-swim 7s ease-in-out infinite; }
+.hb-koi--slow { animation-duration: 11s; }
+.hb-koi--rev  { animation-direction: reverse; }
+
+/* ---------- Meadow animations ---------- */
+
+/* Gentle sway for grass/flowers — anchored at bottom */
+@keyframes hb-sway {
+  0%, 100% { transform: rotate(-3deg); }
+  50%      { transform: rotate(3deg); }
+}
+.hb-sway { animation: hb-sway 4.5s ease-in-out infinite; }
+.hb-sway--slow { animation-duration: 7s; }
+
+/* Slow cloud drift across hero */
+@keyframes hb-drift {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(40px); }
+}
+.hb-drift { animation: hb-drift 24s ease-in-out infinite alternate; }
+.hb-drift--rev { animation-direction: alternate-reverse; }
+
+/* Sun ray slow rotation */
+@keyframes hb-sun-rays {
+  to { transform: rotate(360deg); }
+}
+.hb-sun .hb-sun-rays { animation: hb-sun-rays 60s linear infinite; }
+
+/* Petal fall (very gentle, large arc) */
+@keyframes hb-fall {
+  0%   { transform: translate(0, -20vh) rotate(0deg); opacity: 0; }
+  10%  { opacity: 1; }
+  100% { transform: translate(60px, 110vh) rotate(720deg); opacity: 0; }
+}
+.hb-fall { animation: hb-fall 18s linear infinite; }
+
+/* Card hover lift (used on hub cards, entry cards) */
+.hb-lift { transition: transform .35s cubic-bezier(.2,.7,.3,1), box-shadow .35s; }
+.hb-lift:hover {
+  transform: translateY(-3px) rotate(-.4deg);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Step appear (when a step opens) */
+@keyframes hb-step-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.hb-step-in { animation: hb-step-in .35s ease-out; }
+
+/* Marker-pen highlight that sweeps in */
+@keyframes hb-marker {
+  from { background-size: 0% 50%; }
+  to   { background-size: 100% 50%; }
+}
+.hb-marker {
+  background-image: linear-gradient(transparent 55%, rgba(255, 201, 58, .55) 55%, rgba(255, 201, 58, .55) 92%, transparent 92%);
+  background-repeat: no-repeat;
+  background-position: 0 0.85em;
+  background-size: 100% 50%;
+  padding: 0 4px;
+  animation: hb-marker .8s ease-out;
+}
+
+/* Pulsing dot (for "live" status indicators) */
+@keyframes hb-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 143, 163, .6); }
+  50%      { box-shadow: 0 0 0 6px rgba(255, 143, 163, 0); }
+}
+.hb-pulse { animation: hb-pulse 2s ease-out infinite; }
+
+/* Soft blink (cursor) */
+@keyframes hb-blink { 50% { opacity: 0; } }
+.hb-blink { animation: hb-blink 1s steps(1) infinite; }
+
+/* Bobble — fun for "fresh" badges */
+@keyframes hb-bobble {
+  0%, 100% { transform: rotate(-4deg) translateY(0); }
+  50%      { transform: rotate(4deg) translateY(-2px); }
+}
+.hb-bobble { animation: hb-bobble 3s ease-in-out infinite; }

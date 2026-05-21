@@ -1,49 +1,26 @@
-function lcg(seed: number): number {
-  return ((seed * 1664525 + 1013904223) & 0xffffffff) >>> 0
-}
-
-interface PetalData {
-  x: number; y: number; rot: number; scale: number; opacity: number
-}
-
-export function PetalScatter({
-  count = 18,
-  width = 400,
-  height = 300,
-  className = '',
-}: {
-  count?: number
-  width?: number
-  height?: number
-  className?: string
-}) {
-  const petals: PetalData[] = []
-  let s = 42
-  for (let i = 0; i < count; i++) {
-    s = lcg(s); const x = s % width
-    s = lcg(s); const y = s % height
-    s = lcg(s); const rot = s % 360
-    s = lcg(s); const scale = 0.6 + (s % 100) / 200
-    s = lcg(s); const opacity = 0.35 + (s % 40) / 100
-    petals.push({ x, y, rot, scale, opacity })
+export function PetalScatter({ count = 14, seed = 1 }: { count?: number; seed?: number }) {
+  const rng = (n: number) => {
+    const x = Math.sin(n * 9301 + seed * 49297) * 233280
+    return x - Math.floor(x)
   }
-
+  const hues = ['#F5D6D2', '#FADFC9', '#E8B4B0', '#F2C2A0']
   return (
-    <svg
-      viewBox={`0 0 ${width} ${height}`}
-      className={className}
-      style={{ opacity: 'var(--petal-opacity, 0.65)' }}
-    >
-      {petals.map((p, i) => (
-        <ellipse
-          key={i}
-          cx={p.x} cy={p.y}
-          rx={4 * p.scale} ry={6 * p.scale}
-          transform={`rotate(${p.rot},${p.x},${p.y})`}
-          fill="var(--rose-soft)"
-          opacity={p.opacity}
-        />
-      ))}
-    </svg>
+    <div className="deco deco--petals" style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
+      {Array.from({ length: count }).map((_, i) => {
+        const left = rng(i + 1) * 100
+        const top = rng(i + 1.5) * 100
+        const rotate = rng(i + 2) * 360
+        const size = 6 + rng(i + 3) * 8
+        const opacity = 0.45 + rng(i + 4) * 0.35
+        const hue = hues[i % hues.length]
+        return (
+          <svg key={i} viewBox="0 0 24 24" width={size} height={size}
+            style={{ position: 'absolute', left: `${left}%`, top: `${top}%`, transform: `rotate(${rotate}deg)`, opacity }}>
+            <path d="M12 2 C 8 6, 8 12, 12 16 C 16 12, 16 6, 12 2 Z" fill={hue} />
+            <path d="M12 4 C 10 7, 10 12, 12 15" stroke="rgba(170,90,90,.35)" strokeWidth=".6" fill="none" />
+          </svg>
+        )
+      })}
+    </div>
   )
 }

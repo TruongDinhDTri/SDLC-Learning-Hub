@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=1240" />
+  <title>Hanami — Knowledge Garden</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Caveat:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    html, body { margin: 0; padding: 0; background: #efece6; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
+    #root { min-height: 100vh; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <script src="image-slot.js"></script>
+  <script type="text/babel" src="design-canvas.jsx"></script>
+  <script type="text/babel" src="tweaks-panel.jsx"></script>
+  <script type="text/babel" src="decorations.jsx"></script>
+  <script type="text/babel" src="components.jsx"></script>
+  <script type="text/babel" src="artboards.jsx"></script>
+  <script type="text/babel" src="screens-extra.jsx"></script>
+  <script type="text/babel" src="content-blocks.jsx"></script>
+  <script type="text/babel" src="content-showcases.jsx"></script>
+
+  <script type="text/babel">
+    const { useEffect } = React;
+
+    const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+      "season": "summer",
+      "petalDensity": "lush",
+      "branchOpacity": 1,
+      "displayFont": "Shippori Mincho",
+      "showHand": true,
+      "paperTexture": true,
+      "showScene": true
+    }/*EDITMODE-END*/;
+
+    // Apply tweaks as CSS variables / classes on <html>
+    const applyTweaks = (t) => {
+      const root = document.documentElement;
+      // Season palette swaps
+      if (t.season === 'meadow') {
+        // The bright Ghibli meadow: coral flowers, vivid grass, turquoise sky
+        root.style.setProperty('--rose',      '#FF8FA3');
+        root.style.setProperty('--rose-soft', '#FFC8D2');
+        root.style.setProperty('--rose-deep', '#D45A75');
+        root.style.setProperty('--peach',     '#5FCEDB');  // sky teal
+        root.style.setProperty('--peach-soft','#B6E9EE');
+        root.style.setProperty('--peach-deep','#1D6975');
+        root.style.setProperty('--sage',      '#8FCB6F');
+        root.style.setProperty('--sage-soft', '#C4E3AC');
+        root.style.setProperty('--sage-deep', '#447A2A');
+      } else if (t.season === 'spring') {
+        root.style.setProperty('--rose',      '#E8B4B0');
+        root.style.setProperty('--rose-soft', '#F5D6D2');
+        root.style.setProperty('--rose-deep', '#C4827E');
+        root.style.setProperty('--peach',     '#F2C2A0');
+        root.style.setProperty('--peach-soft','#FADFC9');
+        root.style.setProperty('--peach-deep','#C68A63');
+        root.style.setProperty('--sage',      '#B5C9A6');
+        root.style.setProperty('--sage-soft', '#D6E3CB');
+        root.style.setProperty('--sage-deep', '#7E9968');
+      } else if (t.season === 'summer') {
+        root.style.setProperty('--rose',      '#B9D6E0');
+        root.style.setProperty('--rose-soft', '#DDEAEF');
+        root.style.setProperty('--rose-deep', '#6E94A0');
+        root.style.setProperty('--peach',     '#E8E0B5');
+        root.style.setProperty('--peach-soft','#F2EDD2');
+        root.style.setProperty('--peach-deep','#9E8E54');
+        root.style.setProperty('--sage',      '#A8CFA5');
+        root.style.setProperty('--sage-soft', '#CFE3C7');
+        root.style.setProperty('--sage-deep', '#5F8a5C');
+      } else if (t.season === 'autumn') {
+        root.style.setProperty('--rose',      '#E0A992');
+        root.style.setProperty('--rose-soft', '#F0CFBF');
+        root.style.setProperty('--rose-deep', '#B36B4E');
+        root.style.setProperty('--peach',     '#E8B574');
+        root.style.setProperty('--peach-soft','#F1D2A5');
+        root.style.setProperty('--peach-deep','#A87330');
+        root.style.setProperty('--sage',      '#C9B98A');
+        root.style.setProperty('--sage-soft', '#E0D6B7');
+        root.style.setProperty('--sage-deep', '#8A7948');
+      } else if (t.season === 'pond') {
+        // Lush summer pond — deep mossy greens, teal water, koi orange
+        root.style.setProperty('--rose',      '#E07A4A');
+        root.style.setProperty('--rose-soft', '#F3B898');
+        root.style.setProperty('--rose-deep', '#B0431C');
+        root.style.setProperty('--peach',     '#7BB8B4');
+        root.style.setProperty('--peach-soft','#B6D8D6');
+        root.style.setProperty('--peach-deep','#3F7C7A');
+        root.style.setProperty('--sage',      '#7E9968');
+        root.style.setProperty('--sage-soft', '#B4C99A');
+        root.style.setProperty('--sage-deep', '#3A5C2E');
+      }
+      root.dataset.season = t.season;
+      // Display font
+      root.style.setProperty('--font-display',
+        t.displayFont === 'DM Serif Display' ? "'DM Serif Display', Georgia, serif"
+        : t.displayFont === 'Caveat' ? "'Caveat', cursive"
+        : "'Shippori Mincho', Georgia, serif"
+      );
+      root.classList.toggle('hb-no-hand', !t.showHand);
+      root.classList.toggle('hb-paper', !!t.paperTexture);
+      root.classList.toggle('hb-no-scene', !t.showScene);
+      // Branch opacity & petal density via custom props consumed by decorations.
+      root.style.setProperty('--branch-opacity', String(t.branchOpacity));
+      const densMap = { quiet: 0.25, medium: 0.65, lush: 1.1 };
+      root.style.setProperty('--petal-opacity', String(densMap[t.petalDensity] ?? 0.65));
+    };
+
+    const App = () => {
+      const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+      useEffect(() => { applyTweaks(t); }, [t.season, t.displayFont, t.showHand, t.branchOpacity, t.petalDensity]);
+
+      return (
+        <React.Fragment>
+          <DesignCanvas title="Hanami · Developer Knowledge Garden"
+            subtitle="Ghibli-inspired playbook · desktop + mobile">
+            <DCSection id="desktop" title="Desktop" subtitle="1440 × 900">
+              <DCArtboard id="dash" label="Dashboard · Hub" width={1440} height={900}>
+                <DesktopDashboard />
+              </DCArtboard>
+              <DCArtboard id="browse" label="Browse · Hub detail" width={1440} height={900}>
+                <DesktopBrowse />
+              </DCArtboard>
+              <DCArtboard id="article" label="Content view · Playbook" width={1440} height={900}>
+                <DesktopArticle />
+              </DCArtboard>
+              <DCArtboard id="compose" label="Composer · Editor + Preview" width={1440} height={900}>
+                <DesktopComposer />
+              </DCArtboard>
+            </DCSection>
+            <DCSection id="content" title="Content presentation" subtitle="How everything reads inside a page">
+              <DCArtboard id="show1" label="Reading · typography, quotes, lists, callouts" width={1440} height={2600}>
+                <ContentShowcaseReading />
+              </DCArtboard>
+              <DCArtboard id="show2" label="Technical · code, terminal, diff, table, do/don't" width={1440} height={2900}>
+                <ContentShowcaseTechnical />
+              </DCArtboard>
+            </DCSection>
+            <DCSection id="mobile" title="Mobile" subtitle="iPhone · 390 × 844">
+              <DCArtboard id="m-dash" label="Dashboard" width={414} height={868}>
+                <MobileDashboard />
+              </DCArtboard>
+              <DCArtboard id="m-browse" label="Browse" width={414} height={868}>
+                <MobileBrowse />
+              </DCArtboard>
+              <DCArtboard id="m-article" label="Playbook" width={414} height={868}>
+                <MobileArticle />
+              </DCArtboard>
+              <DCArtboard id="m-compose" label="Composer" width={414} height={868}>
+                <MobileComposer />
+              </DCArtboard>
+            </DCSection>
+          </DesignCanvas>
+
+          <TweaksPanel title="Tweaks">
+            <TweakSection label="Mood">
+              <TweakSelect label="Season" value={t.season}
+                options={['meadow', 'spring', 'summer', 'autumn', 'pond']}
+                onChange={v => setTweak('season', v)} />
+              <TweakRadio label="Petals" value={t.petalDensity}
+                options={['quiet', 'medium', 'lush']}
+                onChange={v => setTweak('petalDensity', v)} />
+              <TweakSlider label="Sakura branch opacity"
+                value={t.branchOpacity} min={0} max={1} step={0.05}
+                onChange={v => setTweak('branchOpacity', v)} />
+              <TweakToggle label="Paper texture" value={t.paperTexture}
+                onChange={v => setTweak('paperTexture', v)} />
+              <TweakToggle label="Painterly hero scene" value={t.showScene}
+                onChange={v => setTweak('showScene', v)} />
+            </TweakSection>
+            <TweakSection label="Type">
+              <TweakSelect label="Display font" value={t.displayFont}
+                options={['Shippori Mincho', 'DM Serif Display', 'Caveat']}
+                onChange={v => setTweak('displayFont', v)} />
+              <TweakToggle label="Handwritten accents" value={t.showHand}
+                onChange={v => setTweak('showHand', v)} />
+            </TweakSection>
+          </TweaksPanel>
+        </React.Fragment>
+      );
+    };
+
+    // Wait for all babel scripts to load before mounting
+    const mount = () => {
+      if (!window.DesignCanvas || !window.TweaksPanel || !window.DesktopDashboard
+          || !window.DesktopBrowse || !window.DesktopComposer
+          || !window.ContentShowcaseReading || !window.ContentShowcaseTechnical) {
+        return requestAnimationFrame(mount);
+      }
+      ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    };
+    mount();
+  </script>
+
+  <style>
+    /* Honor tweaks at runtime */
+    .hb-no-hand [class*="font-hand"],
+    .hb-no-hand [style*="font-hand"] { display: none !important; }
+  </style>
+</body>
+</html>

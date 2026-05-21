@@ -1,22 +1,19 @@
-export function Avatar({ initials = 'T', size = 32 }: { initials?: string; size?: number }) {
+export function Avatar({ initials = 'T', hue = '#E8B4B0' }: { initials?: string; hue?: string }) {
   return (
-    <div
-      style={{
-        width: size,
-        height: size,
-        borderRadius: '50%',
-        background: 'linear-gradient(135deg, var(--peach), var(--rose))',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontSize: size * 0.38,
-        fontWeight: 600,
-        color: '#4a2f23',
-        fontFamily: 'var(--font-body)',
-        flexShrink: 0,
-        userSelect: 'none',
-      }}
-    >
+    <div style={{
+      width: 32,
+      height: 32,
+      borderRadius: '50%',
+      background: `linear-gradient(160deg, ${hue}, #F5D6D2)`,
+      color: '#5a3a2f',
+      display: 'grid',
+      placeItems: 'center',
+      fontFamily: 'var(--font-display)',
+      fontSize: 12,
+      fontWeight: 600,
+      boxShadow: 'inset 0 0 0 1.5px rgba(255,255,255,.5)',
+      flexShrink: 0,
+    }}>
       {initials}
     </div>
   )

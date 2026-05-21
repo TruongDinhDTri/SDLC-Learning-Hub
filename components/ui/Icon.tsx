@@ -1,61 +1,64 @@
-const paths: Record<string, string | string[]> = {
-  folder: 'M2 6h5l2-2h9a1 1 0 011 1v11a1 1 0 01-1 1H2a1 1 0 01-1-1V7a1 1 0 011-1z',
-  file: ['M4 2h9l5 5v13a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z', 'M13 2v5h5'],
-  chevronRight: 'M9 5l7 7-7 7',
-  chevronDown: 'M5 9l7 7 7-7',
-  search: ['M11 11m-4 0a4 4 0 108 0 4 4 0 00-8 0z', 'M21 21l-4.35-4.35'],
-  sun: ['M12 12m-4 0a4 4 0 108 0 4 4 0 00-4 0z', 'M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42'],
-  moon: 'M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z',
-  plus: 'M12 5v14M5 12h14',
-  star: 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z',
-  bookmark: 'M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z',
-  tag: 'M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82zM7 7h.01',
-  book: ['M4 19.5A2.5 2.5 0 016.5 17H20', 'M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z'],
-  clock: ['M12 12m-9 0a9 9 0 1018 0 9 9 0 00-18 0z', 'M12 7v5l3 3'],
-  sparkle: 'M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5L12 2zM5 16l.75 2.25L8 19l-2.25.75L5 22l-.75-2.25L2 19l2.25-.75L5 16zM19 14l.5 1.5L21 16l-1.5.5L19 18l-.5-1.5L17 16l1.5-.5L19 14z',
-  leaf: 'M17 8C8 10 5.9 16.17 3.82 19.92 3.82 19.92 8 20 12 15c0 0-2 5 5 7 0 0 3-4 1-8s-7-4-7-4 4-4 6-4z',
-  arrowRight: 'M5 12h14M12 5l7 7-7 7',
-  home: ['M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z', 'M9 22V12h6v10'],
-  flame: 'M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 11-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 002.5 2.5z',
-  git: ['M18 15a3 3 0 100-6 3 3 0 000 6z', 'M6 9a3 3 0 100-6 3 3 0 000 6z', 'M6 21a3 3 0 100-6 3 3 0 000 6z', 'M18 12h-6M6 9v6'],
-  db: ['M12 12m-9 0a9 3 0 1018 0 9 3 0 00-18 0z', 'M3 12v6a9 3 0 0018 0v-6', 'M3 6v6a9 3 0 0018 0V6'],
-  bug: ['M8 2l1.88 1.88M14.12 3.88 16 2', 'M9 7.13v-1a3.003 3.003 0 116 0v1', 'M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 018 0v3c0 3.3-2.7 6-6 6z', 'M12 20v-9'],
-  cmd: 'M18 3a3 3 0 00-3 3v12a3 3 0 003 3 3 3 0 003-3 3 3 0 00-3-3H6a3 3 0 00-3 3 3 3 0 003 3 3 3 0 003-3V6a3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3h12a3 3 0 003-3 3 3 0 00-3-3z',
-  layers: ['M12 2L2 7l10 5 10-5-10-5z', 'M2 17l10 5 10-5', 'M2 12l10 5 10-5'],
-  menu: 'M3 12h18M3 6h18M3 18h18',
-  dots: 'M12 13a1 1 0 100-2 1 1 0 000 2zM19 13a1 1 0 100-2 1 1 0 000 2zM5 13a1 1 0 100-2 1 1 0 000 2z',
-  check: 'M20 6L9 17l-5-5',
-  copy: ['M8 8H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-2', 'M8 8V6a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2h-2'],
-  eye: ['M1 12S5 4 12 4s11 8 11 8-4 8-11 8S1 12 1 12z', 'M12 15a3 3 0 100-6 3 3 0 000 6z'],
-  pin: ['M12 17v5', 'M5 17h14v-1.76a2 2 0 00-1.11-1.79l-1.78-.9A2 2 0 0115 10.76V6h1a2 2 0 000-4H8a2 2 0 000 4h1v4.76a2 2 0 01-1.11 1.79l-1.78.9A2 2 0 005 15.24V17z'],
+import type { CSSProperties } from 'react'
+
+const PATHS: Record<string, React.ReactNode> = {
+  folder:       <><path d="M3 7 L3 17 Q3 18 4 18 L20 18 Q21 18 21 17 L21 9 Q21 8 20 8 L11 8 L9 6 L4 6 Q3 6 3 7 Z" /></>,
+  file:         <><path d="M6 4 L14 4 L18 8 L18 20 Q18 21 17 21 L6 21 Q5 21 5 20 L5 5 Q5 4 6 4 Z" /><path d="M14 4 L14 8 L18 8" /></>,
+  chevronRight: <><path d="M9 6 L15 12 L9 18" /></>,
+  chevronDown:  <><path d="M6 9 L12 15 L18 9" /></>,
+  chevron:      <><path d="M9 6 L15 12 L9 18" /></>,
+  search:       <><circle cx="11" cy="11" r="6" /><path d="M16 16 L21 21" /></>,
+  sun:          <><circle cx="12" cy="12" r="4" /><path d="M12 2 L12 5 M12 19 L12 22 M2 12 L5 12 M19 12 L22 12 M4.5 4.5 L6.5 6.5 M17.5 17.5 L19.5 19.5 M4.5 19.5 L6.5 17.5 M17.5 6.5 L19.5 4.5" /></>,
+  moon:         <><path d="M20 14 Q15 19 9 17 Q4 14 5 8 Q6 4 11 3 Q9 9 13 13 Q17 16 20 14 Z" /></>,
+  plus:         <><path d="M12 5 L12 19 M5 12 L19 12" /></>,
+  star:         <><path d="M12 4 L14 10 L20 10 L15 14 L17 20 L12 16 L7 20 L9 14 L4 10 L10 10 Z" /></>,
+  bookmark:     <><path d="M7 4 L17 4 Q18 4 18 5 L18 20 L12 16 L6 20 L6 5 Q6 4 7 4 Z" /></>,
+  tag:          <><path d="M3 12 L12 3 L21 3 L21 12 L12 21 Z" /><circle cx="16" cy="8" r="1.4" /></>,
+  book:         <><path d="M4 5 Q4 4 5 4 L19 4 L19 19 L5 19 Q4 19 4 20 L4 5 Z M4 19 Q4 18 5 18 L19 18" /></>,
+  clock:        <><circle cx="12" cy="12" r="8" /><path d="M12 7 L12 12 L16 14" /></>,
+  sparkle:      <><path d="M12 3 L13.5 10 L20 11.5 L13.5 13 L12 20 L10.5 13 L4 11.5 L10.5 10 Z" /><path d="M19 4 L19.6 6 L21.5 6.5 L19.6 7 L19 9 L18.4 7 L16.5 6.5 L18.4 6 Z" /></>,
+  leaf:         <><path d="M5 19 Q4 11 11 5 Q19 4 19 12 Q19 19 11 19 Q8 19 5 19 Z" /><path d="M5 19 L13 11" /></>,
+  pin:          <><path d="M12 3 L17 8 L14 11 L16 18 L12 15 L8 18 L10 11 L7 8 Z" /></>,
+  arrow:        <><path d="M5 12 L19 12 M13 6 L19 12 L13 18" /></>,
+  home:         <><path d="M4 11 L12 4 L20 11 L20 19 Q20 20 19 20 L14 20 L14 14 L10 14 L10 20 L5 20 Q4 20 4 19 Z" /></>,
+  flame:        <><path d="M12 3 Q10 7 8 9 Q5 12 6 16 Q7 20 12 20 Q17 20 18 16 Q19 12 16 9 Q13 7 12 3 Z" /></>,
+  git:          <><circle cx="6" cy="6" r="2" /><circle cx="6" cy="18" r="2" /><circle cx="18" cy="12" r="2" /><path d="M6 8 L6 16 M8 6 Q12 6 12 10 L12 14 Q12 18 8 18 M12 12 L16 12" /></>,
+  db:           <><ellipse cx="12" cy="6" rx="7" ry="3" /><path d="M5 6 L5 12 Q5 15 12 15 Q19 15 19 12 L19 6 M5 12 L5 18 Q5 21 12 21 Q19 21 19 18 L19 12" /></>,
+  bug:          <><ellipse cx="12" cy="13" rx="5" ry="6" /><path d="M12 7 L12 6 M9 4 L11 6 M15 4 L13 6 M5 11 L7 12 M5 17 L7 16 M19 11 L17 12 M19 17 L17 16 M12 9 L12 19" /></>,
+  cmd:          <><path d="M6 6 Q4 6 4 8 Q4 10 6 10 L18 10 Q20 10 20 8 Q20 6 18 6 Q16 6 16 8 L16 16 Q16 18 18 18 Q20 18 20 16 Q20 14 18 14 L6 14 Q4 14 4 16 Q4 18 6 18 Q8 18 8 16 L8 8 Q8 6 6 6 Z" /></>,
+  layers:       <><path d="M12 3 L21 8 L12 13 L3 8 Z M3 13 L12 18 L21 13 M3 18 L12 23 L21 18" /></>,
+  menu:         <><path d="M4 7 L20 7 M4 12 L20 12 M4 17 L20 17" /></>,
+  dots:         <><circle cx="5" cy="12" r="1.4" /><circle cx="12" cy="12" r="1.4" /><circle cx="19" cy="12" r="1.4" /></>,
+  check:        <><path d="M5 12 L10 17 L20 6" /></>,
+  copy:         <><rect x="7" y="7" width="13" height="13" rx="2" /><path d="M5 14 L5 5 Q5 4 6 4 L15 4" /></>,
+  eye:          <><path d="M2 12 Q7 5 12 5 Q17 5 22 12 Q17 19 12 19 Q7 19 2 12 Z" /><circle cx="12" cy="12" r="3" /></>,
 }
 
-export type IconName = keyof typeof paths
+export type IconName = keyof typeof PATHS
 
 interface IconProps {
   name: IconName
   size?: number
-  className?: string
+  color?: string
   strokeWidth?: number
-  style?: React.CSSProperties
+  style?: CSSProperties
+  className?: string
 }
 
-export function Icon({ name, size = 16, className = '', strokeWidth = 1.75, style }: IconProps) {
-  const d = paths[name]
-  const pathList = Array.isArray(d) ? d : [d]
+export function Icon({ name, size = 16, color = 'currentColor', strokeWidth = 1.6, style, className }: IconProps) {
   return (
     <svg
-      width={size} height={size}
       viewBox="0 0 24 24"
+      width={size}
+      height={size}
       fill="none"
-      stroke="currentColor"
+      stroke={color}
       strokeWidth={strokeWidth}
       strokeLinecap="round"
       strokeLinejoin="round"
-      className={className}
       style={style}
+      className={className}
     >
-      {pathList.map((p, i) => <path key={i} d={p} />)}
+      {PATHS[name] ?? null}
     </svg>
   )
 }

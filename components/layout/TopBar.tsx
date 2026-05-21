@@ -1,42 +1,130 @@
-import { Breadcrumb, BreadcrumbItem } from './Breadcrumb'
-import { SeasonSwitcher } from './SeasonSwitcher'
+'use client'
+
+import { useState } from 'react'
+import Link from 'next/link'
+import { Icon } from '@/components/ui/Icon'
 import { Avatar } from '@/components/ui/Avatar'
+
+interface BreadcrumbItem {
+  label: string
+  href?: string
+  icon?: string
+}
 
 interface TopBarProps {
   breadcrumb?: BreadcrumbItem[]
-  title?: string
+  actions?: React.ReactNode
 }
 
-export function TopBar({ breadcrumb = [], title }: TopBarProps) {
+const SEASONS = [
+  { key: 'pond',   label: '池', name: 'Pond' },
+  { key: 'spring', label: '春', name: 'Spring' },
+  { key: 'summer', label: '夏', name: 'Summer' },
+  { key: 'autumn', label: '秋', name: 'Autumn' },
+] as const
+
+function SeasonBtn() {
+  const [idx, setIdx] = useState(0)
+  const cycle = () => {
+    const next = (idx + 1) % SEASONS.length
+    setIdx(next)
+    document.documentElement.dataset.season = SEASONS[next].key
+  }
+  return (
+    <button className="hb-btn hb-btn--ghost" onClick={cycle} style={{ padding: '7px 12px' }}>
+      <Icon name="sun" size={13} />
+      <span style={{ fontFamily: 'var(--font-hand)', fontSize: 15 }}>
+        {SEASONS[idx].label}
+      </span>
+    </button>
+  )
+}
+
+function MobileHamburger() {
+  const toggle = () => {
+    const sidebar = document.querySelector('.hanami-sidebar')
+    const backdrop = document.querySelector('.hb-sidebar-backdrop')
+    const isOpen = sidebar?.classList.contains('sidebar-open')
+    sidebar?.classList.toggle('sidebar-open', !isOpen)
+    backdrop?.classList.toggle('sidebar-open', !isOpen)
+  }
+  return (
+    <button
+      className="hb-hamburger"
+      onClick={toggle}
+      style={{
+        display: 'none',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 36,
+        height: 36,
+        borderRadius: 8,
+        border: '1px solid var(--line)',
+        background: 'rgba(255,255,255,0.6)',
+        cursor: 'pointer',
+        flexShrink: 0,
+      }}
+    >
+      <Icon name="menu" size={18} color="var(--ink-soft)" />
+    </button>
+  )
+}
+
+export function TopBar({ breadcrumb = [], actions }: TopBarProps) {
   return (
     <div style={{
-      height: 52,
+      height: 60,
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'space-between',
-      padding: '0 28px',
+      gap: 16,
+      padding: '0 32px',
       borderBottom: '1px solid var(--line)',
-      background: 'rgba(255, 251, 244, 0.6)',
-      backdropFilter: 'blur(8px)',
-      WebkitBackdropFilter: 'blur(8px)',
+      background: 'rgba(255,251,244,.55)',
+      backdropFilter: 'blur(10px)',
+      WebkitBackdropFilter: 'blur(10px)',
       position: 'sticky',
       top: 0,
       zIndex: 10,
     }}>
-      <Breadcrumb items={breadcrumb} />
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-        {title && (
-          <span style={{
-            fontSize: 12.5,
-            color: 'var(--ink-faint)',
-            fontFamily: 'var(--font-hand)',
-          }}>
-            {title}
+      <MobileHamburger />
+      {/* Breadcrumb */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', minWidth: 0 }}>
+        {breadcrumb.map((item, i) => (
+          <span key={i} style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+            {i > 0 && <span style={{ color: 'var(--ink-ghost)', fontSize: 12 }}>›</span>}
+            {item.href ? (
+              <Link href={item.href} style={{
+                fontSize: 12.5,
+                color: 'var(--ink-faint)',
+                fontWeight: 500,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 6,
+                textDecoration: 'none',
+              }}>
+                {item.icon && <Icon name={item.icon as any} size={12} />}
+                {item.label}
+              </Link>
+            ) : (
+              <span style={{
+                fontSize: 12.5,
+                color: i === breadcrumb.length - 1 ? 'var(--ink)' : 'var(--ink-faint)',
+                fontWeight: i === breadcrumb.length - 1 ? 600 : 500,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 6,
+              }}>
+                {item.icon && <Icon name={item.icon as any} size={12} />}
+                {item.label}
+              </span>
+            )}
           </span>
-        )}
-        <SeasonSwitcher />
-        <Avatar initials="T" />
+        ))}
       </div>
+      <div style={{ flex: 1 }} />
+      {actions}
+      <SeasonBtn />
+      <Avatar initials="T" />
     </div>
   )
 }
