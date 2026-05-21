@@ -1,4 +1,4 @@
-export function HorizonBand({ className = '' }: { className?: string }) {
+export function HorizonBand({ className = '', style }: { className?: string; style?: React.CSSProperties }) {
   const ripples = [
     { x: 120, y: 200, rx: 30, ry: 5 },
     { x: 300, y: 215, rx: 35, ry: 5 },
@@ -17,6 +17,7 @@ export function HorizonBand({ className = '' }: { className?: string }) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
+      style={style}
       preserveAspectRatio="xMidYMid slice"
     >
       <defs>

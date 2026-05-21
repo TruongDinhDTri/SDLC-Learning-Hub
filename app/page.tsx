@@ -1,65 +1,121 @@
-import Image from "next/image";
+import { getHubs } from '@/lib/content'
+import { HubCard } from '@/components/dashboard/HubCard'
+import { StatCard } from '@/components/dashboard/StatCard'
+import { Sidebar } from '@/components/layout/Sidebar'
+import { TopBar } from '@/components/layout/TopBar'
+import { HorizonBand } from '@/components/decorations/HorizonBand'
+import { SakuraBranch } from '@/components/decorations/SakuraBranch'
+import type { TreeItem } from '@/components/layout/TreeNode'
+import type { ContentNode } from '@/lib/content'
 
-export default function Home() {
+function toTreeItems(nodes: ContentNode[]): TreeItem[] {
+  return nodes.map(node => ({
+    id: node.id,
+    label: node.title,
+    status: node.frontmatter.status ?? 'seed',
+    href: '/' + node.slug.join('/'),
+    children: toTreeItems(node.children),
+  }))
+}
+
+function countAllNodes(nodes: ContentNode[]): number {
+  return nodes.reduce((acc, n) => acc + 1 + countAllNodes(n.children), 0)
+}
+
+export default function Dashboard() {
+  const hubs = getHubs()
+  const tree = toTreeItems(hubs)
+  const totalEntries = hubs.reduce((acc, h) => acc + countAllNodes(h.children), 0)
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div style={{ display: 'flex', minHeight: '100vh' }}>
+      <Sidebar tree={tree} />
+
+      <div style={{ flex: 1, overflow: 'hidden', minWidth: 0 }}>
+        <TopBar breadcrumb={[{ label: 'Garden' }]} title="おかえり" />
+
+        <div style={{ padding: '28px 32px', position: 'relative' }}>
+          {/* Decorative sakura branch — top right */}
+          <div style={{
+            position: 'absolute',
+            top: -20,
+            right: 0,
+            width: 360,
+            pointerEvents: 'none',
+            zIndex: 0,
+          }}>
+            <SakuraBranch />
+          </div>
+
+          {/* Hero scene */}
+          <div style={{
+            borderRadius: 'var(--r-xl)',
+            overflow: 'hidden',
+            marginBottom: 24,
+            height: 180,
+            position: 'relative',
+            boxShadow: 'var(--shadow-md)',
+            zIndex: 1,
+          }}>
+            <HorizonBand style={{ width: '100%', height: '100%' }} />
+            <div style={{
+              position: 'absolute',
+              left: 24,
+              bottom: 18,
+              fontFamily: 'var(--font-hand)',
+              color: 'white',
+              fontSize: 22,
+              lineHeight: 1.2,
+              textShadow: '0 1px 6px rgba(0,40,60,.45)',
+            }}>
+              Welcome back to the garden
+            </div>
+          </div>
+
+          {/* Stat cards */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, 1fr)',
+            gap: 12,
+            marginBottom: 28,
+            position: 'relative',
+            zIndex: 1,
+          }}>
+            <StatCard label="Total entries" value={totalEntries} icon="book" accent="peach" />
+            <StatCard label="Active hubs" value={hubs.length} icon="layers" accent="sage" />
+            <StatCard label="Last updated" value="Today" icon="clock" accent="sky" />
+          </div>
+
+          {/* Hub cards */}
+          <div style={{ position: 'relative', zIndex: 1 }}>
+            <h2 style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: 16,
+              fontWeight: 600,
+              color: 'var(--ink)',
+              margin: '0 0 14px',
+            }}>
+              Knowledge Hubs
+            </h2>
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(3, 1fr)',
+              gap: 16,
+            }}>
+              {hubs.map(hub => (
+                <HubCard
+                  key={hub.id}
+                  title={hub.frontmatter.title ?? hub.title}
+                  description={hub.frontmatter.description ?? ''}
+                  accent={(hub.frontmatter.accent as string) ?? 'sage'}
+                  entryCount={countAllNodes(hub.children)}
+                  href={'/' + hub.slug.join('/')}
+                />
+              ))}
+            </div>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+      </div>
     </div>
-  );
+  )
 }
