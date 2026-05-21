@@ -1,10 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { BrandMark } from './BrandMark'
 import { Icon, type IconName } from '@/components/ui/Icon'
+import { SearchModal } from '@/components/ui/SearchModal'
 
 interface TreeLeaf {
   id: string
@@ -126,14 +127,19 @@ function TreeGroup({ group, currentPath }: { group: TreeGroup; currentPath: stri
 
 export function Sidebar({ groups, collapsed = false }: SidebarProps) {
   const pathname = usePathname()
-  const [q, setQ] = useState('')
+  const [searchOpen, setSearchOpen] = useState(false)
 
-  const filtered = q
-    ? groups.map(g => ({
-        ...g,
-        children: g.children.filter(c => c.label.toLowerCase().includes(q.toLowerCase())),
-      })).filter(g => g.children.length > 0)
-    : groups
+  // Global ⌘K / Ctrl+K listener
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault()
+        setSearchOpen(true)
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
 
   return (
     <aside className="hanami-sidebar" style={{
@@ -162,43 +168,28 @@ export function Sidebar({ groups, collapsed = false }: SidebarProps) {
         </button>
       </div>
 
-      {/* Search */}
+      {/* Search trigger */}
       <div style={{ padding: '0 14px 12px' }}>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 8,
-          padding: '8px 12px',
-          background: 'var(--paper)',
-          border: '1px solid var(--line-strong)',
-          borderRadius: 12,
-          boxShadow: 'var(--shadow-sm)',
-        }}>
+        <button
+          onClick={() => setSearchOpen(true)}
+          style={{
+            display: 'flex', alignItems: 'center', gap: 8,
+            width: '100%', padding: '8px 12px', textAlign: 'left',
+            background: 'var(--paper)', border: '1px solid var(--line-strong)',
+            borderRadius: 12, boxShadow: 'var(--shadow-sm)', cursor: 'pointer',
+          }}
+        >
           <Icon name="search" size={14} color="var(--ink-faint)" />
-          <input
-            value={q}
-            onChange={e => setQ(e.target.value)}
-            placeholder="Search the garden…"
-            style={{
-              flex: 1,
-              border: 0,
-              outline: 0,
-              background: 'transparent',
-              fontFamily: 'var(--font-body)',
-              fontSize: 12.5,
-              color: 'var(--ink)',
-            }}
-          />
+          <span style={{ flex: 1, fontFamily: 'var(--font-body)', fontSize: 12.5, color: 'var(--ink-faint)' }}>
+            Search the garden…
+          </span>
           <span style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize: 10,
-            color: 'var(--ink-faint)',
-            border: '1px solid var(--line-strong)',
-            borderRadius: 5,
-            padding: '1px 5px',
+            fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-faint)',
+            border: '1px solid var(--line-strong)', borderRadius: 5, padding: '1px 5px',
           }}>⌘K</span>
-        </div>
+        </button>
       </div>
+      <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)} />
 
       {/* Pinned */}
       <div style={{ padding: '6px 18px 4px' }}>
@@ -240,7 +231,7 @@ export function Sidebar({ groups, collapsed = false }: SidebarProps) {
 
       {/* Tree */}
       <div style={{ flex: 1, overflowY: 'auto', padding: '4px 0 12px' }}>
-        {filtered.map(g => (
+        {groups.map(g => (
           <TreeGroup key={g.id} group={g} currentPath={pathname} />
         ))}
       </div>

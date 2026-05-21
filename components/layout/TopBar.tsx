@@ -97,7 +97,6 @@ export function TopBar({ breadcrumb = [], actions, onToggleSidebar, sidebarOpen 
           onClick={onToggleSidebar}
           title={sidebarOpen ? 'Hide sidebar' : 'Show sidebar'}
           style={{
-            display: 'none',
             width: 32, height: 32, borderRadius: 8,
             background: sidebarOpen ? 'var(--paper)' : 'rgba(255,143,163,.12)',
             border: '1px solid var(--line)',
