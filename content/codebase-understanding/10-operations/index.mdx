@@ -1,0 +1,62 @@
+---
+title: "Phase 10: Understand Operations & Deployment"
+description: "Applications don't live only in code — understand the production environment"
+order: 10
+status: "growing"
+tags: ["devops", "deployment", "infrastructure", "observability"]
+lastUpdated: "2026-05-21"
+---
+
+<PhaseHeader title="Phase 10: Understand Operations" subtitle="Applications don't live only in code — understand production" icon="cmd" accent="sky" duration="1-2 hours" />
+
+<TagRow tags={["devops", "infrastructure", "ci-cd", "monitoring", "kubernetes"]} />
+
+## Purpose
+
+Applications do not live only in code. You must understand how the system is deployed, scaled, and observed in production. This is where real systems live.
+
+## What to Read
+
+```
+Dockerfile          — how the app is containerized
+docker-compose.yml  — how services connect locally
+terraform/          — infrastructure as code
+k8s/                — Kubernetes manifests
+.github/workflows/  — CI/CD pipeline definitions
+nginx.conf          — reverse proxy configuration
+```
+
+## Questions to Answer
+
+```
+How is the app deployed? (manually? GitHub Actions? ArgoCD?)
+How are secrets managed? (env vars? AWS Secrets Manager? Vault?)
+How are environments separated? (dev, staging, prod)
+What services exist in production that don't locally?
+How does scaling work? (horizontal? vertical? auto-scaling?)
+What monitoring exists? (Sentry, Datadog, Grafana, CloudWatch)
+```
+
+## Environments to Understand
+
+| Environment | Purpose |
+|-------------|---------|
+| Local | Development, fast iteration, no real data |
+| Staging | Pre-production testing, mirrors production config |
+| Production | Real users, real data, treat as sacred |
+
+The differences between environments are where bugs hide. What works locally may fail in production due to different config, different data shapes, or different scale.
+
+## Infrastructure Components to Map
+
+- Load balancer or CDN (traffic entry point)
+- Application servers (how many? auto-scaling rules?)
+- Database (primary + read replicas? managed service?)
+- Cache (Redis cluster or single instance?)
+- Queue (SQS? RabbitMQ? Redis queues?)
+- Object storage (S3? GCS?)
+- Monitoring stack (metrics, structured logs, distributed traces)
+
+<Callout type="warn" title="Production Is Always Different">
+Production always has edge cases local dev doesn't: higher load, different data shapes, network latency between services, partial failures. Understanding the production infrastructure is what lets you debug production incidents effectively.
+</Callout>

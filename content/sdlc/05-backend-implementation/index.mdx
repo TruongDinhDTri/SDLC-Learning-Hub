@@ -1,0 +1,79 @@
+---
+title: "Phase 5: Backend Implementation"
+description: "Build APIs, business logic, and data pipelines"
+order: 5
+status: "growing"
+tags: ["backend", "api", "testing", "python"]
+lastUpdated: "2026-05-21"
+---
+
+<PhaseHeader title="Phase 5: Backend Implementation" subtitle="Build APIs, business logic, and data pipelines" icon="cmd" accent="sage" duration="1-2 weeks" />
+
+<TagRow tags={["backend", "rest-api", "testing", "fastapi", "express"]} />
+
+## Purpose
+
+The core functionality lives here. This is where the system actually does things.
+
+**Key question:** *"How does the server handle requests and process data?"*
+
+## Steps
+
+<Step number={1} title="Project Setup" status="growing">
+
+Init framework, folder structure, env config, DB connection.
+
+Establish conventions **before** writing business logic:
+- Folder structure and file naming
+- Error handling pattern
+- Logging format
+- Authentication middleware placement
+
+</Step>
+
+<Step number={2} title="Build CRUD APIs" status="growing">
+
+Core endpoints for each entity. Follow REST conventions:
+
+```
+GET    /resources       → list all
+POST   /resources       → create
+GET    /resources/:id   → read one
+PUT    /resources/:id   → update
+DELETE /resources/:id   → delete
+```
+
+</Step>
+
+<Step number={3} title="Add External Integrations" status="seed">
+
+Third-party API connections (Stripe, SendGrid, S3, etc.)
+
+**Rule:** Wrap every external dependency behind a service layer interface. This makes testing easier and swapping providers painless later.
+
+</Step>
+
+<Step number={4} title="Write Tests" status="seed">
+
+Unit tests + integration tests.
+
+Minimum viable test coverage:
+- Happy path for each endpoint
+- Auth and permission checks
+- Validation edge cases
+- Critical business logic paths
+
+</Step>
+
+## Checklist
+
+<Checklist items={[{label: "Framework initialized with proper folder structure", done: false}, {label: "CRUD endpoints built for all entities", done: false}, {label: "Authentication implemented", done: false}, {label: "Input validation added to all endpoints", done: false}, {label: "External integrations wrapped in service layer", done: false}, {label: "Unit and integration tests written", done: false}]} />
+
+## Output Documents
+
+| Document | Description |
+|----------|-------------|
+| README.md | Setup guide: install, run locally, required env vars |
+| API Documentation | Auto-generated docs (e.g., FastAPI /docs endpoint) |
+| Code Architecture Notes | Folder structure, naming conventions, patterns used |
+| Test Coverage Report | Critical paths tested, coverage percentage |

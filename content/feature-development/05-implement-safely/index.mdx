@@ -1,0 +1,69 @@
+---
+title: "Phase 5: Implement Safely"
+description: "Protect the existing system while evolving it — enterprise-grade engineering practices"
+order: 5
+status: "growing"
+tags: ["implementation", "safety", "observability", "feature-flags", "logging"]
+lastUpdated: "2026-05-21"
+---
+
+<PhaseHeader title="Phase 5: Implement Safely" subtitle="Protect the existing system while you evolve it" icon="cmd" accent="peach" duration="The bulk of development time" />
+
+<TagRow tags={["small-prs", "observability", "feature-flags", "loose-coupling", "structured-logging"]} />
+
+## Purpose
+
+Safe implementation means: the existing system keeps working correctly while new code is added. Every practice below exists to reduce the risk of breaking things that already work.
+
+## Practice 1: Keep PRs Small
+
+Small PRs are:
+- easier to review (reviewer can hold it in their head at once)
+- easier to test (less surface area to cover)
+- easier to rollback (less state change to undo)
+- easier to reason about (one concern at a time)
+
+Enterprise teams strongly prefer small, incremental changes over large, sweeping ones.
+
+## Practice 2: Preserve Architectural Boundaries
+
+Respect ownership and separation of concerns. Do not dump logic where it is convenient — put it where it belongs.
+
+```
+Bad:  Upload service directly edits payment logic.
+Good: Services communicate through defined APIs or events.
+
+Bad:  Controller contains business logic.
+Good: Controller delegates to service layer.
+```
+
+## Practice 3: Avoid Tight Coupling
+
+Ask before each change: "If I change this module, what else breaks?" If the answer is more than one or two things, you have a coupling problem that needs addressing.
+
+Loose coupling improves: scalability, maintainability, testability, and deployment safety.
+
+## Practice 4: Add Logging and Observability
+
+Production systems MUST be observable. Add to every new code path:
+- Structured logs with context (user_id, request_id, operation name)
+- Metrics for operation counts and durations
+- Error tracking integration (Sentry, Bugsnag)
+
+**If you cannot observe a feature, you cannot operate it reliably.**
+
+## Practice 5: Use Feature Flags
+
+Safely deploy unfinished or risky features behind a flag:
+
+```python
+if settings.ENABLE_NEW_UPLOAD_FLOW:
+    return new_upload_handler(request)
+return legacy_upload_handler(request)
+```
+
+This enables: gradual rollout, testing in production with real traffic, and emergency disable without a redeployment. A huge enterprise practice that solo devs underuse.
+
+## Checklist
+
+<Checklist items={[{label: "PRs are small and focused (under 400 lines changed)", done: false}, {label: "Architectural boundaries respected — logic lives where it belongs", done: false}, {label: "No new circular dependencies introduced", done: false}, {label: "Structured logging added to all new code paths", done: false}, {label: "Feature flag added for any risky or incomplete changes", done: false}, {label: "Code reviewed by at least one other person before merge", done: false}]} />

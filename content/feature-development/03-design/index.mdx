@@ -1,0 +1,89 @@
+---
+title: "Phase 3: Design the Solution"
+description: "Design BEFORE implementation — this is where senior engineering starts"
+order: 3
+status: "growing"
+tags: ["design", "architecture", "api-design", "technical-spec"]
+lastUpdated: "2026-05-21"
+---
+
+<PhaseHeader title="Phase 3: Design the Solution" subtitle="Design how the feature integrates — not just how to code it" icon="git" accent="peach" duration="2-4 hours" />
+
+<TagRow tags={["technical-design", "api-contract", "db-design", "security-design", "rfc"]} />
+
+## Purpose
+
+This is where senior engineering starts. You are not just writing code — you are designing how this feature integrates into the existing system without breaking what already works.
+
+## Design Areas
+
+<Step number={1} title="API Design" status="growing">
+
+Define the contract before building anything:
+
+```
+POST /users/:id/avatar
+  Request:  multipart/form-data (file field)
+  Response: { avatarUrl: string, updatedAt: string }
+  Auth:     Bearer token required
+  Errors:
+    413 Payload Too Large (file exceeds 5MB)
+    415 Unsupported Media Type (wrong file type)
+    401 Unauthorized (missing or invalid token)
+```
+
+</Step>
+
+<Step number={2} title="Database Design" status="growing">
+
+Define schema changes before writing a migration:
+
+```
+ALTER TABLE users ADD COLUMN avatar_url TEXT;
+ALTER TABLE users ADD COLUMN avatar_updated_at TIMESTAMP;
+
+Migration type: additive (nullable columns), zero-downtime safe.
+Rollback: DROP COLUMN (safe, no data loss).
+```
+
+</Step>
+
+<Step number={3} title="State Management Design" status="seed">
+
+Define where truth lives and how it flows:
+
+```
+Source of truth: PostgreSQL (user.avatar_url)
+Cache: user object in Redis (TTL 5 minutes)
+Frontend: React Query cache (invalidate on successful upload)
+CDN: CloudFront in front of S3 (cache-control headers)
+```
+
+</Step>
+
+<Step number={4} title="Security Design" status="seed">
+
+Define security constraints explicitly before building:
+
+```
+- File type: validate magic bytes, not just file extension
+- Max size: 5MB enforced at API layer AND S3 presigned URL
+- Rate limit: 5 uploads per user per hour
+- Storage: presigned S3 URLs (files not publicly browsable)
+- CORS: API only accepts from allowed origins
+```
+
+</Step>
+
+## Output Artifacts
+
+Even small design docs help enormously:
+
+- Feature spec (1 page is enough)
+- API contract (request/response shapes)
+- DB migration plan with rollback strategy
+- Sequence diagram for complex async flows
+
+<Callout type="tip" title="Even Small Notes Help">
+A 15-minute design session with a text file prevents hours of rework. The artifact does not need to be formal — it just needs to externalize your thinking before you write the first line of code.
+</Callout>

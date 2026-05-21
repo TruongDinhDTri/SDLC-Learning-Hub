@@ -1,0 +1,82 @@
+---
+title: "Phase 4: Database Design"
+description: "Design tables, columns, and relationships before coding the backend"
+order: 4
+status: "growing"
+tags: ["database", "schema", "sql", "er-diagram"]
+lastUpdated: "2026-05-21"
+---
+
+<PhaseHeader title="Phase 4: Database Design" subtitle="Good schema = easy backend. Bad schema = pain forever." icon="db" accent="sage" duration="1-2 days" />
+
+<TagRow tags={["database", "schema", "sql", "normalization", "migrations"]} />
+
+## Purpose
+
+Design tables BEFORE coding the backend. Your schema is the foundation — get it wrong and everything built on top becomes painful.
+
+**Key question:** *"What data do I store and how is it related?"*
+
+<Callout type="warn" title="Never Retrofit the Schema">
+Changing database schema after the backend is built is expensive. Data migrations on live systems are risky. Design it right the first time.
+</Callout>
+
+## Steps
+
+<Step number={1} title="Identify Entities" status="growing">
+
+List all data objects your system needs:
+
+- User, Profile, Session
+- Product, Order, Payment
+- Comment, Post, Tag
+
+Each entity becomes a table (roughly).
+
+</Step>
+
+<Step number={2} title="Draw ER Diagram" status="growing">
+
+Map relationships:
+- **1-to-1**: User → Profile
+- **1-to-many**: User → Orders
+- **many-to-many**: Products and Tags (via junction table)
+
+Use dbdiagram.io for quick visual design.
+
+</Step>
+
+<Step number={3} title="Define Schema Details" status="seed">
+
+For each table define:
+- Columns and data types
+- NOT NULL constraints
+- Indexes (especially on foreign keys)
+- Default values
+- Timestamps (created_at, updated_at)
+
+</Step>
+
+<Step number={4} title="Plan Migrations" status="seed">
+
+How will you version-control DB changes?
+
+- Alembic (Python)
+- Prisma Migrate (Node.js)
+- Flyway (Java)
+
+Rule: never modify a migration file after it runs in production.
+
+</Step>
+
+## Checklist
+
+<Checklist items={[{label: "All entities identified", done: false}, {label: "ER diagram drawn with relationships", done: false}, {label: "Schema defined per table (columns, types, constraints)", done: false}, {label: "Indexes planned for foreign keys and frequent queries", done: false}, {label: "Migration strategy chosen and documented", done: false}]} />
+
+## Output Documents
+
+| Document | Description |
+|----------|-------------|
+| ER Diagram | Entity relationship diagram: 1-1, 1-N, N-N |
+| Schema Definition | Per-table: columns, data types, constraints, indexes |
+| Migration Plan | Table creation order, seed data, rollback strategy |

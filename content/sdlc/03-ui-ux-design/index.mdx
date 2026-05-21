@@ -1,0 +1,79 @@
+---
+title: "Phase 3: UI/UX Design"
+description: "Design layout, components, and user flow BEFORE coding"
+order: 3
+status: "growing"
+tags: ["ui", "ux", "design", "wireframe"]
+lastUpdated: "2026-05-21"
+---
+
+<PhaseHeader title="Phase 3: UI/UX Design" subtitle="Design layout and user flow before writing a single line of code" icon="eye" accent="sage" duration="3-5 days" />
+
+<TagRow tags={["ui-ux", "wireframing", "design-system", "figma"]} />
+
+## Purpose
+
+Skipping this phase = messy frontend, constant refactoring.
+
+**Key question:** *"What does the app look like and how does the user navigate it?"*
+
+<Callout type="warn" title="Skip This Phase At Your Peril">
+Developers who skip UI/UX design spend 3x more time refactoring frontend code. Design the layout first — even rough sketches save hours of rework.
+</Callout>
+
+## Steps
+
+<Step number={1} title="Map User Flow" status="growing">
+
+Map the journey from entry to goal:
+
+```
+Landing → Login → Dashboard → Create Invoice → Preview → Send → Confirmation
+```
+
+Every screen the user touches. Every decision point along the way.
+
+</Step>
+
+<Step number={2} title="Create Lo-fi Wireframes" status="growing">
+
+Sketch on paper or Excalidraw. Doesn't need to be pretty — just show what goes where.
+
+For each page answer: Where is the nav? The main content? The primary CTA? The empty state?
+
+</Step>
+
+<Step number={3} title="Build Component Inventory" status="seed">
+
+List every UI component needed:
+
+- Navigation, Header, Sidebar
+- Cards, Tables, Lists
+- Forms, Inputs, Buttons
+- Modals, Toasts, Loaders
+- Empty states, Error states
+
+Build this list before writing a line of CSS.
+
+</Step>
+
+<Step number={4} title="Define Design System" status="seed">
+
+2-3 main colors + 1 heading font + 1 body font + spacing grid.
+
+Write it down. Consistency is what separates amateur from professional work.
+
+</Step>
+
+## Checklist
+
+<Checklist items={[{label: "User flow diagram created", done: false}, {label: "Lo-fi wireframes for each page", done: false}, {label: "Component inventory listed", done: false}, {label: "Color palette defined (2-3 colors)", done: false}, {label: "Typography chosen (heading + body fonts)", done: false}]} />
+
+## Output Documents
+
+| Document | Description |
+|----------|-------------|
+| User Flow Diagram | Steps user takes from opening app to completing goal |
+| Wireframes | Layout sketches per page: header, sidebar, main content |
+| Component Inventory | All UI components to build with functional description |
+| Design System | Colors, typography, spacing, border-radius, shadows |

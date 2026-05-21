@@ -1,0 +1,62 @@
+---
+title: "Phase 7: Deploy Carefully"
+description: "Release safely without breaking production — enterprise deployment practices"
+order: 7
+status: "growing"
+tags: ["deployment", "gradual-rollout", "rollback", "monitoring"]
+lastUpdated: "2026-05-21"
+---
+
+<PhaseHeader title="Phase 7: Deploy Carefully" subtitle="Release safely — minimize blast radius at every step" icon="arrowRight" accent="peach" duration="Varies by risk level" />
+
+<TagRow tags={["gradual-rollout", "rollback-planning", "deployment-monitoring", "feature-flags"]} />
+
+## Purpose
+
+Deployment is where theory meets production reality. Enterprise deployment is about minimizing risk — not just shipping code as fast as possible.
+
+## Gradual Rollout Strategy
+
+Release progressively to reduce the blast radius of any issues:
+
+1. **Internal users only** — team members test in production
+2. **Beta users** — opted-in early adopters, 1-5% of users
+3. **Small traffic slice** — 5-10% of all traffic
+4. **Geographic rollout** — one region or market first
+5. **Full release** — 100% of users
+
+At each stage: observe metrics → decide to proceed or rollback.
+
+## Monitor in Real-Time During Release
+
+| Metric | Alert Threshold |
+|--------|----------------|
+| Error rate | Above 1% (baseline: 0.1%) |
+| Latency p95 | Above 500ms (baseline: 150ms) |
+| DB connection errors | Any spike above baseline |
+| Queue depth | Above 2x normal |
+| Memory usage | Above 90% |
+
+Have monitoring dashboards open during every significant deployment.
+
+## Rollback Planning
+
+Ask this question BEFORE every deployment:
+
+```
+How do we undo this safely if something goes wrong?
+- Is the DB migration reversible?
+- Can we disable the feature via feature flag?
+- Is there a tested and documented rollback procedure?
+- What data loss risk exists if we rollback mid-flight?
+```
+
+Deployments without rollback plans are reckless. This is a real senior engineering question.
+
+## Pre-Deploy Checklist
+
+<Checklist items={[{label: "All tests passing in CI on the deploy branch", done: false}, {label: "Code reviewed and approved", done: false}, {label: "DB migration tested on staging environment first", done: false}, {label: "Feature flag configured for risky changes", done: false}, {label: "Rollback procedure documented and understood", done: false}, {label: "Monitoring alerts configured for key metrics", done: false}, {label: "Relevant team members notified of the deployment", done: false}]} />
+
+<Callout type="warn" title="Never Deploy on Fridays">
+Enterprise rule: avoid deploying on Fridays or before holidays. If something breaks, you want engineers available and focused to fix it. Friday deploys are for teams that enjoy weekend incidents.
+</Callout>

@@ -6,9 +6,9 @@ interface ChecklistItem {
   done?: boolean
 }
 
-export function Checklist({ items }: { items: ChecklistItem[] }) {
+export function Checklist({ items = [] }: { items?: ChecklistItem[] }) {
   const [checked, setChecked] = useState<Set<number>>(
-    new Set(items.flatMap((it, i) => (it.done ? [i] : [])))
+    new Set((items ?? []).flatMap((it, i) => (it.done ? [i] : [])))
   )
 
   const toggle = (i: number) => {

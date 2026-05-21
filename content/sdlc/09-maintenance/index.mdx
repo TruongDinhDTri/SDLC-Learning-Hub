@@ -1,0 +1,84 @@
+---
+title: "Phase 9: Maintenance & Iteration"
+description: "80% of a product's lifetime is spent here — collect feedback, fix bugs, keep improving"
+order: 9
+status: "growing"
+tags: ["maintenance", "iteration", "monitoring", "feedback"]
+lastUpdated: "2026-05-21"
+---
+
+<PhaseHeader title="Phase 9: Maintenance & Iteration" subtitle="The app launching is NOT the end — this is where real products live" icon="clock" accent="sage" duration="Ongoing" />
+
+<TagRow tags={["maintenance", "monitoring", "refactoring", "feedback-loop", "tech-debt"]} />
+
+## Purpose
+
+80% of a product's lifetime is spent here. The launch is the beginning, not the end.
+
+**Key question:** *"How do I keep improving and maintaining this?"*
+
+<Callout type="quote" title="The Cycle">
+After Phase 9, new features and feedback loop back to Phase 1. Each iteration gets faster and cleaner. The roadmap is a spiral, not a straight line.
+</Callout>
+
+## Steps
+
+<Step number={1} title="Bug Tracking & Fixing" status="growing">
+
+Collect from: Sentry alerts, user reports, your own usage observations.
+
+Prioritize by severity:
+- **Critical**: system down, data loss, security breach → fix now
+- **High**: core feature broken → fix this week
+- **Medium**: degraded experience → fix this sprint
+- **Low**: cosmetic or edge case → add to backlog
+
+</Step>
+
+<Step number={2} title="User Feedback Loop" status="growing">
+
+Collect via:
+- In-app feedback widget
+- Analytics (Google Analytics, Plausible)
+- Direct user interviews
+- Support emails and messages
+
+Turn feedback into prioritized feature requests. User pain = product opportunity.
+
+</Step>
+
+<Step number={3} title="Performance Monitoring" status="seed">
+
+Track over time:
+- API response time at p50, p95, p99
+- Error rates
+- Uptime percentage
+
+Set alerts for: error rate above 1%, p95 above 500ms, uptime below 99.9%.
+
+</Step>
+
+<Step number={4} title="Feature Iteration" status="seed">
+
+Feedback → plan → back to Phase 1 for that feature. This is the "cycle"!
+
+**Rule**: New features get the same SDLC treatment as the initial build. Don't ship untested features to production.
+
+</Step>
+
+<Step number={5} title="Tech Debt & Refactoring" status="seed">
+
+V1 code will be ugly — that's OK. But schedule time for:
+- Extracting repeated logic into shared functions
+- Improving naming for clarity
+- Updating dependencies to latest stable
+- Improving test coverage
+- Removing dead code
+
+Schedule roughly 20% of each sprint for tech debt.
+
+</Step>
+
+## Checklist
+
+<Checklist items={[{label: "Error monitoring alerts configured for critical issues", done: false}, {label: "Analytics tracking added to measure feature usage", done: false}, {label: "Feedback collection mechanism in place", done: false}, {label: "Performance baselines established and tracked", done: false}, {label: "Tech debt backlog maintained and prioritized", done: false}, {label: "Documentation updated after each significant change", done: false}]} />

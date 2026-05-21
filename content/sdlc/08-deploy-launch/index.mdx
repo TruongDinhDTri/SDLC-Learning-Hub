@@ -1,0 +1,79 @@
+---
+title: "Phase 8: Deploy & Launch"
+description: "Put the app on the internet — no deployment means the app doesn't exist"
+order: 8
+status: "growing"
+tags: ["deployment", "cicd", "devops", "vercel", "railway"]
+lastUpdated: "2026-05-21"
+---
+
+<PhaseHeader title="Phase 8: Deploy & Launch" subtitle="No deployment = the app doesn't exist. This is the finish line." icon="arrowRight" accent="sage" duration="2-3 days" />
+
+<TagRow tags={["deployment", "ci-cd", "github-actions", "vercel", "railway", "sentry"]} />
+
+## Purpose
+
+The finish line. An app that only runs locally doesn't exist in any meaningful sense.
+
+**Key question:** *"How do I get this running in production and keep it running?"*
+
+<Callout type="tip" title="Ship Early, Ship Often">
+Deploy even a rough MVP. Real users on real infrastructure reveal things that local development never will. The goal is to complete the cycle — not to be perfect.
+</Callout>
+
+## Steps
+
+<Step number={1} title="Setup CI/CD Pipeline" status="growing">
+
+GitHub Actions: auto test and deploy on push to main.
+
+Every push to main should: run tests → build → deploy → notify.
+
+If a step fails, the deployment stops. No broken code reaches production.
+
+</Step>
+
+<Step number={2} title="Deploy Backend" status="growing">
+
+Cloud platforms for solo devs:
+- **Railway** — simple Git-based deploy, free tier generous
+- **Render** — similar to Railway, easy Postgres
+- **Fly.io** — more control, Docker-based
+
+Configure: environment variables, DB connection string, custom domain.
+
+</Step>
+
+<Step number={3} title="Deploy Frontend" status="growing">
+
+- **Vercel** — best for Next.js and React, zero config
+- **Netlify** — great for static sites
+
+Connect your repo → configure environment variables → add custom domain.
+
+</Step>
+
+<Step number={4} title="Setup Monitoring" status="seed">
+
+**Sentry** for error tracking — the free tier is generous:
+
+Add a health check endpoint:
+```
+GET /health → { status: "ok", timestamp: "..." }
+```
+
+Set up uptime monitoring (Better Uptime, UptimeRobot — both free tiers available).
+
+</Step>
+
+<Step number={5} title="Launch!" status="seed">
+
+Share on LinkedIn, Twitter/X, Reddit (r/sideprojects, r/webdev).
+
+Collect feedback. Write down everything users say. Turn it into a prioritized backlog.
+
+</Step>
+
+## Checklist
+
+<Checklist items={[{label: "CI/CD pipeline runs tests on every push", done: false}, {label: "Backend deployed and publicly accessible", done: false}, {label: "Frontend deployed and publicly accessible", done: false}, {label: "All environment variables configured in production", done: false}, {label: "Error monitoring connected (Sentry)", done: false}, {label: "Health check endpoint working", done: false}, {label: "Custom domain configured (optional but professional)", done: false}]} />

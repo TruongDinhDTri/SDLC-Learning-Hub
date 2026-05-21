@@ -1,0 +1,76 @@
+---
+title: "Phase 9: Refactor & Improve"
+description: "Prevent entropy — every feature adds complexity, good engineers continuously simplify"
+order: 9
+status: "growing"
+tags: ["refactoring", "tech-debt", "maintenance", "architecture", "quality"]
+lastUpdated: "2026-05-21"
+---
+
+<PhaseHeader title="Phase 9: Refactor & Improve" subtitle="Prevent entropy and long-term degradation" icon="leaf" accent="peach" duration="Ongoing — schedule it explicitly" />
+
+<TagRow tags={["refactoring", "tech-debt", "simplification", "code-quality", "architecture"]} />
+
+## Purpose
+
+Every feature increases system complexity. Without deliberate maintenance, systems decay over time — slowly at first, then catastrophically.
+
+Good engineers continuously:
+- simplify code that grew complex during development
+- reduce coupling that crept in under deadline pressure
+- improve naming that made sense at the time but is now confusing
+- improve test coverage for paths discovered in production
+- extract abstractions that appeared naturally during implementation
+
+## The Long-Term Engineering Mindset
+
+Professional engineering optimizes for:
+
+```
+Long-term system evolution and maintainability.
+```
+
+Not just:
+
+```
+Closing tickets and shipping features quickly.
+```
+
+## What to Refactor After a Feature Stabilizes
+
+<Step number={1} title="Code Simplification" status="growing">
+
+- Extract repeated logic into well-named shared functions
+- Remove dead code paths and commented-out blocks
+- Improve variable and function naming for future readability
+- Reduce function complexity (aim for functions that do one thing)
+
+Rule: future-you should be able to understand present-you's code in 6 months without any context.
+
+</Step>
+
+<Step number={2} title="Test Quality Improvement" status="growing">
+
+- Add tests for bugs you fixed in production — they were real edge cases
+- Improve test descriptions so they read as documentation
+- Remove brittle or flaky tests that give false confidence
+- Add coverage for edge cases discovered through real usage
+
+</Step>
+
+<Step number={3} title="Architecture Cleanup" status="seed">
+
+- Extract abstractions that appeared naturally during implementation
+- Fix coupling issues you discovered while building
+- Improve module boundaries that leaked during development
+- Update architecture documentation to match current reality
+
+</Step>
+
+## The Core Enterprise Principles — Full Checklist
+
+<Checklist items={[{label: "Understand the feature before coding", done: false}, {label: "Design the solution before implementing", done: false}, {label: "Deliver incrementally via vertical slices", done: false}, {label: "Preserve architectural boundaries throughout", done: false}, {label: "Keep changes small and individually reversible", done: false}, {label: "Think about failure from day one", done: false}, {label: "Make every feature observable in production", done: false}, {label: "Optimize for long-term maintainability", done: false}, {label: "Treat production as sacred — deploy with care", done: false}]} />
+
+<Callout type="quote" title="The Real Craft">
+Professional software engineering is not "writing code." It is "managing complexity safely over time." And the deeper you go, you stop thinking "How do I build this feature?" and start thinking "How do I evolve this system responsibly?" That is the path toward senior engineering and architecture thinking.
+</Callout>

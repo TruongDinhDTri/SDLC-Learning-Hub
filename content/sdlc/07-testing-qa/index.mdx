@@ -1,0 +1,75 @@
+---
+title: "Phase 7: Testing & QA"
+description: "Test the full flow, edge cases, performance, and security"
+order: 7
+status: "growing"
+tags: ["testing", "qa", "e2e", "security", "performance"]
+lastUpdated: "2026-05-21"
+---
+
+<PhaseHeader title="Phase 7: Testing & QA" subtitle="The phase that separates amateur from professional" icon="bug" accent="sage" duration="3-5 days" />
+
+<TagRow tags={["e2e-testing", "playwright", "performance", "security", "lighthouse"]} />
+
+## Purpose
+
+This phase determines whether the app feels amateur or professional.
+
+**Key question:** *"Does everything work correctly, even in unexpected situations?"*
+
+<Callout type="warn" title="Do Not Skip Testing">
+Apps that skip QA ship bugs that destroy user trust. One serious bug in production can undo weeks of good work. Testing is not optional.
+</Callout>
+
+## Steps
+
+<Step number={1} title="E2E Testing" status="growing">
+
+Test the full user flow from signup to core action using Playwright or Cypress.
+
+Cover every critical path a real user would take:
+- Sign up and onboarding
+- Core feature creation
+- Editing and updating
+- Deletion and cleanup
+
+</Step>
+
+<Step number={2} title="Edge Cases" status="growing">
+
+What happens when:
+- API is down or returns 500?
+- Input is invalid or malformed?
+- Data state is empty?
+- Session expires mid-flow?
+- Network request times out?
+- User submits a form twice?
+
+</Step>
+
+<Step number={3} title="Performance Testing" status="seed">
+
+Lighthouse audit targets:
+- Performance score greater than 90
+- API responses under 200ms at p95
+- Core Web Vitals: LCP under 2.5s, CLS under 0.1
+
+Check: large lists render with pagination, images are lazy loaded.
+
+</Step>
+
+<Step number={4} title="Security Checklist" status="seed">
+
+OWASP Top 10 basics:
+- Input validation on all endpoints
+- SQL injection prevention via ORM parameterized queries
+- CORS configured correctly
+- Rate limiting on auth endpoints
+- Auth checks on every protected route
+- Secrets in environment variables only
+
+</Step>
+
+## Checklist
+
+<Checklist items={[{label: "E2E tests cover all core user flows", done: false}, {label: "Edge cases identified and tested", done: false}, {label: "Lighthouse performance score above 90", done: false}, {label: "OWASP basic checklist completed", done: false}, {label: "Auth checks verified on all protected routes", done: false}, {label: "No secrets hardcoded in source code", done: false}]} />

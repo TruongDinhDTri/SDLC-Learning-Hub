@@ -1,0 +1,81 @@
+---
+title: "Phase 4: Trace Real Flows"
+description: "Pick one important feature and trace it end-to-end through the entire system"
+order: 4
+status: "growing"
+tags: ["data-flow", "tracing", "feature-trace", "request-lifecycle"]
+lastUpdated: "2026-05-21"
+---
+
+<PhaseHeader title="Phase 4: Trace Real Flows" subtitle="Pick one feature and trace it completely end-to-end" icon="git" accent="sky" duration="1-3 hours" />
+
+<TagRow tags={["feature-tracing", "request-lifecycle", "data-flow", "debugging"]} />
+
+## The Most Important Step
+
+This is the MOST important step in understanding a codebase.
+
+Do NOT read random files. Instead: **trace one complete user flow.**
+
+This creates connected understanding instead of isolated, disconnected knowledge.
+
+<Callout type="tip" title="Best Flows to Trace First">
+Login, signup, file upload, checkout, or create-something. Choose the most common or most critical user action in the system.
+</Callout>
+
+## How to Trace a Flow
+
+### Frontend Layer
+Find: component → form interaction → API call → state update after response
+
+### Backend Layer
+Find: route registration → controller handler → input validator → service layer → DB operations → response formatter
+
+### Database Layer
+Find: which tables are queried, what gets inserted or updated, what transactions exist
+
+### Async Processing Layer
+Find: what jobs get queued, which workers process them, what happens on failure
+
+## Example Trace Output
+
+```
+Upload Flow:
+
+React Form (components/Upload.tsx line 45)
+→ useUpload hook → axios POST /api/uploads
+→ Django route (urls.py line 45)
+→ serializer validation (serializers/upload.py)
+→ service: uploads file to S3 (services/storage.py)
+→ DB record created (models.Upload)
+→ Celery thumbnail job queued (tasks/thumbnails.py)
+→ API response: { id, url, status: "processing" }
+→ React Query cache invalidated
+→ UI shows new upload with "processing" state
+```
+
+## Questions to Answer Per Flow
+
+```
+What triggers this flow?
+What API endpoint is called?
+Where is input validated?
+Where does business logic execute?
+Where is state updated (DB, cache, frontend)?
+What DB tables are touched?
+What background jobs run?
+What does the final response look like?
+```
+
+## The Master Loop
+
+Once you finish tracing one feature:
+
+1. Pick another important flow
+2. Trace it end-to-end
+3. Understand data movement
+4. Observe how failures are handled
+5. Update your mental model
+6. Repeat
+
+This loop gradually reveals the entire system without needing to read every file.

@@ -1,0 +1,75 @@
+---
+title: "Phase 6: Frontend Implementation"
+description: "Build the UI according to Phase 3 design and connect with backend APIs"
+order: 6
+status: "growing"
+tags: ["frontend", "react", "ui", "state-management"]
+lastUpdated: "2026-05-21"
+---
+
+<PhaseHeader title="Phase 6: Frontend Implementation" subtitle="Turn the design into a working interface" icon="eye" accent="sage" duration="1-2 weeks" />
+
+<TagRow tags={["react", "tailwind", "state-management", "api-integration"]} />
+
+## Purpose
+
+Build UI according to Phase 3 design. Connect with backend APIs.
+
+**Key question:** *"How do I turn the design into a working interface?"*
+
+<Callout type="tip" title="Design to Code Discipline">
+Follow the component inventory from Phase 3 exactly. Don't invent new components on the fly — it leads to inconsistency that's painful to fix later.
+</Callout>
+
+## Steps
+
+<Step number={1} title="Project Setup" status="growing">
+
+Init framework, styling, and routing:
+
+```
+npm create vite@latest my-app -- --template react-ts
+npm install tailwindcss @tanstack/react-query zustand
+```
+
+</Step>
+
+<Step number={2} title="Build Components" status="growing">
+
+Follow the component list from Phase 3. Build in order:
+1. UI primitives (Button, Input, Card)
+2. Layout components (Nav, Sidebar, PageWrapper)
+3. Feature components (InvoiceCard, UserProfile)
+4. Page-level components
+
+</Step>
+
+<Step number={3} title="State Management" status="seed">
+
+**Server state**: React Query / TanStack Query — API data, caching, loading states
+
+**Client state**: Zustand — UI state, modals, user preferences
+
+Don't overengineer. Most apps need very little client state.
+
+</Step>
+
+<Step number={4} title="API Integration" status="seed">
+
+Connect to backend endpoints and handle loading and error states gracefully.
+
+Every API call needs: loading state, error state, success state, and empty state.
+
+</Step>
+
+<Step number={5} title="Polish" status="seed">
+
+Responsive design, loading skeletons, error boundaries, animations.
+
+The last 20% that takes 80% of the time — budget for it explicitly.
+
+</Step>
+
+## Checklist
+
+<Checklist items={[{label: "Framework and tooling initialized", done: false}, {label: "All UI primitives built and tested", done: false}, {label: "Layout components built", done: false}, {label: "All feature components built", done: false}, {label: "API integration complete with error handling", done: false}, {label: "Loading and error states handled for every data fetch", done: false}, {label: "Responsive design verified on mobile and desktop", done: false}]} />

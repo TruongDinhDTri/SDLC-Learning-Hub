@@ -1,0 +1,61 @@
+---
+title: "Phase 7: Study Failure Paths"
+description: "Systems reveal their true architecture during failure — this is where deep understanding begins"
+order: 7
+status: "growing"
+tags: ["failure", "resilience", "error-handling", "debugging"]
+lastUpdated: "2026-05-21"
+---
+
+<PhaseHeader title="Phase 7: Study Failure Paths" subtitle="Systems reveal their true architecture during failure" icon="flame" accent="sky" duration="1-2 hours" />
+
+<TagRow tags={["failure-paths", "resilience", "error-handling", "circuit-breakers"]} />
+
+## Purpose
+
+This step separates shallow understanding from deep understanding.
+
+Real architecture reveals itself during failure. Elegant failure handling is a sign of engineering maturity. Fragile, confusing failures reveal technical debt.
+
+<Callout type="warn" title="Only Break Things in Dev/Local">
+Do this only in a local or development environment. Never deliberately break production systems. Use a throwaway dev database.
+</Callout>
+
+## Things to Break and Observe
+
+| What to Break | How | What to Observe |
+|---------------|-----|-----------------|
+| Invalid form data | Submit malformed input | Validation error messages |
+| Expired token | Wait for expiry or manually invalidate | Auth redirect or 401 behavior |
+| Missing env variable | Remove from .env | Startup failure message |
+| DB unavailable | Stop the DB container | Connection error handling |
+| Redis unavailable | Stop Redis | Fallback or crash behavior |
+| Network timeout | Mock slow responses | Timeout and retry behavior |
+| Wrong permissions | Use a lower-privilege user | 403 handling |
+
+## Patterns That Reveal Engineering Quality
+
+| Pattern | What It Means |
+|---------|--------------|
+| Retries with backoff | System expects transient failures |
+| Fallbacks | Graceful degradation implemented |
+| Circuit breakers | Prevents cascading failures |
+| Timeouts on all calls | Protects against slow dependencies |
+| Dead letter queues | Failed jobs don't disappear silently |
+| Structured error logs | Operations team can debug production |
+
+## Questions to Answer
+
+```
+How are errors handled at each layer?
+Where are retries implemented?
+What fails gracefully vs crashes completely?
+What monitoring fires on failure?
+What logs are useful during debugging?
+How resilient is the overall architecture?
+What single point of failure exists?
+```
+
+<Callout type="note">
+A system that fails gracefully under every condition was built by senior engineers with production experience. Poor failure handling — unhandled exceptions, silent data loss, cascading crashes — reveals code written without production empathy.
+</Callout>

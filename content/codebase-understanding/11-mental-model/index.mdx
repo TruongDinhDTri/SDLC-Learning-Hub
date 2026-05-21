@@ -1,0 +1,70 @@
+---
+title: "Phase 11: Build Your Mental Model"
+description: "Document your understanding — if you can't explain it simply, you don't fully understand it yet"
+order: 11
+status: "growing"
+tags: ["mental-model", "documentation", "system-map", "synthesis"]
+lastUpdated: "2026-05-21"
+---
+
+<PhaseHeader title="Phase 11: Build Your Mental Model" subtitle="Writing clarifies thinking — document what you have learned" icon="book" accent="sky" duration="2-4 hours" />
+
+<TagRow tags={["mental-model", "system-map", "documentation", "synthesis"]} />
+
+## Purpose
+
+Writing clarifies thinking.
+
+If you cannot explain the system simply — in plain language, without the code in front of you — then you probably don't fully understand it yet. Writing forces the gaps to surface.
+
+## What to Document
+
+Write notes answering these questions in your own words:
+
+```
+What starts the app and initializes services?
+Where does business logic live?
+How does authentication work end-to-end?
+Where is state stored? What is the source of truth?
+What services communicate with each other?
+What are the risky areas to touch?
+What happens during failure at each layer?
+What background jobs exist and what triggers them?
+How is the app deployed to production?
+What are the known performance bottlenecks?
+```
+
+## Create Architecture Diagrams
+
+Even rough, ugly diagrams help enormously. The act of drawing forces you to resolve ambiguity.
+
+```
+Frontend (React)
+   ↓ REST API (axios, React Query)
+Backend (Django REST Framework)
+   ↓ SQLAlchemy ORM
+PostgreSQL (source of truth)
+
+Async: Celery workers + Redis queue
+Storage: AWS S3 (presigned URLs)
+Auth: JWT tokens (stateless, 24hr TTL)
+Cache: Redis (user sessions, expensive queries)
+```
+
+## Signs You Actually Understand the System
+
+<Checklist items={[{label: "Can predict where new code should live without searching", done: false}, {label: "Can explain major flows end-to-end from memory", done: false}, {label: "Can trace a bug without reading every related file", done: false}, {label: "Can modify a feature without unexpected side effects", done: false}, {label: "Can identify risky areas before touching them", done: false}, {label: "Can explain the architecture clearly to a new team member", done: false}, {label: "Understand failure behavior and know how to debug it", done: false}, {label: "Could onboard another developer into the codebase", done: false}]} />
+
+## Senior vs Junior Thinking
+
+| Junior | Senior |
+|--------|--------|
+| "What does this file do?" | "How does the system behave?" |
+| Reads implementation details | Reads architecture and flow |
+| Focuses on one class at a time | Traces complete end-to-end flows |
+| Works around bugs | Finds and fixes root causes |
+| Understands WHAT the code does | Understands WHY it was designed this way |
+
+<Callout type="quote" title="Final Truth">
+A codebase is not just code. It is architecture, business decisions, team culture, operational tradeoffs, evolving history, and human assumptions baked into structure. The deeper you look, the more the system starts feeling alive. And eventually — you stop seeing files. You start seeing flows.
+</Callout>

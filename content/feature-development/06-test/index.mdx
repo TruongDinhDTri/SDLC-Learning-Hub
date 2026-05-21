@@ -1,0 +1,63 @@
+---
+title: "Phase 6: Test the Feature"
+description: "Verify correctness and prevent regressions — senior engineers test failure, not just success"
+order: 6
+status: "growing"
+tags: ["testing", "unit-tests", "integration-tests", "e2e", "failure-testing"]
+lastUpdated: "2026-05-21"
+---
+
+<PhaseHeader title="Phase 6: Test the Feature" subtitle="Verify correctness and prevent regressions" icon="check" accent="peach" duration="20-40% of implementation time" />
+
+<TagRow tags={["unit-tests", "integration-tests", "e2e", "load-testing", "security-testing"]} />
+
+## Testing Pyramid
+
+| Test Type | Purpose | Speed | Cost |
+|-----------|---------|-------|------|
+| Unit Tests | Isolated logic, pure functions | Fast | Low |
+| Integration Tests | Service interaction, API contracts | Medium | Medium |
+| E2E Tests | Complete user flows | Slow | High |
+| Load Tests | Performance under real stress | Slow | High |
+| Security Tests | Vulnerabilities and abuse vectors | Varies | High |
+
+## Always Test These Scenarios
+
+<Checklist items={[{label: "Happy path — the expected successful flow", done: false}, {label: "Invalid input — validation errors surface correctly", done: false}, {label: "Permission failures — unauthorized users are rejected", done: false}, {label: "Timeouts — system behaves correctly when dependencies are slow", done: false}, {label: "Retries — operations are idempotent where needed", done: false}, {label: "Concurrency — two users doing the same thing simultaneously", done: false}, {label: "Large payloads — performance holds under edge case data sizes", done: false}, {label: "Service failures — what happens when a dependency is down", done: false}]} />
+
+## Failure-Aware Testing
+
+Senior engineers test what happens when things **break**, not just when things work.
+
+Example of a failure-aware test:
+
+```typescript
+test('upload fails gracefully when S3 is unavailable', async () => {
+  mockS3.simulateFailure()
+
+  const response = await request(app)
+    .post('/users/123/avatar')
+    .attach('file', testImagePath)
+
+  expect(response.status).toBe(503)
+  expect(response.body.error).toBe('Upload temporarily unavailable')
+
+  // Verify: no partial DB record was created
+  const user = await db.users.findById(123)
+  expect(user.avatar_url).toBeNull()
+})
+```
+
+## Tests as Living Documentation
+
+Well-written tests are the best documentation a codebase can have.
+
+A new team member reading your tests should understand:
+- What the feature does
+- What constraints exist
+- What edge cases matter
+- What the system considers invalid
+
+<Callout type="tip" title="Test Names Are Documentation">
+Name tests as sentences: "should reject uploads larger than 5MB" tells you far more than "test upload size". Future readers will thank you.
+</Callout>

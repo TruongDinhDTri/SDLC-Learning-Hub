@@ -1,0 +1,67 @@
+---
+title: "Phase 6: Run the System"
+description: "Static reading is not enough — you must interact, observe, and experiment"
+order: 6
+status: "growing"
+tags: ["local-dev", "experimentation", "observation", "hands-on"]
+lastUpdated: "2026-05-21"
+---
+
+<PhaseHeader title="Phase 6: Run the System" subtitle="Convert theory into real understanding through interaction" icon="cmd" accent="sky" duration="2-4 hours" />
+
+<TagRow tags={["local-dev", "docker", "experimentation", "logs", "observation"]} />
+
+## Purpose
+
+Static reading is NOT enough. Real understanding comes from:
+- **Interaction** — triggering actual system behavior
+- **Observation** — watching what happens at every layer
+- **Experimentation** — testing what happens when things go wrong
+
+## Setup
+
+```
+npm install
+pip install -r requirements.txt
+docker compose up
+```
+
+Follow the README exactly. If setup fails, that's your first insight — the README is out of date or the dev experience is poor.
+
+## What to Trigger
+
+Work through every major flow:
+- Create users and test onboarding
+- Submit forms with valid data
+- Upload files or interact with file features
+- Cause validation errors deliberately
+- Refresh pages after performing actions
+- Delete data and verify cascade behavior
+- Test authentication edge cases (expired token, wrong password)
+
+## What to Observe While Triggering
+
+| Layer | What to Watch |
+|-------|--------------|
+| Logs | What gets logged, at what level, with what context |
+| Network | API calls, response times, payload shapes |
+| Database | What records get created, updated, or deleted |
+| Cache | What gets cached, TTLs, invalidation patterns |
+| Workers | What background jobs run and when |
+| Browser | Network tab, console errors, state changes |
+
+## Questions to Answer
+
+```
+What happens when operations succeed?
+What happens when they fail?
+What log lines appear for each action?
+What services communicate during each flow?
+What changes in the DB after each operation?
+How long do operations take?
+What errors are swallowed silently?
+```
+
+<Callout type="tip" title="Key Insight About Logs">
+Systems reveal their character through logging. A system with structured, contextual logs was built by engineers who cared about production operations. Poor logging means debugging will be painful. This is a leading indicator of overall code quality.
+</Callout>

@@ -1,0 +1,72 @@
+---
+title: "Phase 1: Understand the Feature"
+description: "Understand WHY the feature exists before writing a single line of code"
+order: 1
+status: "growing"
+tags: ["requirements", "business-intent", "understanding"]
+lastUpdated: "2026-05-21"
+---
+
+<PhaseHeader title="Phase 1: Understand the Feature" subtitle="Great engineers solve problems, not just tickets" icon="sparkle" accent="peach" duration="1-2 hours" />
+
+<TagRow tags={["business-intent", "requirements", "context", "problem-framing"]} />
+
+## Core Philosophy
+
+Professional software engineering is NOT "just writing code."
+
+It is: **Safely evolving complex systems over time.**
+
+The real goal is not to make a feature work. The real goal is to make it **reliable, maintainable, scalable, observable, and safe to evolve.**
+
+| Junior Mindset | Senior Mindset |
+|----------------|----------------|
+| How do I code this? | How do I evolve the system safely? |
+| Focus on implementation | Focus on architecture and impact |
+| Finish the ticket | Preserve long-term maintainability |
+| Local feature thinking | System-wide thinking |
+| Happy path only | Failure-aware engineering |
+
+## Understand Business Intent
+
+Before writing code, understand:
+- What problem is being solved
+- Who needs the feature and why it matters to them
+- What business outcome is expected
+- What success looks like in measurable terms
+
+**Great engineers solve problems — not just tickets.**
+
+## Questions to Ask
+
+```
+Who requested this feature?
+Who are the actual users?
+What pain or problem exists today without this?
+What does success look like concretely?
+What metrics should improve?
+What edge cases matter to the business?
+What are the failure scenarios?
+```
+
+## Output to Produce
+
+```
+Feature: User profile image upload
+
+Goal: Allow users to personalize their profiles.
+
+Business value: Improve engagement and sense of identity in the product.
+
+Constraints:
+- Max 5MB file size
+- Images only (jpg, png, webp)
+- Secure uploads via presigned URLs
+- Must work on mobile
+
+Success metric: 40% of users upload a photo within first week of launch.
+```
+
+<Callout type="warn" title="Never Skip This Step">
+Every hour spent understanding the feature saves 3 hours of rework later. Features built without business context are expensive guesses — and guesses are expensive to fix in production.
+</Callout>

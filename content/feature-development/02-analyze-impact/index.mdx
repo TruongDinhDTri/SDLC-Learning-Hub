@@ -1,0 +1,74 @@
+---
+title: "Phase 2: Analyze System Impact"
+description: "Understand how the feature affects the current architecture before touching code"
+order: 2
+status: "growing"
+tags: ["impact-analysis", "architecture", "risk", "dependencies"]
+lastUpdated: "2026-05-21"
+---
+
+<PhaseHeader title="Phase 2: Analyze System Impact" subtitle="Features rarely affect only one place — map the blast radius first" icon="layers" accent="peach" duration="1-3 hours" />
+
+<TagRow tags={["impact-analysis", "risk-assessment", "dependencies", "architecture"]} />
+
+## Purpose
+
+Features rarely affect only one place. You must understand what parts of the system will change — this prevents accidental breakage of existing behavior.
+
+<Callout type="warn" title="Unanalyzed Impact = Production Incidents">
+The most common cause of production incidents is a change with unexpected side effects. Impact analysis is how senior engineers prevent this.
+</Callout>
+
+## Impact Areas to Analyze
+
+<Step number={1} title="Frontend Impact" status="growing">
+
+- Which UI components need to change or be created?
+- Does routing change (new pages, redirects)?
+- How does state management change?
+- Are there new forms or input flows?
+- What gets added to the API layer?
+- What cache invalidations are needed?
+
+</Step>
+
+<Step number={2} title="Backend Impact" status="growing">
+
+- Which APIs are added or modified?
+- Which services are affected by this change?
+- Does authentication or permissions logic change?
+- What new validation rules are needed?
+- Are new background jobs required?
+
+</Step>
+
+<Step number={3} title="Database Impact" status="seed">
+
+- New tables required?
+- New columns on existing tables?
+- New indexes needed for query performance?
+- New relationships or foreign keys?
+- Is a zero-downtime migration possible?
+
+</Step>
+
+<Step number={4} title="Infrastructure Impact" status="seed">
+
+- New storage needs (S3 buckets, volume mounts)?
+- New queue topics or worker types?
+- Redis key patterns that change?
+- New external API integrations?
+- Monitoring or alerting changes needed?
+
+</Step>
+
+## Questions to Ask
+
+```
+What existing flows could this change break?
+Does auth or permissions logic change?
+Will DB migrations be needed? Are they safe?
+Does this affect performance under load?
+Will async jobs be required?
+What tests become invalid after this change?
+```

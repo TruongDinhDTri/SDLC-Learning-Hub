@@ -1,0 +1,94 @@
+---
+title: "Phase 2: System Design"
+description: "Draw the blueprint — how FE, BE, DB, and external APIs connect"
+order: 2
+status: "growing"
+tags: ["architecture", "api-design", "system-design"]
+lastUpdated: "2026-05-21"
+---
+
+<PhaseHeader title="Phase 2: System Design" subtitle="Draw the blueprint before you build the house" icon="git" accent="sage" duration="2-4 days" />
+
+<TagRow tags={["architecture", "api-design", "data-flow", "tech-stack"]} />
+
+## Purpose
+
+Like an architecture plan before building a house. This is where you decide HOW your system is shaped.
+
+**Key question:** *"What does the system look like and how do parts communicate?"*
+
+<Callout type="note">
+System design happens BEFORE implementation. Decisions made here are expensive to reverse. Spend time here to save 10x the time later.
+</Callout>
+
+## Steps
+
+<Step number={1} title="Create Architecture Diagram" status="growing">
+
+Map: User → Frontend → Backend → Database → External APIs
+
+Even a rough sketch is enough. The goal is shared understanding of the whole system.
+
+```
+User
+  ↓
+React SPA (Vercel)
+  ↓
+FastAPI (Railway)
+  ↓
+PostgreSQL (Supabase)
+  ↓
+Stripe / SendGrid (external)
+```
+
+</Step>
+
+<Step number={2} title="Choose Tech Stack" status="growing">
+
+For each layer, decide: language, framework, hosting. Write down WHY you chose it.
+
+Questions to answer:
+- What is the team's expertise?
+- What are the scaling requirements?
+- What is the operational cost?
+- What is the ecosystem like?
+
+</Step>
+
+<Step number={3} title="Design APIs" status="seed">
+
+Define endpoints, methods, request/response shapes before coding.
+
+```
+POST /auth/login  → { email, password } → { token, user }
+GET  /invoices    → (auth header)       → { items: Invoice[] }
+POST /invoices    → Invoice             → Invoice
+```
+
+Use OpenAPI/Swagger to document formally.
+
+</Step>
+
+<Step number={4} title="Map Data Flow" status="seed">
+
+How does data move through the system?
+
+- Where does it enter?
+- What transforms it?
+- Where does it persist?
+- What returns to the client?
+
+</Step>
+
+## Checklist
+
+<Checklist items={[{label: "Architecture diagram created", done: false}, {label: "Tech stack decided with reasoning documented", done: false}, {label: "Core API endpoints defined", done: false}, {label: "Data flow mapped end-to-end", done: false}, {label: "External integration points identified", done: false}]} />
+
+## Output Documents
+
+| Document | Description |
+|----------|-------------|
+| Architecture Diagram | FE, BE, DB, external APIs, how they connect |
+| Tech Stack Decision Record | Why each technology was chosen |
+| API Specification | Endpoints, methods, request/response format |
+| Data Flow Diagram | Data source → transformation → destination |

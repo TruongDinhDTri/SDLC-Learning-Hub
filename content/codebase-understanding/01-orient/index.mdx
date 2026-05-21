@@ -1,0 +1,90 @@
+---
+title: "Phase 1: Orient Yourself"
+description: "Understand what this system exists to do before touching any code"
+order: 1
+status: "growing"
+tags: ["orientation", "purpose", "tech-stack", "architecture"]
+lastUpdated: "2026-05-21"
+---
+
+<PhaseHeader title="Phase 1: Orient Yourself" subtitle="Understand what this system exists to do" icon="home" accent="sky" duration="1-2 hours" />
+
+<TagRow tags={["readme", "tech-stack", "architecture", "domain"]} />
+
+## The Real Goal
+
+The goal is NOT to memorize every file.
+
+The real goal is to build a mental model of:
+- what the system does
+- how data moves through it
+- where logic lives
+- how components communicate
+- where failures happen
+- where changes are risky
+
+If you can predict behavior, debug confidently, trace flows quickly, modify features safely, and explain architecture clearly — you understand the system.
+
+<Callout type="tip" title="Signs You Truly Understand">
+You can predict where new code should go, explain major flows end-to-end, and trace a bug without reading every file. That is the target.
+</Callout>
+
+## Step 1: Identify the System's Purpose
+
+Read first:
+- README.md
+- docs/ folder
+- API documentation or landing page
+- Issue tracker (reveals real pain points)
+
+Write a short summary:
+
+```
+This is a SaaS platform for X.
+Users can: do A, do B, do C.
+Main workflows: login → create → process → notify.
+```
+
+Without this, code feels completely random.
+
+## Step 2: Identify the Tech Stack
+
+**Frontend** — look for: `package.json`, `vite.config`, `next.config`
+
+Possible frameworks: React, Vue, Angular, Next.js, Nuxt
+
+**Backend** — look for: `requirements.txt`, `pyproject.toml`, `go.mod`
+
+Possible frameworks: Django, FastAPI, Express, Spring, Rails, Go Fiber
+
+**Infrastructure** — look for: `Dockerfile`, `docker-compose.yml`, `terraform/`, `k8s/`, `.github/workflows/`
+
+Infrastructure understanding separates senior engineers from juniors.
+
+## Step 3: Identify Architecture Style
+
+Two different layers:
+
+| Layer | Purpose |
+|-------|---------|
+| Tech Stack | WHAT technologies and tools exist |
+| Architecture Style | HOW the system is organized |
+
+Architecture styles to identify:
+- Monolith / Modular monolith / Microservices
+- REST / GraphQL / WebSockets / gRPC
+- Synchronous / Asynchronous / Queue-based / Event-driven
+- Stateless vs Stateful services
+- Tightly coupled vs Loosely coupled modules
+
+<Callout type="quote" title="Final Insight">
+Architecture is a collection of engineering tradeoffs. Understanding architecture means understanding WHY the system was shaped this way — not just what technologies it uses.
+</Callout>
+
+## Output You Should Produce
+
+```
+Tech Stack: React + Vite, Django REST Framework, PostgreSQL, Docker, AWS S3, Redis
+Architecture: Modular monolith, REST API, Async Celery jobs, Redis caching, Stateless JWT auth
+Domain: Invoice management SaaS for freelancers
+```

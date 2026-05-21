@@ -1,0 +1,71 @@
+---
+title: "Phase 4: Slice the Feature Vertically"
+description: "Deliver value incrementally — small end-to-end slices beat big horizontal builds"
+order: 4
+status: "growing"
+tags: ["vertical-slices", "incremental-delivery", "agile", "small-prs"]
+lastUpdated: "2026-05-21"
+---
+
+<PhaseHeader title="Phase 4: Vertical Slices" subtitle="Build small end-to-end slices that each deliver real value" icon="layers" accent="peach" duration="Planning: 30 minutes" />
+
+<TagRow tags={["vertical-slices", "incremental", "small-prs", "agile", "delivery"]} />
+
+## Purpose
+
+Instead of building everything at once: build small end-to-end slices.
+
+Each slice should be: **testable, deployable, reviewable, understandable, and low-risk.**
+
+## Bad: Horizontal Development
+
+```
+Day 1: All DB schema work
+Day 2: All backend API work
+Day 3: All frontend UI work
+Day 4: Integration + testing (usually rushed)
+```
+
+Problems: giant PRs, delayed feedback, painful merges, hard to debug integration issues, high blast radius if something goes wrong.
+
+## Good: Vertical Slice Development
+
+**Slice 1 — Minimal working feature:**
+```
+Simple upload endpoint + basic file input UI + save URL to DB
+Ship: users can upload. Basic functionality works end-to-end.
+```
+
+**Slice 2 — Safety and validation:**
+```
+File type validation + size limits + proper error messages
+Ship: feature is now safe for real users.
+```
+
+**Slice 3 — Async processing:**
+```
+Background resize job + thumbnail generation at multiple sizes
+Ship: feature is optimized and performant.
+```
+
+**Slice 4 — Observability and polish:**
+```
+Monitoring, analytics tracking, retry logic, UX polish
+Ship: feature is production-ready quality.
+```
+
+Each slice delivers working business value. Users can use what's built at every step.
+
+## Benefits
+
+| Benefit | Why It Matters |
+|---------|----------------|
+| Early feedback | Catch wrong assumptions before too much is built |
+| Smaller PRs | Reviews are faster, more thorough, and less stressful |
+| Rollback safety | Each slice can be reverted independently |
+| Parallel work | Frontend and backend can progress simultaneously |
+| Reduced risk | Smaller changes mean smaller blast radius |
+
+<Callout type="tip" title="The Vertical Slice Test">
+If your PR touches only backend OR only frontend OR only database — it's horizontal. Vertical means end-to-end: a user can do something new after every merge.
+</Callout>

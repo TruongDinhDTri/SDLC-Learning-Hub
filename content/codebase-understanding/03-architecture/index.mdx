@@ -1,0 +1,76 @@
+---
+title: "Phase 3: Map the Architecture"
+description: "Understand the major building blocks and how they communicate"
+order: 3
+status: "growing"
+tags: ["architecture", "components", "communication", "mapping"]
+lastUpdated: "2026-05-21"
+---
+
+<PhaseHeader title="Phase 3: Map the Architecture" subtitle="Understand major building blocks and how they communicate" icon="layers" accent="sky" duration="1-2 hours" />
+
+<TagRow tags={["architecture-diagram", "components", "boundaries", "services"]} />
+
+## Purpose
+
+This is the beginning of architecture thinking. You need to see how major components communicate — not just what they contain individually.
+
+## Frontend Architecture
+
+Identify:
+- **Routing** — How pages and views are organized
+- **State management** — Redux, Zustand, Context API, React Query
+- **API layer** — How the frontend talks to the backend
+- **Authentication flow** — Where auth state lives and how it propagates
+
+## Backend Architecture
+
+Identify:
+- **Controllers and Routes** — Request entry points
+- **Services** — Where business logic lives
+- **Models and Repositories** — Data access layer
+- **Middleware** — Cross-cutting concerns (auth, logging, rate limiting)
+- **Background jobs** — Async processing
+
+Common patterns:
+- MVC (Model-View-Controller)
+- Layered (Controller → Service → Repository)
+- Clean Architecture (inward dependency rule)
+
+## Database Architecture
+
+Identify:
+- Core entities and their ownership boundaries
+- Transaction boundaries (what changes together)
+- Read patterns vs write patterns
+- Indexes and optimization strategies
+
+## External Services Map
+
+| Service | Purpose |
+|---------|---------|
+| Stripe | Payment processing |
+| AWS S3 | File and object storage |
+| SendGrid | Transactional email |
+| Firebase | Auth or real-time data |
+| OAuth providers | Social login |
+
+## Output: Architecture Diagram
+
+```
+Frontend (React + Vite)
+  ↓ REST API calls
+Django Controllers (routes.py)
+  ↓
+Service Layer (services/)
+  ↓
+PostgreSQL (source of truth)
+
+Background jobs: Celery workers + Redis queue
+File storage: AWS S3 (presigned URLs)
+Auth: JWT tokens (stateless)
+```
+
+<Callout type="note" title="Architecture vs Implementation">
+Architecture is HOW the system is organized. Implementation is WHAT the code does. Always understand architecture before diving into implementation details — otherwise you get lost in details without seeing the whole.
+</Callout>

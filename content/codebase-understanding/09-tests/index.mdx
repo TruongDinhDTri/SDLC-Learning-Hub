@@ -1,0 +1,61 @@
+---
+title: "Phase 9: Read the Tests"
+description: "Tests reveal expected behavior, edge cases, and business rules better than documentation"
+order: 9
+status: "growing"
+tags: ["testing", "test-reading", "behavior", "business-rules"]
+lastUpdated: "2026-05-21"
+---
+
+<PhaseHeader title="Phase 9: Read the Tests" subtitle="Tests sometimes explain the system better than documentation" icon="check" accent="sky" duration="1-2 hours" />
+
+<TagRow tags={["tests", "unit-tests", "integration-tests", "business-rules"]} />
+
+## Purpose
+
+Tests reveal:
+- **Expected behavior** — what the code is supposed to do
+- **Edge cases** — unusual inputs the original author anticipated
+- **Business rules** — constraints that must always hold
+- **Assumptions** — what the system takes for granted
+
+Sometimes tests explain the system better than any documentation.
+
+## What to Read
+
+| Test Type | What It Reveals |
+|-----------|----------------|
+| Unit tests | Isolated logic, pure functions, business calculations |
+| Integration tests | How services interact, API contracts between layers |
+| E2E tests | Complete user flows, happy paths, critical journeys |
+
+## What to Look For
+
+Read tests as documentation:
+
+- **Edge cases** — What unusual inputs were anticipated?
+- **Permission logic** — What roles can do what actions?
+- **Validation rules** — What input is rejected and why?
+- **Business invariants** — What constraints must always hold true?
+
+## Questions to Answer
+
+```
+What behavior is considered critical (most heavily tested)?
+What edge cases were explicitly anticipated?
+What assumptions are protected by tests?
+What business rules are enforced in tests vs in code?
+What is NOT tested? (potential risk areas)
+```
+
+## Signs of a Well-Tested Codebase
+
+- Tests document intent, not just implementation details
+- Edge cases are explicitly covered, not just happy paths
+- Failure paths are tested as carefully as success paths
+- Tests run fast and reliably without flakiness
+- Coverage focuses on business-critical paths, not just line coverage
+
+<Callout type="note" title="Untested Code is a Risk Map">
+Areas with no tests are where bugs hide. If a module has no tests, be extra careful when modifying it — you have no safety net and no documentation of intended behavior.
+</Callout>

@@ -22,12 +22,12 @@ export async function generateStaticParams() {
   const slugs = getAllSlugs()
   return slugs.map(slug => ({
     hub: slug[0],
-    slug: slug.slice(1),
+    slug: slug.slice(1).length > 0 ? slug.slice(1) : undefined,
   }))
 }
 
 interface PageProps {
-  params: Promise<{ hub: string; slug: string[] }>
+  params: Promise<{ hub: string; slug?: string[] }>
 }
 
 export default async function ArticlePage({ params }: PageProps) {

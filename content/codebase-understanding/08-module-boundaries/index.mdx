@@ -1,0 +1,62 @@
+---
+title: "Phase 8: Understand Module Boundaries"
+description: "Learn ownership, responsibilities, and separation of concerns"
+order: 8
+status: "growing"
+tags: ["modules", "boundaries", "coupling", "responsibilities"]
+lastUpdated: "2026-05-21"
+---
+
+<PhaseHeader title="Phase 8: Module Boundaries" subtitle="Learn what each module owns and what it should never touch" icon="layers" accent="sky" duration="1-2 hours" />
+
+<TagRow tags={["modules", "coupling", "single-responsibility", "dependency-analysis"]} />
+
+## Purpose
+
+Good systems separate concerns cleanly. You need to understand what each module owns — and equally important, what it should NOT own.
+
+## Questions to Ask About Each Module
+
+```
+What is this module responsible for?
+What should NOT belong here?
+What dependencies does it have?
+What modules depend on it?
+Is it tightly coupled to implementation details?
+Can it be changed without breaking other modules?
+```
+
+## Good vs Bad Boundaries
+
+**Bad — responsibilities leaking across modules:**
+```
+Auth service directly edits payment logic.
+Upload service sends emails.
+API controller contains business logic.
+User model directly calls external APIs.
+```
+
+**Good — clean separation:**
+```
+Auth service: login, token validation, permissions ONLY.
+Upload service: file storage and size validation ONLY.
+Services communicate through defined APIs or events.
+```
+
+## Signs of Tight Coupling
+
+- Module A imports deeply from Module B's internal implementation
+- Changing one module requires cascading changes in many others
+- Circular dependencies (A imports B, B imports C, C imports A)
+- Test setup requires initializing many unrelated modules
+
+## Signs of Good Modularity
+
+- Module can be read and understood in isolation
+- Module can be tested without initializing unrelated systems
+- Module can be replaced without cascading changes throughout the codebase
+- Dependencies flow in one direction (inward, toward stable abstractions)
+
+<Callout type="tip" title="Dependency Analysis Tool">
+Most languages have import graph tools. Circular imports are always a red flag. A star-shaped dependency graph — where everything depends on one central module — suggests a missing abstraction layer.
+</Callout>

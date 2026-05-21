@@ -1,0 +1,70 @@
+---
+title: "Phase 5: Understand the Data Model"
+description: "The database reveals the true shape of the business domain"
+order: 5
+status: "growing"
+tags: ["database", "schema", "entities", "relationships"]
+lastUpdated: "2026-05-21"
+---
+
+<PhaseHeader title="Phase 5: Understand the Data Model" subtitle="Databases expose the true shape of the business domain" icon="db" accent="sky" duration="1-2 hours" />
+
+<TagRow tags={["database", "schema", "entities", "ER-diagram", "migrations"]} />
+
+## Purpose
+
+The database reveals:
+- **Business concepts** — the core "nouns" of the domain
+- **Ownership** — who created what, who is responsible for what
+- **Relationships** — how data elements connect to each other
+- **Core domain logic** — business rules encoded directly into schema constraints
+
+Databases expose the true shape of the system — more honestly than the code does.
+
+## What to Read
+
+- Migration files (shows how the system evolved over time)
+- ORM models (shows relationships, constraints, validation)
+- Schema files or ERD exports (the ground truth)
+- ER diagrams if they exist in docs/
+
+## What to Find
+
+- **Primary entities** — the core nouns of the business domain
+- **Relationships** — 1-to-1, 1-to-many, many-to-many
+- **Indexes** — what's optimized for read performance
+- **Constraints** — what the DB enforces (uniqueness, nullability, foreign keys)
+- **Timestamps** — created_at, updated_at, deleted_at patterns
+- **Soft deletes** — records marked inactive vs hard deleted
+
+## Output Example
+
+```
+Users
+  ↓ (1 user → many orders)
+Orders
+  ↓ (1 order → 1 payment)
+Payments
+  ↓
+LineItems (many per order)
+
+Users can have many orders.
+Orders belong to one user.
+Payments belong to one order.
+Each order can have many line items.
+```
+
+## Questions to Answer
+
+```
+What are the core entities of this domain?
+How are they connected to each other?
+Which tables are most central to the system?
+What is considered the source of truth?
+Where is mutable state persisted?
+What can be derived vs what must be stored?
+```
+
+<Callout type="note" title="Migration History as System History">
+Reading migration history in order tells you how the system evolved. New tables and columns reveal features added over time. Dropped columns reveal abandoned features or bad initial design decisions. The history is educational.
+</Callout>

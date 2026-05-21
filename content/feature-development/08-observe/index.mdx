@@ -1,0 +1,62 @@
+---
+title: "Phase 8: Observe in Production"
+description: "Deployment is not the end — production reveals truths that development environments hide"
+order: 8
+status: "growing"
+tags: ["monitoring", "observability", "production", "analytics"]
+lastUpdated: "2026-05-21"
+---
+
+<PhaseHeader title="Phase 8: Observe in Production" subtitle="Learn from real-world usage — deployment is not the finish line" icon="eye" accent="peach" duration="1-2 weeks post-launch" />
+
+<TagRow tags={["monitoring", "observability", "user-behavior", "production-analytics", "sentry"]} />
+
+## Purpose
+
+Production reveals truths that development environments hide.
+
+Real traffic brings: unexpected usage patterns, edge cases you never anticipated, scale you couldn't simulate locally, and abuse patterns from bad actors.
+
+## What to Observe
+
+- **User behavior** — Are users using the feature as you expected?
+- **Performance** — How does it hold up at real traffic volumes?
+- **Errors** — What errors appear in production that never appeared in tests?
+- **Edge cases** — What unusual inputs or flows do real users produce?
+- **Abuse** — Are bad actors trying to exploit the feature?
+- **Bottlenecks** — What becomes slow under actual load patterns?
+
+## Metrics to Track Post-Launch
+
+| Category | Metrics |
+|----------|---------|
+| Usage | Feature adoption rate, daily active users, funnel completion |
+| Performance | p50, p95, p99 latency; throughput in requests per second |
+| Reliability | Error rate, uptime, failed operations count |
+| Business | Conversion delta, engagement delta, retention impact |
+
+## Questions to Answer
+
+```
+Are users behaving as expected?
+What errors appear in production?
+What assumptions turned out to be wrong?
+Where are bottlenecks emerging under real load?
+What needs optimization in the next iteration?
+What should we build next based on usage data?
+```
+
+## The Observation Feedback Loop
+
+```
+Deploy → Observe metrics and behavior
+→ Identify issues or opportunities
+→ Fix issues or plan improvements
+→ Redeploy → Observe again → Repeat
+```
+
+This loop never truly ends for a healthy production feature. The first week after launch is the most important observation window.
+
+<Callout type="tip" title="Observe for at Least One Full Week">
+Many production issues only appear at specific times: end-of-month batch jobs, Monday morning traffic spikes, concurrent user peaks during business hours. Observe for at least one full week before declaring a feature stable.
+</Callout>

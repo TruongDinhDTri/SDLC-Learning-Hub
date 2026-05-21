@@ -1,0 +1,79 @@
+---
+title: "Phase 2: Find Entry Points"
+description: "Learn where execution begins — your navigation anchor for the whole codebase"
+order: 2
+status: "growing"
+tags: ["entry-points", "routing", "startup", "middleware"]
+lastUpdated: "2026-05-21"
+---
+
+<PhaseHeader title="Phase 2: Find Entry Points" subtitle="Every system starts somewhere — find it first" icon="arrowRight" accent="sky" duration="30-60 minutes" />
+
+<TagRow tags={["entry-points", "routing", "middleware", "workers", "startup"]} />
+
+## Purpose
+
+Every system starts somewhere. Entry points become your navigation anchors.
+
+Once you know where execution begins, you can trace any flow from root to leaf without getting lost.
+
+## Frontend Entry Points
+
+```
+main.jsx / index.js / App.tsx
+```
+
+Find:
+- How routes are registered
+- App-level providers (auth, theme, query client)
+- Global state initialization
+- Root layout structure
+
+## Backend Entry Points
+
+```
+main.py / manage.py / server.js / app.py
+```
+
+Find:
+- How routes and endpoints are registered
+- Middleware stack (auth, logging, CORS, rate limiting)
+- App initialization sequence
+- Database connection setup
+
+## Background Workers
+
+```
+celery.py / workers/ / jobs/ / queues/ / cron/
+```
+
+Find:
+- What tasks run asynchronously
+- Retry and failure behavior
+- Scheduling patterns and intervals
+
+## Infrastructure Startup
+
+```
+Dockerfile / docker-compose.yml / entrypoint.sh / Makefile
+```
+
+Find:
+- Service startup order and dependencies
+- Environment variable loading
+- Port bindings and network configuration
+
+## Questions to Answer
+
+```
+What starts the application?
+How are routes registered?
+Where is middleware configured?
+Where are services initialized?
+Where are environment variables loaded?
+What happens first when a request arrives?
+```
+
+<Callout type="tip" title="Navigation Anchor">
+Once you know the entry points, every code exploration starts here. Following a request from entry point to response is the fastest way to understand any codebase.
+</Callout>
