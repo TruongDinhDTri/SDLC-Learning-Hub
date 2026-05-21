@@ -420,7 +420,7 @@ function ArticleWithProgress({
 }
 
 /* ─── Hub index (redirects to /[hub] page) ─── */
-function HubIndexContent({ hubId }: { hubId: string }) {
+function HubIndexContent({ hubId, showSidebar, onToggleSidebar }: { hubId: string; showSidebar?: boolean; onToggleSidebar?: () => void }) {
   const hub = getHub(hubId)
   const hubDef = HUB_DEFS.find(h => h.id === hubId)
   if (!hub || !hubDef) return null
@@ -431,11 +431,15 @@ function HubIndexContent({ hubId }: { hubId: string }) {
 
   return (
     <>
-      <TopBar breadcrumb={[
-        { label: 'Home', href: '/', icon: 'home' },
-        { label: 'Library', href: '/' },
-        { label: hub.title },
-      ]} />
+      <TopBar
+        breadcrumb={[
+          { label: 'Home', href: '/', icon: 'home' },
+          { label: 'Library', href: '/' },
+          { label: hub.title },
+        ]}
+        onToggleSidebar={onToggleSidebar}
+        sidebarOpen={showSidebar}
+      />
       <div style={{ flex: 1, overflowY: 'auto' }}>
         <div style={{ position: 'relative', borderRadius: 16, margin: '16px 24px 0', overflow: 'hidden' }}>
           <HorizonBand height={160} />
@@ -507,6 +511,10 @@ export default function ArticlePage() {
   const hubId = typeof params.hub === 'string' ? params.hub : ''
   const slugArr = Array.isArray(params.slug) ? params.slug : (params.slug ? [params.slug as string] : [])
 
+  // Panel toggle state — must be before any conditional returns
+  const [showSidebar, setShowSidebar] = useState(true)
+  const [showToc, setShowToc] = useState(true)
+
   // Hub index
   if (!slugArr || slugArr.length === 0) {
     const hub = getHub(hubId)
@@ -516,9 +524,9 @@ export default function ArticlePage() {
     return (
       <div style={{ display: 'flex', minHeight: '100vh' }}>
         <MobileSidebarBackdrop />
-        <Sidebar groups={SIDEBAR_GROUPS} />
+        <Sidebar groups={SIDEBAR_GROUPS} collapsed={!showSidebar} />
         <main style={{ flex: 1, minWidth: 0, height: '100vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-          <HubIndexContent hubId={hubId} />
+          <HubIndexContent hubId={hubId} showSidebar={showSidebar} onToggleSidebar={() => setShowSidebar(p => !p)} />
         </main>
         <MobileBottomNav />
       </div>
@@ -584,7 +592,7 @@ export default function ArticlePage() {
   return (
     <div style={{ display: 'flex', minHeight: '100vh' }}>
       <MobileSidebarBackdrop />
-      <Sidebar groups={SIDEBAR_GROUPS} />
+      <Sidebar groups={SIDEBAR_GROUPS} collapsed={!showSidebar} />
 
       <main style={{ flex: 1, minWidth: 0, height: '100vh', display: 'flex', overflow: 'hidden', position: 'relative' }}>
         {/* Sky gradient band */}
@@ -601,6 +609,10 @@ export default function ArticlePage() {
               { label: hubData.title, href: `/${hubId}` },
               { label: page.title },
             ]}
+            onToggleSidebar={() => setShowSidebar(p => !p)}
+            sidebarOpen={showSidebar}
+            onToggleToc={() => setShowToc(p => !p)}
+            tocOpen={showToc}
             actions={
               <button className="hb-btn hb-btn--ghost" style={{ padding: '7px 10px' }}>
                 <Icon name="bookmark" size={13} />
@@ -614,7 +626,7 @@ export default function ArticlePage() {
           </div>
 
           {/* Reading column — centered within the scrollable area */}
-          <div style={{ maxWidth: 760, margin: '0 auto', padding: '0 40px', width: '100%', boxSizing: 'border-box' }}>
+          <div style={{ maxWidth: 1060, margin: '0 auto', padding: '0 40px', width: '100%', boxSizing: 'border-box' }}>
 
           {/* Article header */}
           <div style={{ padding: '32px 0 0' }}>
@@ -767,15 +779,17 @@ export default function ArticlePage() {
 
         {/* TOC Panel */}
         <aside className="hanami-toc-panel" style={{
-          width: 260,
+          width: showToc ? 260 : 0,
           flex: '0 0 auto',
-          borderLeft: '1px solid var(--line)',
-          padding: '32px 22px',
+          borderLeft: showToc ? '1px solid var(--line)' : 'none',
+          padding: showToc ? '32px 22px' : '32px 0',
           background: 'rgba(255,251,244,.55)',
           backdropFilter: 'blur(6px)',
           overflowY: 'auto',
+          overflowX: 'hidden',
           height: '100%',
           position: 'relative',
+          transition: 'width 0.22s cubic-bezier(.4,0,.2,1), padding 0.22s cubic-bezier(.4,0,.2,1)',
         }}>
           <TOCPanel
             items={finalTocItems}

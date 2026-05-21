@@ -1,3 +1,6 @@
+'use client'
+
+import { useState } from 'react'
 import Link from 'next/link'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { TopBar } from '@/components/layout/TopBar'
@@ -128,17 +131,23 @@ const HUB_CARDS = [
 // ---------------------------------------------------------------------------
 
 export default function Dashboard() {
+  const [showSidebar, setShowSidebar] = useState(true)
+
   return (
     <div className="hanami-surface" style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
       <MobileSidebarBackdrop />
-      <Sidebar groups={SIDEBAR_GROUPS} />
+      <Sidebar groups={SIDEBAR_GROUPS} collapsed={!showSidebar} />
 
       {/* Main scrollable area */}
       <div
         className="hanami-main-content"
         style={{ flex: 1, overflowY: 'auto', height: '100vh', position: 'relative', minWidth: 0 }}
       >
-        <TopBar breadcrumb={[{ label: 'Home', href: '/', icon: 'home' }]} />
+        <TopBar
+          breadcrumb={[{ label: 'Home', href: '/', icon: 'home' }]}
+          onToggleSidebar={() => setShowSidebar(p => !p)}
+          sidebarOpen={showSidebar}
+        />
 
         {/* ── HERO BAND ─────────────────────────────────────────────── */}
         <div style={{ position: 'relative' }}>

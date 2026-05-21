@@ -14,6 +14,10 @@ interface BreadcrumbItem {
 interface TopBarProps {
   breadcrumb?: BreadcrumbItem[]
   actions?: React.ReactNode
+  onToggleSidebar?: () => void
+  sidebarOpen?: boolean
+  onToggleToc?: () => void
+  tocOpen?: boolean
 }
 
 const SEASONS = [
@@ -70,14 +74,14 @@ function MobileHamburger() {
   )
 }
 
-export function TopBar({ breadcrumb = [], actions }: TopBarProps) {
+export function TopBar({ breadcrumb = [], actions, onToggleSidebar, sidebarOpen = true, onToggleToc, tocOpen = true }: TopBarProps) {
   return (
     <div style={{
       height: 60,
       display: 'flex',
       alignItems: 'center',
       gap: 16,
-      padding: '0 32px',
+      padding: '0 20px 0 16px',
       borderBottom: '1px solid var(--line)',
       background: 'rgba(255,251,244,.55)',
       backdropFilter: 'blur(10px)',
@@ -87,6 +91,25 @@ export function TopBar({ breadcrumb = [], actions }: TopBarProps) {
       zIndex: 10,
     }}>
       <MobileHamburger />
+      {/* Desktop sidebar toggle */}
+      {onToggleSidebar && (
+        <button
+          onClick={onToggleSidebar}
+          title={sidebarOpen ? 'Hide sidebar' : 'Show sidebar'}
+          style={{
+            display: 'none',
+            width: 32, height: 32, borderRadius: 8,
+            background: sidebarOpen ? 'var(--paper)' : 'rgba(255,143,163,.12)',
+            border: '1px solid var(--line)',
+            cursor: 'pointer', alignItems: 'center', justifyContent: 'center',
+            color: sidebarOpen ? 'var(--ink-faint)' : 'var(--rose-deep)',
+            flexShrink: 0,
+          }}
+          className="hb-panel-toggle"
+        >
+          <Icon name="sidebar" size={14} />
+        </button>
+      )}
       {/* Breadcrumb */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', minWidth: 0 }}>
         {breadcrumb.map((item, i) => (
@@ -123,6 +146,22 @@ export function TopBar({ breadcrumb = [], actions }: TopBarProps) {
       </div>
       <div style={{ flex: 1 }} />
       {actions}
+      {onToggleToc && (
+        <button
+          onClick={onToggleToc}
+          title={tocOpen ? 'Hide outline' : 'Show outline'}
+          style={{
+            width: 32, height: 32, borderRadius: 8,
+            background: tocOpen ? 'var(--paper)' : 'rgba(255,143,163,.12)',
+            border: '1px solid var(--line)',
+            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            color: tocOpen ? 'var(--ink-faint)' : 'var(--rose-deep)',
+            flexShrink: 0,
+          }}
+        >
+          <Icon name="list" size={14} />
+        </button>
+      )}
       <SeasonBtn />
       <Avatar initials="T" />
     </div>

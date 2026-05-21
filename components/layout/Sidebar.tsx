@@ -25,6 +25,7 @@ interface TreeGroup {
 
 interface SidebarProps {
   groups: TreeGroup[]
+  collapsed?: boolean
 }
 
 function TreeItem({ leaf, currentPath }: { leaf: TreeLeaf; currentPath: string }) {
@@ -123,7 +124,7 @@ function TreeGroup({ group, currentPath }: { group: TreeGroup; currentPath: stri
   )
 }
 
-export function Sidebar({ groups }: SidebarProps) {
+export function Sidebar({ groups, collapsed = false }: SidebarProps) {
   const pathname = usePathname()
   const [q, setQ] = useState('')
 
@@ -136,13 +137,15 @@ export function Sidebar({ groups }: SidebarProps) {
 
   return (
     <aside className="hanami-sidebar" style={{
-      width: 272,
+      width: collapsed ? 0 : 272,
       flexShrink: 0,
+      overflow: 'hidden',
       height: '100vh',
       position: 'sticky',
       top: 0,
       display: 'flex',
       flexDirection: 'column',
+      transition: 'width 0.22s cubic-bezier(.4,0,.2,1)',
       background: 'rgba(255,251,244,0.82)',
       backdropFilter: 'blur(10px)',
       WebkitBackdropFilter: 'blur(10px)',

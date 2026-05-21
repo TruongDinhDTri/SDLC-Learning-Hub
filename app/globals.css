@@ -379,6 +379,9 @@ html, body {
   z-index: 190;
 }
 
+/* Desktop sidebar/TOC toggle buttons */
+.hb-panel-toggle { display: flex; }
+
 @media (max-width: 768px) {
   .hanami-sidebar {
     position: fixed !important;
@@ -399,6 +402,7 @@ html, body {
   .hanami-article-grid { grid-template-columns: 1fr !important; }
   .hanami-toc-panel { display: none !important; }
   .hb-hamburger { display: flex !important; }
+  .hb-panel-toggle { display: none !important; }
   .hanami-topbar-title { display: none !important; }
   .hanami-hero-grid { grid-template-columns: 1fr !important; }
 }

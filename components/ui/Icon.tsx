@@ -31,6 +31,9 @@ const PATHS: Record<string, React.ReactNode> = {
   check:        <><path d="M5 12 L10 17 L20 6" /></>,
   copy:         <><rect x="7" y="7" width="13" height="13" rx="2" /><path d="M5 14 L5 5 Q5 4 6 4 L15 4" /></>,
   eye:          <><path d="M2 12 Q7 5 12 5 Q17 5 22 12 Q17 19 12 19 Q7 19 2 12 Z" /><circle cx="12" cy="12" r="3" /></>,
+  sidebar:      <><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M9 3 L9 21" /></>,
+  list:         <><path d="M9 6 L21 6 M9 12 L21 12 M9 18 L21 18 M4 6 L4 6.01 M4 12 L4 12.01 M4 18 L4 18.01" strokeWidth="2" /></>,
+  panelright:   <><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M15 3 L15 21" /></>,
 }
 
 export type IconName = keyof typeof PATHS
