@@ -1,26 +1,321 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Caveat:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* ============================================================
+   Hanami — design tokens
+   ============================================================ */
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Palette — base (spring) */
+  --cream: #FBF6EE;
+  --cream-deep: #F5EDDF;
+  --paper: #FFFBF4;
+
+  --rose: #E8B4B0;
+  --rose-soft: #F5D6D2;
+  --rose-deep: #C4827E;
+
+  --peach: #F2C2A0;
+  --peach-soft: #FADFC9;
+  --peach-deep: #C68A63;
+
+  --sage: #B5C9A6;
+  --sage-soft: #D6E3CB;
+  --sage-deep: #7E9968;
+
+  --lavender: #C7BDD8;
+  --lavender-soft: #E2DCEB;
+
+  --sky: #B9D6E0;
+  --sky-soft: #DDEAEF;
+
+  /* Ink & neutrals — warm-toned, NOT pure black */
+  --ink: #3F362C;
+  --ink-soft: #6B5F52;
+  --ink-faint: #9C8E7E;
+  --ink-ghost: #C9BCAA;
+
+  /* Surfaces */
+  --line: rgba(63, 54, 44, 0.08);
+  --line-strong: rgba(63, 54, 44, 0.14);
+  --shadow-sm: 0 1px 2px rgba(120, 90, 60, 0.04), 0 2px 8px rgba(120, 90, 60, 0.06);
+  --shadow-md: 0 2px 6px rgba(120, 90, 60, 0.06), 0 10px 30px rgba(120, 90, 60, 0.08);
+  --shadow-lg: 0 4px 14px rgba(120, 90, 60, 0.08), 0 24px 60px rgba(120, 90, 60, 0.10);
+
+  /* Radii */
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-xl: 22px;
+  --r-2xl: 28px;
+
+  /* Typography */
+  --font-display: 'Shippori Mincho', Georgia, serif;
+  --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-hand: 'Caveat', cursive;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Decoration opacity */
+  --branch-opacity: 1;
+  --petal-opacity: 1.1;
 }
 
+/* ============================================================
+   Pond season (DEFAULT — mossy greens, teal water, koi orange)
+   ============================================================ */
+:root,
+:root[data-season="pond"] {
+  --rose: #E07A4A;
+  --rose-soft: #F3B898;
+  --rose-deep: #B0431C;
+  --peach: #7BB8B4;
+  --peach-soft: #B6D8D6;
+  --peach-deep: #3F7C7A;
+  --sage: #7E9968;
+  --sage-soft: #B4C99A;
+  --sage-deep: #3A5C2E;
+}
+
+/* Spring */
+:root[data-season="spring"] {
+  --rose: #E8B4B0; --rose-soft: #F5D6D2; --rose-deep: #C4827E;
+  --peach: #F2C2A0; --peach-soft: #FADFC9; --peach-deep: #C68A63;
+  --sage: #B5C9A6; --sage-soft: #D6E3CB; --sage-deep: #7E9968;
+}
+
+/* Summer */
+:root[data-season="summer"] {
+  --rose: #B9D6E0; --rose-soft: #DDEAEF; --rose-deep: #6E94A0;
+  --peach: #E8E0B5; --peach-soft: #F2EDD2; --peach-deep: #9E8E54;
+  --sage: #A8CFA5; --sage-soft: #CFE3C7; --sage-deep: #5F8A5C;
+}
+
+/* Autumn */
+:root[data-season="autumn"] {
+  --rose: #E0A992; --rose-soft: #F0CFBF; --rose-deep: #B36B4E;
+  --peach: #E8B574; --peach-soft: #F1D2A5; --peach-deep: #A87330;
+  --sage: #C9B98A; --sage-soft: #E0D6B7; --sage-deep: #8A7948;
+}
+
+/* ============================================================
+   Tailwind v4 theme extension
+   ============================================================ */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-display: 'Shippori Mincho', Georgia, serif;
+  --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-hand: 'Caveat', cursive;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --color-cream: #FBF6EE;
+  --color-paper: #FFFBF4;
+  --color-ink: #3F362C;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ============================================================
+   Hanami surface background
+   ============================================================ */
+.hanami-surface {
+  position: relative;
+  min-height: 100vh;
+  /* Pond gradient (default) */
+  background:
+    radial-gradient(900px 600px at 100% 0%, rgba(185, 214, 224, 0.55), transparent 60%),
+    radial-gradient(1100px 700px at -10% 110%, rgba(126, 153, 104, 0.32), transparent 60%),
+    radial-gradient(800px 600px at 60% 120%, rgba(123, 184, 180, 0.30), transparent 60%),
+    linear-gradient(180deg, #EEF4E8 0%, #E5EFDF 55%, #DCE9D4 100%);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.55;
+  letter-spacing: -0.005em;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+:root[data-season="spring"] .hanami-surface {
+  background:
+    radial-gradient(1100px 700px at 92% -8%, rgba(232, 180, 176, 0.32), transparent 60%),
+    radial-gradient(900px 600px at -8% 110%, rgba(181, 201, 166, 0.28), transparent 60%),
+    radial-gradient(700px 500px at 50% 120%, rgba(242, 194, 160, 0.22), transparent 60%),
+    linear-gradient(180deg, #FCF5EC 0%, #FBF1E4 60%, #F8EAD8 100%);
 }
+
+:root[data-season="summer"] .hanami-surface {
+  background:
+    radial-gradient(1100px 700px at 92% -8%, rgba(185, 214, 224, 0.50), transparent 60%),
+    radial-gradient(900px 600px at -8% 110%, rgba(168, 207, 165, 0.30), transparent 60%),
+    linear-gradient(180deg, #EEF6F8 0%, #E8F1EE 60%, #DEEEDB 100%);
+}
+
+:root[data-season="autumn"] .hanami-surface {
+  background:
+    radial-gradient(1100px 700px at 92% -8%, rgba(224, 169, 146, 0.35), transparent 60%),
+    radial-gradient(900px 600px at -8% 110%, rgba(201, 185, 138, 0.30), transparent 60%),
+    linear-gradient(180deg, #FBF3E5 0%, #F8EAD0 60%, #F3DCB7 100%);
+}
+
+/* Paper grain overlay */
+.hb-paper .hanami-surface::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+  background-image:
+    repeating-linear-gradient(45deg, rgba(120, 95, 60, 0.025) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(-45deg, rgba(120, 95, 60, 0.018) 0 1px, transparent 1px 4px);
+  mix-blend-mode: multiply;
+}
+
+/* ============================================================
+   Shared component classes (mirroring the Hanami design system)
+   ============================================================ */
+
+/* Buttons */
+.hb-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 13px;
+  padding: 9px 14px;
+  border-radius: 999px;
+  background: var(--paper);
+  border: 1px solid var(--line-strong);
+  color: var(--ink);
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+  box-shadow: var(--shadow-sm);
+  text-decoration: none;
+}
+.hb-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+.hb-btn--primary {
+  background: linear-gradient(160deg, var(--peach) 0%, var(--rose) 100%);
+  border-color: transparent;
+  color: #4a2f23;
+  box-shadow: 0 6px 16px rgba(196, 130, 126, 0.32);
+}
+.hb-btn--ghost {
+  background: transparent;
+  border-color: var(--line);
+  box-shadow: none;
+}
+.hb-btn--ghost:hover {
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Chips */
+.hb-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 500;
+  line-height: 1;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid var(--line);
+  color: var(--ink-soft);
+  backdrop-filter: blur(6px);
+}
+
+/* Cards */
+.hb-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm);
+  position: relative;
+}
+.hb-card--soft {
+  background: rgba(255, 251, 244, 0.78);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Status dots */
+.hb-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+  flex: 0 0 auto;
+}
+.hb-dot--rose  { background: var(--rose-deep); box-shadow: 0 0 0 3px rgba(228, 180, 176, 0.35); }
+.hb-dot--peach { background: var(--peach-deep); box-shadow: 0 0 0 3px rgba(242, 194, 160, 0.4); }
+.hb-dot--sage  { background: var(--sage-deep); box-shadow: 0 0 0 3px rgba(181, 201, 166, 0.4); }
+.hb-dot--lav   { background: #9388A6; box-shadow: 0 0 0 3px rgba(199, 189, 216, 0.4); }
+.hb-dot--mute  { background: var(--ink-ghost); }
+
+/* Underline highlight (peach band) */
+.hb-underline {
+  background-image: linear-gradient(
+    transparent 62%,
+    rgba(242, 194, 160, 0.55) 62%,
+    rgba(242, 194, 160, 0.55) 90%,
+    transparent 90%
+  );
+  padding: 0 2px;
+}
+:root[data-season="pond"] .hb-underline {
+  background-image: linear-gradient(
+    transparent 62%,
+    rgba(123, 184, 180, 0.6) 62%,
+    rgba(123, 184, 180, 0.6) 90%,
+    transparent 90%
+  );
+}
+
+/* Dividers */
+.hb-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink-faint);
+  font-family: var(--font-hand);
+  font-size: 16px;
+}
+.hb-divider::before,
+.hb-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--line-strong), transparent);
+}
+
+/* Koi swim animation */
+@keyframes hb-koi-swim {
+  0%   { transform: translate(0, 0) rotate(0deg); }
+  25%  { transform: translate(20px, -8px) rotate(-6deg); }
+  50%  { transform: translate(40px, 0) rotate(0deg); }
+  75%  { transform: translate(20px, 8px) rotate(6deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+.hb-koi { animation: hb-koi-swim 7s ease-in-out infinite; }
+.hb-koi--slow { animation-duration: 11s; }
+.hb-koi--rev  { animation-direction: reverse; }
+
+/* Mono / code */
+.hb-mono { font-family: var(--font-mono); font-size: 12px; }
+.hb-code {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  background: #FFF7EC;
+  border: 1px dashed rgba(196, 130, 126, 0.35);
+  border-radius: var(--r-md);
+  padding: 14px 16px;
+  color: #5a4a3a;
+  line-height: 1.7;
+  white-space: pre;
+  overflow: hidden;
+}
+
+/* Hand-written accent hiding */
+.hb-no-hand [style*="font-hand"] { display: none !important; }
+
+/* Global reset */
+html, body { margin: 0; padding: 0; background: #DCE9D4; }
+* { box-sizing: border-box; }
