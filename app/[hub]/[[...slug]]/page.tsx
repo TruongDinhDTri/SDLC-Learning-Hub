@@ -24,6 +24,16 @@ import PrereqChecklist from '@/components/content/PrereqChecklist'
 import CodeFile from '@/components/content/CodeFile'
 import Terminal from '@/components/content/Terminal'
 import StepBlock from '@/components/content/StepBlock'
+import { PullQuote } from '@/components/content/PullQuote'
+import { BlockQuote } from '@/components/content/BlockQuote'
+import { KeyTerm } from '@/components/content/KeyTerm'
+import { DropCap } from '@/components/content/DropCap'
+import { RcBullets } from '@/components/content/RcBullets'
+import { RcOrdered } from '@/components/content/RcOrdered'
+import { RcTable } from '@/components/content/RcTable'
+import { Diff } from '@/components/content/Diff'
+import { DeadlockDiagram } from '@/components/content/DeadlockDiagram'
+import { FootnotesList } from '@/components/content/FootnotesList'
 import { HUB_DEFS } from '@/lib/content'
 import { HUBS, getHubPage, getHub, type ContentBlock } from '@/lib/hub-content'
 
@@ -77,31 +87,41 @@ function ReadingProgress() {
 
 /* ─── Callout helper (internal) ─── */
 function Callout({ kind, title, text }: { kind: string; title?: string; text: string }) {
-  const styles: Record<string, { bg: string; border: string; ink: string; icon: IconName; label: string }> = {
-    tip:     { bg: 'linear-gradient(160deg, #E8F2DC, #DCEACE)', border: 'rgba(126,153,104,.3)',  ink: '#3e5234', icon: 'leaf',    label: 'tip' },
-    note:    { bg: 'linear-gradient(160deg, #FFF7EA, #F5EDDF)', border: 'rgba(184,153,104,.3)',  ink: '#5a4a32', icon: 'sparkle', label: 'note' },
-    warn:    { bg: 'linear-gradient(160deg, #FFE2D6, #FAD0BD)', border: 'rgba(198,138,99,.35)',  ink: '#7a3f1f', icon: 'flame',   label: 'careful' },
-    quote:   { bg: 'linear-gradient(160deg, #ECE5F5, #E2DCEB)', border: 'rgba(147,136,166,.3)',  ink: '#48405a', icon: 'book',    label: 'wisdom' },
-    danger:  { bg: 'linear-gradient(160deg, #FFE2D6, #FAD0BD)', border: 'rgba(198,100,80,.35)',  ink: '#7a2a1f', icon: 'flame',   label: 'danger' },
-    success: { bg: 'linear-gradient(160deg, #E8F2DC, #D6E3CB)', border: 'rgba(120,160,100,.3)',  ink: '#3e5234', icon: 'check',   label: 'success' },
+  const styles: Record<string, { bg: string; border: string; ink: string; icon: IconName; handle: string }> = {
+    tip:     { bg: 'linear-gradient(160deg, #DDF1CC, #B8E098)', border: 'rgba(111,175,84,.4)',  ink: '#2e4818', icon: 'leaf',    handle: 'pro tip —' },
+    note:    { bg: 'linear-gradient(160deg, #DCF0F4, #B6E9EE)', border: 'rgba(95,206,219,.35)', ink: '#1d6975', icon: 'sparkle', handle: 'good to know —' },
+    warn:    { bg: 'linear-gradient(160deg, #FFE5D2, #FAC8A8)', border: 'rgba(198,138,99,.4)',  ink: '#7a3f1f', icon: 'flame',   handle: 'watch out —' },
+    quote:   { bg: 'linear-gradient(160deg, #FFF7E1, #FFEAB3)', border: 'rgba(229,169,60,.4)',  ink: '#5a3f0a', icon: 'sparkle', handle: 'remember —' },
+    danger:  { bg: 'linear-gradient(160deg, #FFE0E6, #FFC8D2)', border: 'rgba(212,90,117,.4)',  ink: '#5c1f2d', icon: 'flame',   handle: 'careful —' },
+    success: { bg: 'linear-gradient(160deg, #E0F0CC, #C4E3AC)', border: 'rgba(111,175,84,.5)',  ink: '#2e4818', icon: 'check',   handle: 'you did it —' },
   }
   const s = styles[kind] ?? styles.note
   return (
-    <div className={`hb-callout hb-callout--${kind}`} style={{
-      background: s.bg, border: `1px solid ${s.border}`, borderRadius: 14,
-      padding: '14px 16px', color: s.ink, display: 'flex', gap: 12, margin: '16px 0',
+    <div style={{
+      margin: '14px 0', padding: '14px 18px',
+      background: s.bg, border: `1.5px solid ${s.border}`,
+      borderRadius: 14, display: 'flex', gap: 14,
     }}>
       <div style={{
-        flexShrink: 0, width: 26, height: 26, borderRadius: 8,
-        background: 'rgba(255,255,255,.6)', display: 'grid', placeItems: 'center',
+        flex: '0 0 auto', width: 30, height: 30, borderRadius: 10,
+        background: 'rgba(255,255,255,.7)', display: 'grid', placeItems: 'center',
+        color: s.ink,
       }}>
-        <Icon name={s.icon} size={14} color={s.ink} />
+        <Icon name={s.icon} size={15} color={s.ink} />
       </div>
       <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ fontSize: 11, letterSpacing: '.16em', textTransform: 'uppercase', fontWeight: 600, opacity: .8 }}>
-          {s.label}{title ? ` — ${title}` : ''}
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
+          <span style={{
+            fontFamily: 'var(--font-hand)', fontSize: 16, color: s.ink,
+            transform: 'rotate(-1deg)', display: 'inline-block',
+          }}>{s.handle}</span>
+          {title && (
+            <span style={{ fontSize: 11, color: s.ink, opacity: .7, letterSpacing: '.14em', textTransform: 'uppercase' }}>
+              {title}
+            </span>
+          )}
         </div>
-        <div style={{ marginTop: 4, fontSize: 13, lineHeight: 1.6 }}>{text}</div>
+        <div style={{ marginTop: 4, fontSize: 13.5, color: s.ink, lineHeight: 1.6 }}>{text}</div>
       </div>
     </div>
   )
@@ -114,31 +134,60 @@ function BlockRenderer({ block }: { block: ContentBlock }) {
       return (
         <h2
           id={block.text.toLowerCase().replace(/\s+/g, '-')}
-          style={{ fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 500, color: 'var(--ink)', margin: '28px 0 8px', letterSpacing: '-0.01em' }}
+          style={{
+            fontFamily: 'var(--font-display)', fontSize: 28, fontWeight: 500,
+            color: 'var(--ink)', margin: '36px 0 10px', letterSpacing: '-0.012em',
+            lineHeight: 1.18, position: 'relative',
+            display: 'flex', alignItems: 'baseline', gap: 14,
+          }}
         >
-          {block.text}
+          {block.kanji !== undefined ? (
+            <span style={{
+              display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+              width: 28, height: 28, marginRight: -4,
+              borderRadius: 8, background: 'linear-gradient(160deg, #FFE38B, #FFC93A)',
+              color: '#5a3f0a', fontFamily: 'var(--font-display)',
+              fontSize: 14, fontWeight: 700, flex: '0 0 auto',
+              boxShadow: 'inset 0 0 0 1px rgba(255,255,255,.5)',
+            }}>{block.kanji || '§'}</span>
+          ) : null}
+          <span style={{ flex: 1, minWidth: 0 }}>{block.text}</span>
         </h2>
       )
     case 'h3':
       return (
-        <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 17, fontWeight: 500, color: 'var(--ink-soft)', margin: '20px 0 6px' }}>
+        <h3 style={{
+          fontFamily: 'var(--font-display)', fontSize: 19, fontWeight: 600,
+          color: 'var(--ink)', margin: '24px 0 8px',
+          display: 'flex', alignItems: 'center', gap: 10,
+        }}>
+          <span className="hb-dot hb-dot--coral" style={{ flex: '0 0 auto' }} />
           {block.text}
         </h3>
       )
     case 'p':
       return (
-        <p style={{ fontSize: 14.5, color: 'var(--ink-soft)', lineHeight: 1.75, margin: '10px 0' }}>
+        <p style={{ fontSize: 15, color: 'var(--ink)', lineHeight: 1.72, margin: '0 0 14px' }}>
           {block.text}
         </p>
       )
+    case 'drop-cap':
+      return <DropCap first={block.first}>{block.text}</DropCap>
     case 'list':
       return (
-        <ul style={{ paddingLeft: 22, margin: '10px 0' }}>
+        <ul style={{ paddingLeft: 4, margin: '8px 0 18px', listStyle: 'none' }}>
           {block.items.map((item, i) => (
-            <li key={i} style={{ fontSize: 14, color: 'var(--ink-soft)', lineHeight: 1.7, marginBottom: 4 }}>{item}</li>
+            <li key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', padding: '4px 0', fontSize: 14, lineHeight: 1.6, color: 'var(--ink)' }}>
+              <span style={{ color: '#FF8FA3', fontSize: 14, lineHeight: 1.4, flex: '0 0 auto' }}>✿</span>
+              <span>{item}</span>
+            </li>
           ))}
         </ul>
       )
+    case 'bullets':
+      return <RcBullets items={block.items} />
+    case 'ordered':
+      return <RcOrdered items={block.items} />
     case 'callout':
       return <Callout kind={block.kind} title={block.title} text={block.text} />
     case 'step':
@@ -167,6 +216,7 @@ function BlockRenderer({ block }: { block: ContentBlock }) {
           filename={block.filename}
           language={block.language}
           lines={block.lines}
+          highlight={block.highlight}
         />
       )
     case 'terminal':
@@ -191,46 +241,70 @@ function BlockRenderer({ block }: { block: ContentBlock }) {
       )
     case 'table':
       return (
-        <div style={{ overflowX: 'auto', margin: '16px 0' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13.5 }}>
-            <thead>
-              <tr style={{ background: 'rgba(242,194,160,.18)', borderBottom: '2px solid var(--line-strong)' }}>
-                {block.headers.map((h, i) => (
-                  <th key={i} style={{ padding: '8px 14px', textAlign: 'left', color: 'var(--ink)', fontWeight: 600 }}>{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {block.rows.map((row, ri) => (
-                <tr key={ri} style={{ borderBottom: '1px solid var(--line)', background: ri % 2 ? 'rgba(251,246,238,.5)' : 'transparent' }}>
-                  {row.map((cell, ci) => (
-                    <td key={ci} style={{ padding: '7px 14px', color: 'var(--ink-soft)', verticalAlign: 'top' }}>{cell}</td>
-                  ))}
-                </tr>
+        <div style={{ margin: '18px 0', borderRadius: 14, overflow: 'hidden', border: '1px solid var(--line)', boxShadow: 'var(--shadow-sm)' }}>
+          <div style={{
+            display: 'grid', gridTemplateColumns: `repeat(${block.headers.length}, 1fr)`,
+            background: 'linear-gradient(180deg, #f5ede0, #ecddc4)',
+            borderBottom: '1px solid rgba(63,54,44,.1)',
+            fontSize: 10.5, letterSpacing: '.16em', textTransform: 'uppercase',
+            color: '#5a4a3a', fontWeight: 600,
+          }}>
+            {block.headers.map((h, i) => (
+              <div key={i} style={{
+                padding: '10px 14px',
+                borderRight: i < block.headers.length - 1 ? '1px solid rgba(63,54,44,.08)' : 'none',
+              }}>{h}</div>
+            ))}
+          </div>
+          {block.rows.map((row, ri) => (
+            <div key={ri} style={{
+              display: 'grid', gridTemplateColumns: `repeat(${block.headers.length}, 1fr)`,
+              borderBottom: ri < block.rows.length - 1 ? '1px solid var(--line)' : 'none',
+              background: ri % 2 === 1 ? 'rgba(250,245,238,.5)' : 'var(--paper)',
+              fontSize: 13,
+            }}>
+              {row.map((cell, ci) => (
+                <div key={ci} style={{
+                  padding: '11px 14px',
+                  borderRight: ci < row.length - 1 ? '1px solid rgba(63,54,44,.05)' : 'none',
+                  color: ci === 0 ? 'var(--ink)' : 'var(--ink)',
+                  fontWeight: ci === 0 ? 600 : 400,
+                  lineHeight: 1.55,
+                }}>{cell}</div>
               ))}
-            </tbody>
-          </table>
+            </div>
+          ))}
         </div>
       )
     case 'mindset':
       return (
-        <div style={{ margin: '16px 0', borderRadius: 10, overflow: 'hidden', border: '1px solid var(--line-strong)' }}>
+        <div style={{ margin: '16px 0', borderRadius: 14, overflow: 'hidden', border: '1px solid var(--line)' }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
-            <div style={{ padding: '8px 14px', background: 'rgba(242,194,160,.25)', fontWeight: 700, fontSize: 11, textTransform: 'uppercase', letterSpacing: '.1em', color: 'var(--ink-faint)' }}>Junior Mindset</div>
-            <div style={{ padding: '8px 14px', background: 'rgba(181,201,166,.25)', fontWeight: 700, fontSize: 11, textTransform: 'uppercase', letterSpacing: '.1em', color: 'var(--ink-faint)' }}>Senior Mindset</div>
+            <div style={{ padding: '10px 14px', background: 'linear-gradient(180deg, rgba(242,194,160,.3), rgba(242,194,160,.15))', fontWeight: 600, fontSize: 10.5, textTransform: 'uppercase', letterSpacing: '.14em', color: '#7a4a2a' }}>Junior Mindset</div>
+            <div style={{ padding: '10px 14px', background: 'linear-gradient(180deg, rgba(181,201,166,.3), rgba(181,201,166,.15))', fontWeight: 600, fontSize: 10.5, textTransform: 'uppercase', letterSpacing: '.14em', color: '#3e5234' }}>Senior Mindset</div>
           </div>
           {block.rows.map((row, i) => (
             <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', borderTop: '1px solid var(--line)' }}>
-              <div style={{ padding: '8px 14px', color: 'var(--ink-soft)', fontSize: 13.5, background: i % 2 ? 'rgba(242,194,160,.06)' : 'transparent' }}>{row.junior}</div>
-              <div style={{ padding: '8px 14px', color: 'var(--ink-soft)', fontSize: 13.5, background: i % 2 ? 'rgba(181,201,166,.06)' : 'transparent' }}>{row.senior}</div>
+              <div style={{ padding: '10px 14px', color: 'var(--ink)', fontSize: 13.5, lineHeight: 1.55, background: i % 2 ? 'rgba(242,194,160,.06)' : 'transparent' }}>{row.junior}</div>
+              <div style={{ padding: '10px 14px', color: 'var(--ink)', fontSize: 13.5, lineHeight: 1.55, background: i % 2 ? 'rgba(181,201,166,.06)' : 'transparent' }}>{row.senior}</div>
             </div>
           ))}
         </div>
       )
     case 'wisdom':
       return <WisdomBlock body={block.body} />
+    case 'pull-quote':
+      return <PullQuote attribution={block.attribution}>{block.text}</PullQuote>
+    case 'blockquote':
+      return <BlockQuote attribution={block.attribution}>{block.text}</BlockQuote>
     case 'quote':
       return <QuoteBlock text={block.text} attribution={block.attribution} />
+    case 'key-term':
+      return <KeyTerm term={block.term} kana={block.kana} def={block.def} see={block.see} />
+    case 'deadlock-diagram':
+      return <DeadlockDiagram caption={block.caption} />
+    case 'diff':
+      return <Diff filename={block.filename} hunks={block.hunks} />
     case 'figure':
       return (
         <FigureBlock
@@ -240,6 +314,10 @@ function BlockRenderer({ block }: { block: ContentBlock }) {
           diagramContent={block.diagramContent}
         />
       )
+    case 'rc-table':
+      return <RcTable caption={block.caption} headers={block.headers} rows={block.rows} />
+    case 'footnotes':
+      return <FootnotesList items={block.items} />
     case 'do-dont':
       return (
         <DoDontBlock
@@ -508,7 +586,14 @@ export default function ArticlePage() {
       <MobileSidebarBackdrop />
       <Sidebar groups={SIDEBAR_GROUPS} />
 
-      <main style={{ flex: 1, minWidth: 0, height: '100vh', display: 'flex', overflow: 'hidden' }}>
+      <main style={{ flex: 1, minWidth: 0, height: '100vh', display: 'flex', overflow: 'hidden', position: 'relative' }}>
+        {/* Sky gradient band */}
+        <div style={{
+          position: 'absolute', top: 0, left: 0, right: 0, height: 140,
+          background: 'linear-gradient(180deg, #B6E9EE 0%, transparent 100%)',
+          zIndex: 0, pointerEvents: 'none', opacity: .7,
+        }} />
+
         <ArticleWithProgress accentInk={a.ink}>
           <TopBar
             breadcrumb={[
@@ -525,11 +610,14 @@ export default function ArticlePage() {
 
           {/* Hero band */}
           <div style={{ position: 'relative', overflow: 'hidden' }}>
-            <HorizonBand height={200} />
+            <HorizonBand height={180} />
           </div>
 
+          {/* Reading column — centered within the scrollable area */}
+          <div style={{ maxWidth: 760, margin: '0 auto', padding: '0 40px', width: '100%', boxSizing: 'border-box' }}>
+
           {/* Article header */}
-          <div style={{ padding: '28px 32px 0', maxWidth: 760 }}>
+          <div style={{ padding: '32px 0 0' }}>
             {/* Pills row */}
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 14 }}>
               <Pill variant="coral">Playbook</Pill>
@@ -546,23 +634,24 @@ export default function ArticlePage() {
             {/* H1 */}
             <h1 style={{
               fontFamily: 'var(--font-display)',
-              fontSize: 44,
-              lineHeight: 1.08,
-              fontWeight: 700,
-              margin: '0 0 12px',
+              fontSize: 52,
+              lineHeight: 1.04,
+              fontWeight: 500,
+              margin: '4px 0 8px',
               color: 'var(--ink)',
               letterSpacing: '-0.02em',
             }}>
-              <span className="hb-underline">{page.title}</span>
+              <span className="hb-marker">{page.title}</span>
             </h1>
 
             {/* Lead */}
             <p style={{
               fontFamily: 'var(--font-display)',
-              fontSize: 18,
-              color: 'var(--ink-soft)',
-              lineHeight: 1.6,
-              margin: '0 0 18px',
+              fontSize: 19,
+              color: 'var(--ink)',
+              lineHeight: 1.55,
+              margin: '8px 0 18px',
+              letterSpacing: '-0.005em',
             }}>
               {page.description}
             </p>
@@ -571,10 +660,10 @@ export default function ArticlePage() {
             <div className="hb-author-row" style={{
               display: 'flex',
               alignItems: 'center',
-              gap: 12,
+              gap: 14,
               padding: '12px 0',
-              borderTop: '1px solid var(--line)',
-              borderBottom: '1px solid var(--line)',
+              borderTop: '1px dashed var(--line)',
+              borderBottom: '1px dashed var(--line)',
               marginBottom: 16,
             }}>
               <Avatar initials="YT" hue={a.bg.split(',')[1]?.trim().split(')')[0] ?? '#E8B4B0'} />
@@ -647,7 +736,7 @@ export default function ArticlePage() {
           </div>
 
           {/* Article body */}
-          <div className="rc-article" style={{ padding: '0 32px 48px', maxWidth: 692 }}>
+          <div className="rc-article" style={{ paddingBottom: 80 }}>
             {page.content.map((block, i) => (
               <BlockRenderer key={i} block={block} />
             ))}
@@ -672,17 +761,21 @@ export default function ArticlePage() {
               )}
             </div>
           </div>
+
+          </div>{/* end reading column */}
         </ArticleWithProgress>
 
         {/* TOC Panel */}
         <aside className="hanami-toc-panel" style={{
-          width: 220,
-          flexShrink: 0,
+          width: 260,
+          flex: '0 0 auto',
           borderLeft: '1px solid var(--line)',
-          padding: '36px 20px',
-          background: 'rgba(255,251,244,.45)',
+          padding: '32px 22px',
+          background: 'rgba(255,251,244,.55)',
+          backdropFilter: 'blur(6px)',
           overflowY: 'auto',
           height: '100%',
+          position: 'relative',
         }}>
           <TOCPanel
             items={finalTocItems}
