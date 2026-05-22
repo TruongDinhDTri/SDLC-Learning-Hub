@@ -199,6 +199,13 @@
   }
   .tag.tool { background: var(--surface); color: var(--text2); }
   .tag.skill { font-family: 'DM Sans', sans-serif; font-weight: 600; }
+  .tag.kw {
+    font-family: 'DM Mono', monospace;
+    background: var(--phase-color-08, #F2F0ED);
+    color: var(--phase-color, #5C5752);
+    border: 1px solid var(--phase-color-22, #EEECE9);
+    cursor: default;
+  }
 
   /* Columns */
   .cols { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
@@ -308,6 +315,7 @@ const phases = [
     ],
     tools: ["Notion", "Excalidraw", "Linear"],
     skills: ["Product Thinking", "Problem Decomposition"],
+    keywords: ["PRD", "User Story", "MoSCoW", "JTBD", "Acceptance Criteria", "Problem Statement", "Use Case", "Feasibility Study", "Value Proposition Canvas", "Design Thinking", "Lean Canvas", "MVP"],
     projectExample: "MVP: (1) Fetch markets từ Polymarket (2) Chạy prediction model (3) Hiển thị kết quả + confidence score",
     docs: [
       { name: "PRD (Product Requirements Document)", desc: "Tài liệu mô tả sản phẩm: vấn đề, users, features, MVP scope, success metrics" },
@@ -329,6 +337,7 @@ const phases = [
     ],
     tools: ["Excalidraw", "dbdiagram.io", "Swagger"],
     skills: ["System Design basics", "API Design", "Data Modeling"],
+    keywords: ["C4 Model", "DDD", "Monolith vs Microservices", "REST vs GraphQL", "CAP Theorem", "API Gateway", "SOLID", "12-Factor App", "Scalability", "High Availability", "Event-Driven Architecture"],
     projectExample: "React FE → FastAPI BE → PostgreSQL + Redis cache → Polymarket API + ML microservice",
     docs: [
       { name: "Architecture Diagram", desc: "Sơ đồ tổng thể: FE, BE, DB, external APIs, cách chúng kết nối" },
@@ -351,6 +360,7 @@ const phases = [
     ],
     tools: ["Figma", "Excalidraw", "Coolors.co"],
     skills: ["Basic UI/UX", "Wireframing", "Design Systems"],
+    keywords: ["Atomic Design", "Design System", "User Persona", "Information Architecture", "Accessibility (A11y)", "WCAG", "Design Tokens", "Gestalt Principles", "Prototype", "Component Library", "UX Research"],
     projectExample: "Dashboard: Header + Sidebar. Main: Grid of MarketCards (title, odds, AI prediction, confidence bar)",
     docs: [
       { name: "User Flow Diagram", desc: "Sơ đồ các bước user đi qua từ mở app → hoàn thành goal" },
@@ -372,6 +382,7 @@ const phases = [
     ],
     tools: ["dbdiagram.io", "DBeaver", "Alembic"],
     skills: ["Database Design", "SQL", "Normalization"],
+    keywords: ["ACID", "Normalization", "ERD", "ORM", "Indexing", "SQL vs NoSQL", "Transactions", "Foreign Key", "Data Modeling", "Query Optimization", "Migration Strategy", "Database Sharding"],
     projectExample: "Core: users, markets, predictions(market_id, probability, confidence, created_at), bets, positions",
     docs: [
       { name: "ER Diagram", desc: "Sơ đồ quan hệ giữa các entities: 1-1, 1-N, N-N" },
@@ -393,6 +404,7 @@ const phases = [
     ],
     tools: ["FastAPI", "SQLAlchemy", "pytest", "Docker"],
     skills: ["Python", "REST API", "ML basics", "Testing"],
+    keywords: ["JWT", "OAuth2", "Clean Architecture", "Hexagonal Architecture", "TDD", "Middleware", "Rate Limiting", "Background Jobs", "CRUD", "Business Logic", "Exception Handling", "Logging"],
     projectExample: "Week 1: Auth + Markets + Polymarket sync. Week 2: ML pipeline + Bets logic + Tests",
     docs: [
       { name: "README.md", desc: "Setup guide: cách install, chạy local, env variables cần config" },
@@ -415,6 +427,7 @@ const phases = [
     ],
     tools: ["React + Vite", "TailwindCSS", "React Query", "Recharts"],
     skills: ["React", "Tailwind", "API consumption", "State mgmt"],
+    keywords: ["SPA vs SSR vs SSG", "Virtual DOM", "Code Splitting", "Lazy Loading", "TypeScript", "BEM", "Micro-frontends", "Performance Budget", "React Query", "Zustand", "Accessibility"],
     projectExample: "Week 1: Layout + Dashboard + MarketCard. Week 2: Prediction view + BetForm + Portfolio",
     docs: [
       { name: "Component Storybook / Docs", desc: "Document mỗi component: props, usage, variants" },
@@ -435,6 +448,7 @@ const phases = [
     ],
     tools: ["Playwright", "Lighthouse", "Postman"],
     skills: ["Testing mindset", "Debugging", "Security basics"],
+    keywords: ["Test Pyramid", "TDD", "BDD", "Unit Test", "Integration Test", "E2E Test", "Test Coverage", "Regression Testing", "Load Testing", "Security Testing", "OWASP", "Mocking"],
     projectExample: "Day 1-2: E2E. Day 3: Edge cases. Day 4: Performance. Day 5: Security",
     docs: [
       { name: "Test Plan", desc: "Danh sách tất cả test cases cần chạy, chia theo feature" },
@@ -457,6 +471,7 @@ const phases = [
     ],
     tools: ["GitHub Actions", "Railway", "Vercel", "Sentry"],
     skills: ["DevOps basics", "CI/CD", "Cloud deploy"],
+    keywords: ["Docker", "CI/CD", "Blue-Green Deployment", "Canary Release", "IaC (Terraform)", "GitOps", "Zero Downtime Deploy", "CDN", "SSL/TLS", "SRE", "Environment Variables"],
     projectExample: "Day 1: CI/CD + BE deploy. Day 2: FE deploy + domain. Day 3: Monitor + soft launch",
     docs: [
       { name: "Deployment Guide", desc: "Step-by-step: cách deploy BE, FE, DB từ scratch" },
@@ -480,6 +495,7 @@ const phases = [
     ],
     tools: ["Sentry", "Google Analytics", "GitHub Issues", "Notion"],
     skills: ["Monitoring", "Prioritization", "Refactoring", "User Research"],
+    keywords: ["Technical Debt", "Refactoring", "SLA/SLO/SLI", "Post-mortem", "Feature Flags", "A/B Testing", "Kaizen", "OKR", "Incident Management", "Changelog", "Semantic Versioning"],
     projectExample: "Ongoing: Monitor prediction accuracy → feedback → improve ML → thêm backtesting → update docs",
     docs: [
       { name: "Changelog", desc: "Log mọi thay đổi theo version: v1.0.1, v1.1.0... (semver)" },
@@ -595,6 +611,14 @@ function render() {
               <div class="col-label">🧠 Skills cần có</div>
               <div class="tags">${p.skills.map(s => `<span class="tag skill" style="background:${p.color}12;color:${p.color}">${s}</span>`).join('')}</div>
             </div>
+          </div>
+        </div>
+
+        <!-- Research Keywords -->
+        <div class="info-card" style="margin-bottom:20px">
+          <div class="card-label" style="color:${p.color}">🔑 Keywords để research</div>
+          <div class="tags" style="margin-top:6px">
+            ${p.keywords.map(k => `<span class="tag kw">${k}</span>`).join('')}
           </div>
         </div>
 
