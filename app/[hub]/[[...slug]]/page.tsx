@@ -174,16 +174,7 @@ function BlockRenderer({ block }: { block: ContentBlock }) {
     case 'drop-cap':
       return <DropCap first={block.first}>{block.text}</DropCap>
     case 'list':
-      return (
-        <ul style={{ paddingLeft: 4, margin: '8px 0 18px', listStyle: 'none' }}>
-          {block.items.map((item, i) => (
-            <li key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', padding: '4px 0', fontSize: 14, lineHeight: 1.6, color: 'var(--ink)' }}>
-              <span style={{ color: '#FF8FA3', fontSize: 14, lineHeight: 1.4, flex: '0 0 auto' }}>✿</span>
-              <span>{item}</span>
-            </li>
-          ))}
-        </ul>
-      )
+      return <RcBullets items={block.items} />
     case 'bullets':
       return <RcBullets items={block.items} />
     case 'ordered':
@@ -626,7 +617,7 @@ export default function ArticlePage() {
           </div>
 
           {/* Reading column — centered within the scrollable area */}
-          <div style={{
+          <div className="hanami-reading-col" style={{
             maxWidth: 1060,
             margin: '0 auto',
             padding: '0 48px',
@@ -649,7 +640,7 @@ export default function ArticlePage() {
             </div>
 
             {/* H1 */}
-            <h1 style={{
+            <h1 className="hanami-article-h1" style={{
               fontFamily: 'var(--font-display)',
               fontSize: 52,
               lineHeight: 1.04,
