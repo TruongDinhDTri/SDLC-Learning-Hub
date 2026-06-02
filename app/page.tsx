@@ -45,15 +45,15 @@ const HUBS = [
     phases: [
       { slug: '01-orient', label: 'Orient Yourself', status: 'sage' as const },
       { slug: '02-entry-points', label: 'Find Entry Points', status: 'sage' as const },
-      { slug: '03-architecture', label: 'Understand Architecture', status: 'sage' as const },
-      { slug: '04-data-flow', label: 'Trace Data Flow', status: 'peach' as const },
-      { slug: '05-dependencies', label: 'Map Dependencies', status: 'peach' as const },
-      { slug: '06-tests', label: 'Read the Tests', status: 'peach' as const },
-      { slug: '07-dev-environment', label: 'Dev Environment', status: 'mute' as const },
-      { slug: '08-domain-language', label: 'Domain Language', status: 'mute' as const },
-      { slug: '09-conventions', label: 'Team Conventions', status: 'mute' as const },
-      { slug: '10-pain-points', label: 'Pain Points', status: 'mute' as const },
-      { slug: '11-mental-model', label: 'Mental Model', status: 'mute' as const },
+      { slug: '03-architecture', label: 'Map the Architecture', status: 'sage' as const },
+      { slug: '04-data-flow', label: 'Trace Real Flows', status: 'sage' as const },
+      { slug: '05-data-model', label: 'Understand Data Model', status: 'peach' as const },
+      { slug: '06-run-system', label: 'Run the System', status: 'peach' as const },
+      { slug: '07-failure-paths', label: 'Study Failure Paths', status: 'peach' as const },
+      { slug: '08-module-boundaries', label: 'Module Boundaries', status: 'peach' as const },
+      { slug: '09-tests', label: 'Read the Tests', status: 'sage' as const },
+      { slug: '10-operations', label: 'Operations & Deployment', status: 'sage' as const },
+      { slug: '11-mental-model', label: 'Create Your System Map', status: 'sage' as const },
     ],
   },
   {
@@ -157,13 +157,13 @@ export default function Dashboard() {
           </div>
 
           {/* Content layer — overlaps the horizon band */}
-          <div style={{ padding: '32px 36px 0', position: 'relative', zIndex: 1 }}>
+          <div className="hanami-home-content" style={{ padding: '32px 36px 0', position: 'relative', zIndex: 1 }}>
 
             {/* ── HERO + STATS ROW ──────────────────────────────── */}
-            <div style={{ display: 'flex', gap: 28, marginBottom: 18, alignItems: 'flex-start' }}>
+            <div className="hanami-hero-row" style={{ display: 'flex', gap: 28, marginBottom: 18, alignItems: 'flex-start' }}>
 
               {/* LEFT — greeting + headline + subtitle */}
-              <div style={{ flex: '0 0 58%', minWidth: 0 }}>
+              <div className="hanami-hero-text" style={{ flex: '0 0 58%', minWidth: 0 }}>
                 <div style={{
                   fontFamily: 'var(--font-hand)',
                   fontSize: 18,
@@ -173,7 +173,7 @@ export default function Dashboard() {
                 }}>
                   おかえり, Yuki
                 </div>
-                <h1 style={{
+                <h1 className="hanami-home-h1" style={{
                   fontFamily: 'var(--font-display)',
                   fontSize: 46,
                   fontWeight: 500,
@@ -197,7 +197,7 @@ export default function Dashboard() {
               </div>
 
               {/* RIGHT — three stat cards */}
-              <div style={{ flex: 1, display: 'flex', gap: 12, alignItems: 'flex-start', paddingTop: 4 }}>
+              <div className="hanami-stat-grid" style={{ flex: 1, display: 'flex', gap: 12, alignItems: 'flex-start', paddingTop: 4 }}>
                 {/* ENTRIES */}
                 <div className="hb-stat-card" style={{ flex: 1 }}>
                   <div className="hb-stat-card__label" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>

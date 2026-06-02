@@ -163,8 +163,17 @@ export function Sidebar({ groups, collapsed = false }: SidebarProps) {
         <Link href="/" style={{ textDecoration: 'none' }}>
           <BrandMark />
         </Link>
-        <button className="hb-btn hb-btn--ghost" style={{ padding: '6px 8px', borderRadius: 8 }}>
-          <Icon name="menu" size={14} />
+        <button
+          className="hb-btn hb-btn--ghost hb-sidebar-close"
+          onClick={() => {
+            document.querySelector('.hanami-sidebar')?.classList.remove('sidebar-open')
+            document.querySelector('.hb-sidebar-backdrop')?.classList.remove('sidebar-open')
+          }}
+          style={{ padding: '6px 8px', borderRadius: 8 }}
+        >
+          <svg viewBox="0 0 24 24" width={14} height={14} fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round">
+            <path d="M18 6 L6 18 M6 6 L18 18" />
+          </svg>
         </button>
       </div>
 

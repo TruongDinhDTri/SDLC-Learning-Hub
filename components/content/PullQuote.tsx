@@ -1,4 +1,5 @@
 import React from 'react'
+import { renderInline } from '@/lib/richText'
 
 interface PullQuoteProps {
   children: React.ReactNode
@@ -6,6 +7,7 @@ interface PullQuoteProps {
 }
 
 export function PullQuote({ children, attribution }: PullQuoteProps) {
+  const content = typeof children === 'string' ? renderInline(children) : children
   return (
     <blockquote style={{
       margin: '28px 0', padding: '20px 36px',
@@ -25,7 +27,7 @@ export function PullQuote({ children, attribution }: PullQuoteProps) {
         color: '#FFC93A', opacity: 0.6, fontStyle: 'normal',
         userSelect: 'none',
       }}>&rdquo;</span>
-      <div style={{ position: 'relative', zIndex: 1 }}>{children}</div>
+      <div style={{ position: 'relative', zIndex: 1 }}>{content}</div>
       {attribution && (
         <div style={{
           marginTop: 12, fontFamily: 'var(--font-body)', fontSize: 12,

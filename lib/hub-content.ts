@@ -5,7 +5,7 @@ export type ContentBlock =
   | { type: 'list'; items: string[] }
   | { type: 'bullets'; items: string[] }
   | { type: 'ordered'; items: string[] }
-  | { type: 'callout'; kind: 'tip' | 'note' | 'warn' | 'quote' | 'danger' | 'success'; title?: string; text: string }
+  | { type: 'callout'; kind: 'tip' | 'note' | 'warn' | 'quote' | 'danger' | 'success'; title?: string; text: string; items?: string[] }
   | { type: 'step'; n: number; title: string; summary?: string; done?: boolean; content: ContentBlock[] }
   | { type: 'code'; lang: string; code: string }
   | { type: 'checklist'; items: { label: string; done?: boolean }[] }
@@ -1003,896 +1003,1286 @@ const sdlcPhases: HubPage[] = [
 // CODEBASE UNDERSTANDING PHASES
 // ---------------------------------------------------------------------------
 
+
 const codebasePhases: HubPage[] = [
+  // =========================================================================
+  // PHASE 1 — ORIENT YOURSELF
+  // =========================================================================
   {
     hub: 'codebase-understanding',
     slug: '01-orient',
-    title: 'Steps 1+2: Identify Purpose + Identify Tech Stack',
-    subtitle: 'Orient yourself — understand what the system exists to do',
-    duration: '1-2 hours',
-    tags: ['orientation', 'purpose', 'tech-stack'],
+    title: 'Phase 1: Orient Yourself',
+    subtitle: 'Understand what this system exists to do',
+    duration: '2-3 hours',
+    tags: ['orientation', 'purpose', 'tech-stack', 'architecture'],
     status: 'growing',
-    description: 'Build a first mental model before diving into code.',
+    description: 'Identify the purpose, tech stack, and architecture style of the system before touching any code.',
     icon: 'compass',
     content: [
       {
         type: 'callout',
         kind: 'note',
         title: 'Goal',
-        text: 'Understand what this system exists to do. Without this, code feels random.',
+        text: 'Understand what this system exists to do',
       },
+
+      // ── STEP 1 ──────────────────────────────────────────────────────────
+      {
+        type: 'step',
+        n: 1,
+        title: 'Identify the Purpose of the System',
+        summary: 'Understand what problem the system solves, who uses it, what business/domain it belongs to, what the main workflows are.',
+        content: [
+          {
+            type: 'callout',
+            kind: 'tip',
+            title: 'Purpose',
+            text: 'Understand what problem the system solves, who uses it, what business/domain it belongs to, what the main workflows are. Without this, code feels random.',
+          },
+          {
+            type: 'h3',
+            text: 'What To Look For',
+          },
+          {
+            type: 'bullets',
+            items: [
+              'README.md',
+              'docs/',
+              'landing page',
+              'API docs',
+              'product pages',
+              'issue tracker',
+              'environment names',
+              'package names',
+            ],
+          },
+          {
+            type: 'code-file',
+            filename: 'questions-to-ask.txt',
+            language: 'text',
+            lines: [
+              'What does this system do?',
+              'Who are the users?',
+              'What are the core features?',
+              'What actions do users perform most?',
+              'What business problem is being solved?',
+            ],
+          },
+          {
+            type: 'h3',
+            text: 'Output You Should Produce',
+          },
+          {
+            type: 'code-file',
+            filename: 'your-output.txt',
+            language: 'text',
+            lines: [
+              'This is a SaaS platform for X.',
+              'Users can:',
+              '- do A',
+              '- do B',
+              '- do C',
+              '',
+              'Main workflows:',
+              '1. login',
+              '2. create resource',
+              '3. process payment',
+              '4. notifications',
+            ],
+          },
+        ],
+      },
+
+      // ── STEP 2 ──────────────────────────────────────────────────────────
+      {
+        type: 'step',
+        n: 2,
+        title: 'Identify the Tech Stack',
+        summary: 'Understand languages, frameworks, and infrastructure. This tells you where things probably live, common patterns, likely conventions.',
+        content: [
+          {
+            type: 'callout',
+            kind: 'tip',
+            title: 'Purpose',
+            text: 'Understand languages, frameworks, and infrastructure (THIS IS REALLY IMPORTANT TO UNDERSTAND THE INFRASTRUCTURE OF THE SYSTEM), architecture style (THIS IS REALLY IMPORTANT TO UNDERSTAND THE ARCHITECTURE STYLE, THE SYSTEM DESIGN). This tells you where things probably live, common patterns, likely conventions.',
+          },
+          {
+            type: 'h3',
+            text: 'Frontend',
+          },
+          {
+            type: 'p',
+            text: 'Look for:',
+          },
+          {
+            type: 'code-file',
+            filename: 'frontend-indicators.txt',
+            language: 'text',
+            lines: [
+              'package.json',
+              'vite.config',
+              'next.config',
+              'webpack.config',
+            ],
+          },
+          {
+            type: 'p',
+            text: 'Possible frameworks:',
+          },
+          {
+            type: 'bullets',
+            items: ['React', 'Vue', 'Angular', 'Next.js', 'Nuxt'],
+          },
+          {
+            type: 'h3',
+            text: 'Backend',
+          },
+          {
+            type: 'p',
+            text: 'Look for:',
+          },
+          {
+            type: 'code-file',
+            filename: 'backend-indicators.txt',
+            language: 'text',
+            lines: [
+              'requirements.txt',
+              'pyproject.toml',
+              'manage.py',
+              'pom.xml',
+              'go.mod',
+              'Gemfile',
+            ],
+          },
+          {
+            type: 'p',
+            text: 'Possible frameworks:',
+          },
+          {
+            type: 'bullets',
+            items: ['Django', 'FastAPI', 'Express', 'Spring', 'Rails', 'Go Fiber'],
+          },
+          {
+            type: 'h3',
+            text: 'Infrastructure',
+          },
+          {
+            type: 'callout',
+            kind: 'warn',
+            title: 'REALLY REALLY IMPORTANT',
+            text: 'Infrastructure needs deep focus. Understanding the infrastructure of the system is critical.',
+          },
+          {
+            type: 'p',
+            text: 'Look for:',
+          },
+          {
+            type: 'code-file',
+            filename: 'infra-indicators.txt',
+            language: 'text',
+            lines: [
+              'Dockerfile',
+              'docker-compose.yml',
+              'terraform/',
+              'k8s/',
+              '.github/workflows/',
+            ],
+          },
+          {
+            type: 'p',
+            text: 'Possible technologies:',
+          },
+          {
+            type: 'bullets',
+            items: ['Docker', 'Kubernetes', 'AWS', 'Redis', 'RabbitMQ', 'Celery', 'Kafka'],
+          },
+          {
+            type: 'h3',
+            text: 'Output You Should Produce',
+          },
+          {
+            type: 'code-file',
+            filename: 'your-output.txt',
+            language: 'text',
+            lines: [
+              'Frontend:',
+              '- React + Vite',
+              '',
+              'Backend:',
+              '- Django Rest Framework',
+              '',
+              'Database:',
+              '- PostgreSQL',
+              '',
+              'Infra:',
+              '- Docker',
+              '- AWS S3',
+              '- Redis',
+              '- Celery',
+            ],
+          },
+        ],
+      },
+
+      // ── STEP 3 ──────────────────────────────────────────────────────────
+      {
+        type: 'step',
+        n: 3,
+        title: 'Identify the Architecture Style',
+        summary: 'Understand HOW the system is conceptually organized. This is where engineering starts becoming architecture.',
+        content: [
+          {
+            type: 'callout',
+            kind: 'tip',
+            title: 'Purpose',
+            text: 'Understanding how the system is architecturally shaped. Not just what technologies exist, but how the entire system is organized.',
+          },
+          {
+            type: 'p',
+            text: 'This helps you predict: where code lives, how components communicate, how scalable the system is, where bottlenecks exist, how failures propagate, how tightly coupled the system is, what engineering tradeoffs were made.',
+          },
+          {
+            type: 'wisdom',
+            body: 'This is where engineering starts becoming architecture.',
+          },
+          {
+            type: 'h3',
+            text: 'Important Distinction',
+          },
+          {
+            type: 'rc-table',
+            caption: 'Two different layers you now have',
+            headers: ['Layer', 'Purpose'],
+            rows: [
+              ['Tech Stack', 'WHAT technologies/tools exist'],
+              ['Architecture Style', 'HOW the system is organized'],
+            ],
+          },
+          {
+            type: 'h3',
+            text: 'Example — Tech Stack',
+          },
+          {
+            type: 'code-file',
+            filename: 'tech-stack-example.txt',
+            language: 'text',
+            lines: [
+              'React',
+              'Django',
+              'PostgreSQL',
+              'Redis',
+              'Docker',
+            ],
+          },
+          {
+            type: 'p',
+            text: 'This tells you: WHAT tools exist.',
+          },
+          {
+            type: 'h3',
+            text: 'Example — Architecture Style',
+          },
+          {
+            type: 'code-file',
+            filename: 'architecture-style-example.txt',
+            language: 'text',
+            lines: [
+              'Modular monolith',
+              'REST API',
+              'Async task processing',
+              'Layered service architecture',
+              'Stateless authentication',
+              'Queue-based background jobs',
+              'Redis caching',
+            ],
+          },
+          {
+            type: 'p',
+            text: 'This tells you: HOW the system behaves. That distinction is HUGE.',
+          },
+        ],
+      },
+
+      // ── 7 DIMENSIONS (nested inside Phase 1 content) ────────────────────
       {
         type: 'h2',
-        text: 'Step 1 — Identify the Purpose of the System',
+        text: '7 Dimensions to Identify',
+      },
+
+      // Dimension 1
+      {
+        type: 'numbered-callout',
+        num: 1,
+        variant: 'sage',
+        heading: 'System Shape',
+        body: 'Understand the high-level structural pattern of the system.',
       },
       {
-        type: 'p',
-        text: 'Understand: what problem the system solves, who uses it, what business/domain it belongs to, and what the main workflows are. Without this, code feels random.',
+        type: 'bullets',
+        items: [
+          'monolith',
+          'modular monolith',
+          'microservices',
+          'event-driven',
+          'serverless',
+          'layered architecture',
+          'clean architecture',
+          'hexagonal architecture',
+          'CQRS',
+          'domain-driven design (DDD)',
+          'plugin-based',
+          'service-oriented architecture (SOA)',
+        ],
       },
       {
-        type: 'h3',
-        text: 'What To Look For',
+        type: 'code-file',
+        filename: 'system-shape-questions.txt',
+        language: 'text',
+        lines: [
+          'Is everything deployed together?',
+          'Are modules isolated?',
+          'Do services own their own databases?',
+          'Is communication synchronous or async?',
+          'Is business logic centralized or distributed?',
+        ],
+      },
+
+      // Dimension 2
+      {
+        type: 'numbered-callout',
+        num: 2,
+        variant: 'peach',
+        heading: 'Communication Style',
+        body: 'Understand how different parts of the system talk to each other.',
       },
       {
-        type: 'list',
-        items: ['README.md', 'docs/', 'landing page', 'API docs', 'product pages', 'issue tracker', 'environment names', 'package names'],
+        type: 'bullets',
+        items: [
+          'REST',
+          'GraphQL',
+          'WebSockets',
+          'gRPC / RPC',
+          'message queues',
+          'pub/sub',
+          'event streaming',
+          'polling',
+          'webhooks',
+        ],
       },
       {
-        type: 'code',
-        lang: 'text',
-        code: `What does this system do?
-Who are the users?
-What are the core features?
-What actions do users perform most?
-What business problem is being solved?`,
+        type: 'code-file',
+        filename: 'communication-questions.txt',
+        language: 'text',
+        lines: [
+          'How does frontend communicate with backend?',
+          'How do services communicate?',
+          'How are async tasks triggered?',
+          'What happens if communication fails?',
+        ],
+      },
+
+      // Dimension 3
+      {
+        type: 'numbered-callout',
+        num: 3,
+        variant: 'rose',
+        heading: 'State Management Style',
+        body: 'Understand where the system stores truth. State management is one of the hardest parts of software architecture.',
       },
       {
-        type: 'h3',
+        type: 'bullets',
+        items: [
+          'frontend state',
+          'database',
+          'Redis cache',
+          'browser storage',
+          'sessions',
+          'distributed cache',
+          'event streams',
+          'object storage (S3)',
+          'search indexes',
+        ],
+      },
+      {
+        type: 'code-file',
+        filename: 'state-management-questions.txt',
+        language: 'text',
+        lines: [
+          'What is the source of truth?',
+          'What data is cached?',
+          'What data is temporary?',
+          'What data is eventually consistent?',
+          'How is synchronization handled?',
+        ],
+      },
+
+      // Dimension 4
+      {
+        type: 'numbered-callout',
+        num: 4,
+        variant: 'sun',
+        heading: 'Processing Style',
+        body: 'Understand HOW work is executed.',
+      },
+      {
+        type: 'bullets',
+        items: [
+          'synchronous',
+          'asynchronous',
+          'queue-based',
+          'event-driven',
+          'eventually consistent',
+          'batch-based',
+          'stream-processing',
+          'real-time',
+        ],
+      },
+      {
+        type: 'code-file',
+        filename: 'processing-questions.txt',
+        language: 'text',
+        lines: [
+          'What operations happen instantly?',
+          'What gets deferred to workers?',
+          'What happens in the background?',
+          'How are retries handled?',
+          'How are long-running tasks managed?',
+        ],
+      },
+
+      // Dimension 5
+      {
+        type: 'numbered-callout',
+        num: 5,
+        variant: 'sage',
+        heading: 'Coupling & Modularity',
+        body: 'Understand how dependent components are on each other. This reveals: maintainability, scalability, engineering maturity, fragility.',
+      },
+      {
+        type: 'bullets',
+        items: [
+          'tightly coupled',
+          'loosely coupled',
+          'highly modular',
+          'dependency-heavy',
+          'domain-separated',
+          'interface-driven',
+        ],
+      },
+      {
+        type: 'code-file',
+        filename: 'coupling-questions.txt',
+        language: 'text',
+        lines: [
+          'Can modules be changed independently?',
+          'What breaks when one component changes?',
+          'Are responsibilities clearly separated?',
+          'Are there circular dependencies?',
+          'How reusable are components?',
+        ],
+      },
+
+      // Dimension 6
+      {
+        type: 'numbered-callout',
+        num: 6,
+        variant: 'peach',
+        heading: 'Failure Behavior',
+        body: 'Understand how the system behaves under stress or failure. Real architecture reveals itself during failure.',
+      },
+      {
+        type: 'bullets',
+        items: [
+          'retries',
+          'fallbacks',
+          'circuit breakers',
+          'timeouts',
+          'dead letter queues',
+          'graceful degradation',
+          'monitoring alerts',
+          'recovery behavior',
+        ],
+      },
+      {
+        type: 'code-file',
+        filename: 'failure-questions.txt',
+        language: 'text',
+        lines: [
+          'What happens if Redis dies?',
+          'What happens if the DB becomes slow?',
+          'What failures crash the system?',
+          'What failures are isolated?',
+          'How resilient is the architecture?',
+        ],
+      },
+
+      // Dimension 7
+      {
+        type: 'numbered-callout',
+        num: 7,
+        variant: 'rose',
+        heading: 'Scalability Model',
+        body: 'Understand how the system grows under load.',
+      },
+      {
+        type: 'bullets',
+        items: [
+          'horizontal scaling',
+          'vertical scaling',
+          'stateless services',
+          'load balancing',
+          'caching strategy',
+          'queue scaling',
+          'DB bottlenecks',
+          'read/write separation',
+        ],
+      },
+      {
+        type: 'code-file',
+        filename: 'scalability-questions.txt',
+        language: 'text',
+        lines: [
+          'What becomes the bottleneck first?',
+          'Can services scale independently?',
+          'What components are stateful?',
+          'How expensive is scaling?',
+        ],
+      },
+
+      // ── Always-ask questions ────────────────────────────────────────────
+      {
+        type: 'h2',
+        text: 'Questions You Should ALWAYS Ask',
+      },
+      {
+        type: 'code-file',
+        filename: 'always-ask.txt',
+        language: 'text',
+        lines: [
+          'How do services communicate?',
+          'What happens during failure?',
+          'Where are bottlenecks?',
+          'How scalable is this architecture?',
+          'Why was this style chosen?',
+          'What tradeoffs exist?',
+          'What assumptions hold the system together?',
+        ],
+      },
+
+      // ── Output ──────────────────────────────────────────────────────────
+      {
+        type: 'h2',
         text: 'Output You Should Produce',
       },
       {
-        type: 'code',
-        lang: 'text',
-        code: `This is a SaaS platform for X.
-Users can:
-- do A
-- do B
-- do C
+        type: 'code-file',
+        filename: 'architecture-output.txt',
+        language: 'text',
+        lines: [
+          'Architecture Style:',
+          '- Modular monolith',
+          '- Layered backend architecture',
+          '- REST-based communication',
+          '- Async background jobs with Celery',
+          '- Redis caching',
+          '- Stateless authentication via JWT',
+          '- Queue-based task processing',
+          '- S3 object storage',
+          '- PostgreSQL as source of truth',
+        ],
+      },
 
-Main workflows:
-1. login
-2. create resource
-3. process payment
-4. notifications`,
+      // ── Closing insights ────────────────────────────────────────────────
+      {
+        type: 'wisdom',
+        body: 'THIS Is Where Real Engineering Starts. Because now you are no longer seeing files. You are seeing system philosophy. That is the leap from developer to architect thinking.',
       },
       {
-        type: 'h2',
-        text: 'Step 2 — Identify the Tech Stack',
+        type: 'key-term',
+        term: 'Architecture',
+        def: 'A system\'s architecture is really a collection of engineering tradeoffs. Every architecture style optimizes for something: scalability, simplicity, deployment speed, team size, fault isolation, development velocity, operational complexity. Understanding architecture means understanding WHY the system was shaped this way.',
       },
       {
-        type: 'p',
-        text: 'Understand: languages, frameworks, and infrastructure (THIS IS REALLY IMPORTANT TO UNDERSTAND THE INFRASTRUCTURE OF THE SYSTEM). This tells you where things probably live, common patterns, and likely conventions.',
-      },
-      {
-        type: 'h3',
-        text: 'Frontend — Look For',
-      },
-      {
-        type: 'code',
-        lang: 'text',
-        code: `package.json
-vite.config
-next.config
-webpack.config`,
-      },
-      {
-        type: 'h3',
-        text: 'Backend — Look For',
-      },
-      {
-        type: 'code',
-        lang: 'text',
-        code: `requirements.txt
-pyproject.toml
-manage.py
-pom.xml
-go.mod
-Gemfile`,
-      },
-      {
-        type: 'h3',
-        text: 'Infrastructure — Look For (REALLY REALLY IMPORTANT)',
-      },
-      {
-        type: 'code',
-        lang: 'text',
-        code: `Dockerfile
-docker-compose.yml
-terraform/
-k8s/
-.github/workflows/`,
-      },
-      {
-        type: 'h3',
-        text: 'Output You Should Produce',
-      },
-      {
-        type: 'code',
-        lang: 'text',
-        code: `Frontend:
-- React + Vite
-
-Backend:
-- Django Rest Framework
-
-Database:
-- PostgreSQL
-
-Infra:
-- Docker
-- AWS S3
-- Redis
-- Celery`,
+        type: 'pull-quote',
+        text: 'By wisdom a house is built.',
+        attribution: 'Proverbs 24:3',
       },
     ],
   },
+
+  // =========================================================================
+  // PHASE 2 — FIND SYSTEM ENTRY POINTS
+  // =========================================================================
   {
     hub: 'codebase-understanding',
     slug: '02-entry-points',
-    title: 'Step 3: Find Application Entry Points',
-    subtitle: 'Learn where execution begins — your navigation anchor',
+    title: 'Phase 2: Find System Entry Points',
+    subtitle: 'Learn where execution begins',
     duration: '30-60 min',
-    tags: ['entry-points', 'routing', 'startup'],
+    tags: ['entry-points', 'routing', 'startup', 'navigation'],
     status: 'growing',
-    description: 'Every system starts somewhere. Find it.',
+    description: 'Every system starts somewhere. You need to know where execution begins. This becomes your navigation anchor.',
     icon: 'door-open',
     content: [
       {
         type: 'callout',
         kind: 'note',
         title: 'Goal',
-        text: 'Learn where execution begins. This becomes your navigation anchor.',
+        text: 'Learn where execution begins',
       },
+
       {
-        type: 'p',
-        text: 'Every system starts somewhere. You need to know where execution begins. This becomes your navigation anchor.',
+        type: 'step',
+        n: 3,
+        title: 'Find the Application Entry Points',
+        summary: 'Every system starts somewhere. You need to know where execution begins. This becomes your navigation anchor.',
+        content: [
+          {
+            type: 'callout',
+            kind: 'tip',
+            title: 'Purpose',
+            text: 'Every system starts somewhere. You need to know where execution begins. This becomes your navigation anchor.',
+          },
+          {
+            type: 'h3',
+            text: 'Frontend',
+          },
+          {
+            type: 'p',
+            text: 'Common entry files:',
+          },
+          {
+            type: 'code-file',
+            filename: 'frontend-entry-files.txt',
+            language: 'text',
+            lines: [
+              'main.jsx',
+              'index.js',
+              'App.tsx',
+            ],
+          },
+          {
+            type: 'p',
+            text: 'Find:',
+          },
+          {
+            type: 'bullets',
+            items: ['routing', 'app providers', 'global state', 'root layout'],
+          },
+          {
+            type: 'h3',
+            text: 'Backend',
+          },
+          {
+            type: 'p',
+            text: 'Common entry files:',
+          },
+          {
+            type: 'code-file',
+            filename: 'backend-entry-files.txt',
+            language: 'text',
+            lines: [
+              'main.py',
+              'manage.py',
+              'server.js',
+              'app.py',
+            ],
+          },
+          {
+            type: 'p',
+            text: 'Find:',
+          },
+          {
+            type: 'bullets',
+            items: ['routes', 'middleware', 'authentication', 'app initialization'],
+          },
+          {
+            type: 'h3',
+            text: 'Background Workers',
+          },
+          {
+            type: 'p',
+            text: 'Look for:',
+          },
+          {
+            type: 'code-file',
+            filename: 'worker-entry-files.txt',
+            language: 'text',
+            lines: [
+              'celery.py',
+              'workers/',
+              'jobs/',
+              'queues/',
+              'cron/',
+            ],
+          },
+          {
+            type: 'h3',
+            text: 'Infrastructure Startup',
+          },
+          {
+            type: 'p',
+            text: 'Look for:',
+          },
+          {
+            type: 'code-file',
+            filename: 'infra-entry-files.txt',
+            language: 'text',
+            lines: [
+              'Dockerfile',
+              'docker-compose.yml',
+              'entrypoint.sh',
+              'Makefile',
+            ],
+          },
+        ],
       },
-      {
-        type: 'h2',
-        text: 'Frontend Entry Files',
-      },
-      {
-        type: 'code',
-        lang: 'text',
-        code: `main.jsx
-index.js
-App.tsx`,
-      },
-      {
-        type: 'list',
-        items: ['routing', 'app providers', 'global state', 'root layout'],
-      },
-      {
-        type: 'h2',
-        text: 'Backend Entry Files',
-      },
-      {
-        type: 'code',
-        lang: 'text',
-        code: `main.py
-manage.py
-server.js
-app.py`,
-      },
-      {
-        type: 'list',
-        items: ['routes', 'middleware', 'authentication', 'app initialization'],
-      },
-      {
-        type: 'h2',
-        text: 'Background Workers',
-      },
-      {
-        type: 'code',
-        lang: 'text',
-        code: `celery.py
-workers/
-jobs/
-queues/
-cron/`,
-      },
-      {
-        type: 'h2',
-        text: 'Infrastructure Startup',
-      },
-      {
-        type: 'code',
-        lang: 'text',
-        code: `Dockerfile
-docker-compose.yml
-entrypoint.sh
-Makefile`,
-      },
+
       {
         type: 'h2',
         text: 'Questions To Answer',
       },
       {
-        type: 'code',
-        lang: 'text',
-        code: `What starts the application?
-How are routes registered?
-Where is middleware configured?
-Where are services initialized?
-Where are environment variables loaded?`,
+        type: 'code-file',
+        filename: 'questions-to-answer.txt',
+        language: 'text',
+        lines: [
+          'What starts the application?',
+          'How are routes registered?',
+          'Where is middleware configured?',
+          'Where are services initialized?',
+          'Where are environment variables loaded?',
+        ],
       },
     ],
   },
+
+  // =========================================================================
+  // PHASE 3 — MAP THE ARCHITECTURE
+  // =========================================================================
   {
     hub: 'codebase-understanding',
     slug: '03-architecture',
-    title: 'Architecture Style Deep Dive',
-    subtitle: 'Understand HOW the system is conceptually organized — all 7 dimensions',
-    duration: '2-4 hours',
-    tags: ['architecture', 'system-design', 'patterns'],
+    title: 'Phase 3: Map the Architecture',
+    subtitle: 'Understand the major building blocks',
+    duration: '1-2 hours',
+    tags: ['architecture', 'components', 'dependencies', 'mapping'],
     status: 'growing',
-    description: 'This is where engineering starts becoming architecture thinking.',
+    description: 'You need to see how major components communicate. This is the beginning of architecture thinking.',
     icon: 'layers',
     content: [
       {
         type: 'callout',
         kind: 'note',
         title: 'Goal',
-        text: 'Understand HOW the system is architecturally shaped — not just what technologies exist, but how the entire system is organized.',
+        text: 'Understand the major building blocks',
       },
-      {
-        type: 'p',
-        text: 'This step is about understanding how the system is architecturally shaped. This helps you predict where code lives, how components communicate, how scalable the system is, where bottlenecks exist, how failures propagate, how tightly coupled the system is, and what engineering tradeoffs were made.',
-      },
-      {
-        type: 'h2',
-        text: 'Important Distinction',
-      },
-      {
-        type: 'table',
-        headers: ['Layer', 'Purpose'],
-        rows: [
-          ['Tech Stack', 'WHAT technologies/tools exist'],
-          ['Architecture Style', 'HOW the system is organized'],
-        ],
-      },
-      {
-        type: 'h3',
-        text: 'Example',
-      },
-      {
-        type: 'code',
-        lang: 'text',
-        code: `Tech Stack:
-React
-Django
-PostgreSQL
-Redis
-Docker
 
-This tells you: WHAT tools exist.
-
-Architecture Style:
-Modular monolith
-REST API
-Async task processing
-Layered service architecture
-Stateless authentication
-Queue-based background jobs
-Redis caching
-
-This tells you: HOW the system behaves.
-
-That distinction is HUGE.`,
-      },
-      {
-        type: 'step',
-        n: 1,
-        title: 'System Shape',
-        summary: 'Understand the high-level structural pattern of the system',
-        content: [
-          {
-            type: 'p',
-            text: 'Understand the high-level structural pattern of the system.',
-          },
-          {
-            type: 'list',
-            items: ['monolith', 'modular monolith', 'microservices', 'event-driven', 'serverless', 'layered architecture', 'clean architecture', 'hexagonal architecture', 'CQRS', 'domain-driven design (DDD)', 'plugin-based', 'service-oriented architecture (SOA)'],
-          },
-          {
-            type: 'code',
-            lang: 'text',
-            code: `Is everything deployed together?
-Are modules isolated?
-Do services own their own databases?
-Is communication synchronous or async?
-Is business logic centralized or distributed?`,
-          },
-        ],
-      },
-      {
-        type: 'step',
-        n: 2,
-        title: 'Communication Style',
-        summary: 'Understand how different parts of the system talk to each other',
-        content: [
-          {
-            type: 'p',
-            text: 'Understand how different parts of the system talk to each other.',
-          },
-          {
-            type: 'list',
-            items: ['REST', 'GraphQL', 'WebSockets', 'gRPC / RPC', 'message queues', 'pub/sub', 'event streaming', 'polling', 'webhooks'],
-          },
-          {
-            type: 'code',
-            lang: 'text',
-            code: `How does frontend communicate with backend?
-How do services communicate?
-How are async tasks triggered?
-What happens if communication fails?`,
-          },
-        ],
-      },
-      {
-        type: 'step',
-        n: 3,
-        title: 'State Management Style',
-        summary: 'Understand where the system stores truth',
-        content: [
-          {
-            type: 'p',
-            text: 'Understand where the system stores truth. State management is one of the hardest parts of software architecture.',
-          },
-          {
-            type: 'list',
-            items: ['frontend state', 'database', 'Redis cache', 'browser storage', 'sessions', 'distributed cache', 'event streams', 'object storage (S3)', 'search indexes'],
-          },
-          {
-            type: 'code',
-            lang: 'text',
-            code: `What is the source of truth?
-What data is cached?
-What data is temporary?
-What data is eventually consistent?
-How is synchronization handled?`,
-          },
-        ],
-      },
       {
         type: 'step',
         n: 4,
-        title: 'Processing Style',
-        summary: 'Understand HOW work is executed',
+        title: 'Create a High-Level Architecture Map',
+        summary: 'You need to see how major components communicate. This is the beginning of architecture thinking.',
         content: [
           {
+            type: 'callout',
+            kind: 'tip',
+            title: 'Purpose',
+            text: 'You need to see how major components communicate. This is the beginning of architecture thinking.',
+          },
+          {
+            type: 'h3',
+            text: 'Frontend',
+          },
+          {
             type: 'p',
-            text: 'Understand HOW work is executed.',
+            text: 'Identify:',
           },
           {
-            type: 'list',
-            items: ['synchronous', 'asynchronous', 'queue-based', 'event-driven', 'eventually consistent', 'batch-based', 'stream-processing', 'real-time'],
+            type: 'bullets',
+            items: ['routing', 'state management', 'API layer', 'component structure', 'authentication flow'],
           },
           {
-            type: 'code',
-            lang: 'text',
-            code: `What operations happen instantly?
-What gets deferred to workers?
-What happens in the background?
-How are retries handled?
-How are long-running tasks managed?`,
+            type: 'p',
+            text: 'Possible patterns:',
+          },
+          {
+            type: 'bullets',
+            items: ['Redux', 'Zustand', 'Context API', 'React Query'],
+          },
+          {
+            type: 'h3',
+            text: 'Backend',
+          },
+          {
+            type: 'p',
+            text: 'Identify:',
+          },
+          {
+            type: 'bullets',
+            items: ['controllers/routes', 'services', 'models', 'repositories', 'middleware', 'background jobs'],
+          },
+          {
+            type: 'p',
+            text: 'Possible architectures:',
+          },
+          {
+            type: 'bullets',
+            items: ['MVC', 'layered', 'clean architecture', 'microservices', 'monolith'],
+          },
+          {
+            type: 'h3',
+            text: 'Database',
+          },
+          {
+            type: 'p',
+            text: 'Identify:',
+          },
+          {
+            type: 'bullets',
+            items: ['main entities', 'relationships', 'ownership', 'transaction boundaries'],
+          },
+          {
+            type: 'h3',
+            text: 'External Services',
+          },
+          {
+            type: 'p',
+            text: 'Identify:',
+          },
+          {
+            type: 'bullets',
+            items: ['Stripe', 'AWS S3', 'Firebase', 'Twilio', 'SendGrid', 'OAuth providers'],
           },
         ],
       },
-      {
-        type: 'step',
-        n: 5,
-        title: 'Coupling & Modularity',
-        summary: 'Understand how dependent components are on each other',
-        content: [
-          {
-            type: 'p',
-            text: 'Understand how dependent components are on each other. This reveals maintainability, scalability, engineering maturity, and fragility.',
-          },
-          {
-            type: 'list',
-            items: ['tightly coupled', 'loosely coupled', 'highly modular', 'dependency-heavy', 'domain-separated', 'interface-driven'],
-          },
-          {
-            type: 'code',
-            lang: 'text',
-            code: `Can modules be changed independently?
-What breaks when one component changes?
-Are responsibilities clearly separated?
-Are there circular dependencies?
-How reusable are components?`,
-          },
-        ],
-      },
-      {
-        type: 'step',
-        n: 6,
-        title: 'Failure Behavior',
-        summary: 'Understand how the system behaves under stress or failure',
-        content: [
-          {
-            type: 'p',
-            text: 'Understand how the system behaves under stress or failure. Real architecture reveals itself during failure.',
-          },
-          {
-            type: 'list',
-            items: ['retries', 'fallbacks', 'circuit breakers', 'timeouts', 'dead letter queues', 'graceful degradation', 'monitoring alerts', 'recovery behavior'],
-          },
-          {
-            type: 'code',
-            lang: 'text',
-            code: `What happens if Redis dies?
-What happens if the DB becomes slow?
-What failures crash the system?
-What failures are isolated?
-How resilient is the architecture?`,
-          },
-        ],
-      },
-      {
-        type: 'step',
-        n: 7,
-        title: 'Scalability Model',
-        summary: 'Understand how the system grows under load',
-        content: [
-          {
-            type: 'p',
-            text: 'Understand how the system grows under load.',
-          },
-          {
-            type: 'list',
-            items: ['horizontal scaling', 'vertical scaling', 'stateless services', 'load balancing', 'caching strategy', 'queue scaling', 'DB bottlenecks', 'read/write separation'],
-          },
-          {
-            type: 'code',
-            lang: 'text',
-            code: `What becomes the bottleneck first?
-Can services scale independently?
-What components are stateful?
-How expensive is scaling?`,
-          },
-        ],
-      },
+
       {
         type: 'h2',
-        text: 'Questions You Should ALWAYS Ask',
+        text: 'Output You Should Produce',
       },
       {
-        type: 'code',
-        lang: 'text',
-        code: `How do services communicate?
-What happens during failure?
-Where are bottlenecks?
-How scalable is this architecture?
-Why was this style chosen?
-What tradeoffs exist?
-What assumptions hold the system together?`,
-      },
-      {
-        type: 'h2',
-        text: 'Output Example',
-      },
-      {
-        type: 'code',
-        lang: 'text',
-        code: `Architecture Style:
-- Modular monolith
-- Layered backend architecture
-- REST-based communication
-- Async background jobs with Celery
-- Redis caching
-- Stateless authentication via JWT
-- Queue-based task processing
-- S3 object storage
-- PostgreSQL as source of truth`,
-      },
-      {
-        type: 'callout',
-        kind: 'note',
-        title: 'THIS Is Where Real Engineering Starts',
-        text: 'Because now you are no longer seeing files. You are seeing system philosophy. That is the leap from developer → architect thinking.',
-      },
-      {
-        type: 'p',
-        text: 'A system\'s architecture is really a collection of engineering tradeoffs. Every architecture style optimizes for something:',
-      },
-      {
-        type: 'list',
-        items: ['scalability', 'simplicity', 'deployment speed', 'team size', 'fault isolation', 'development velocity', 'operational complexity'],
-      },
-      {
-        type: 'callout',
-        kind: 'quote',
-        text: '"By wisdom a house is built." — Proverbs 24:3',
+        type: 'code-file',
+        filename: 'your-output.txt',
+        language: 'text',
+        lines: [
+          'Frontend',
+          '  ↓',
+          'REST API',
+          '  ↓',
+          'Django Controllers',
+          '  ↓',
+          'Service Layer',
+          '  ↓',
+          'PostgreSQL',
+          '',
+          'Background jobs:',
+          'Celery + Redis',
+          '',
+          'File uploads:',
+          'AWS S3',
+        ],
       },
     ],
   },
+
+  // =========================================================================
+  // PHASE 4 — TRACE REAL FLOWS
+  // =========================================================================
   {
     hub: 'codebase-understanding',
     slug: '04-data-flow',
-    title: 'Steps 5+6: Pick ONE Flow + Follow Complete Request Lifecycle',
-    subtitle: 'Trace one complete user flow end-to-end',
+    title: 'Phase 4: Trace Real Flows',
+    subtitle: 'Understand the system dynamically',
     duration: '2-3 hours',
-    tags: ['data-flow', 'tracing', 'request-lifecycle'],
+    tags: ['data-flow', 'tracing', 'request-lifecycle', 'features'],
     status: 'growing',
-    description: 'The MOST important step. Do NOT read random files — trace one complete user flow.',
+    description: 'This is the MOST important step. Do NOT read random files. Instead: Trace one complete user flow. This creates connected understanding.',
     icon: 'flow',
     content: [
       {
         type: 'callout',
         kind: 'note',
         title: 'Goal',
-        text: 'Understand the system dynamically. Trace one complete user flow. This creates connected understanding.',
+        text: 'Understand the system dynamically',
       },
-      {
-        type: 'h2',
-        text: 'Step 5 — Pick ONE Important Feature',
-      },
-      {
-        type: 'p',
-        text: 'This is the MOST important step. Do NOT read random files. Instead, trace one complete user flow. This creates connected understanding.',
-      },
-      {
-        type: 'h3',
-        text: 'Good Features To Trace',
-      },
-      {
-        type: 'list',
-        items: ['login', 'signup', 'file upload', 'checkout', 'chat message', 'create post', 'search', 'notifications'],
-      },
-      {
-        type: 'code',
-        lang: 'text',
-        code: `What triggers this flow?
-What API is called?
-Where is validation?
-Where is business logic?
-Where is state updated?
-What DB tables are touched?
-What background jobs run?
-What response returns?`,
-      },
-      {
-        type: 'h2',
-        text: 'Step 6 — Follow the Entire Request Lifecycle',
-      },
-      {
-        type: 'p',
-        text: 'Learn how data moves through the system. Systems are mostly data transformations.',
-      },
-      {
-        type: 'h3',
-        text: 'Frontend',
-      },
-      {
-        type: 'list',
-        items: ['component', 'form', 'API call', 'state update'],
-      },
-      {
-        type: 'h3',
-        text: 'Backend',
-      },
-      {
-        type: 'list',
-        items: ['route/controller', 'serializer/validator', 'service layer', 'DB operations', 'response formatter'],
-      },
-      {
-        type: 'h3',
-        text: 'Database',
-      },
-      {
-        type: 'list',
-        items: ['inserts', 'updates', 'queries', 'joins', 'transactions'],
-      },
-      {
-        type: 'h3',
-        text: 'Async Processing',
-      },
-      {
-        type: 'list',
-        items: ['queues', 'workers', 'scheduled jobs', 'events'],
-      },
-      {
-        type: 'h2',
-        text: 'Output Example',
-      },
-      {
-        type: 'code',
-        lang: 'text',
-        code: `Upload Flow:
 
-React Form
-→ axios POST
-→ Django route
-→ serializer validation
-→ service uploads to S3
-→ DB record created
-→ Celery thumbnail job
-→ API response
-→ frontend updates UI`,
-      },
-    ],
-  },
-  {
-    hub: 'codebase-understanding',
-    slug: '05-dependencies',
-    title: 'Step 4: Create High-Level Architecture Map',
-    subtitle: 'Understand the major building blocks and how they communicate',
-    duration: '1-2 hours',
-    tags: ['architecture', 'dependencies', 'components'],
-    status: 'seed',
-    description: 'The beginning of architecture thinking.',
-    icon: 'map',
-    content: [
+      // ── STEP 5 ──────────────────────────────────────────────────────────
       {
-        type: 'callout',
-        kind: 'note',
-        title: 'Goal',
-        text: 'Understand the major building blocks and how major components communicate. This is the beginning of architecture thinking.',
+        type: 'step',
+        n: 5,
+        title: 'Pick ONE Important Feature',
+        summary: 'This is the MOST important step. Do NOT read random files. Instead: Trace one complete user flow.',
+        content: [
+          {
+            type: 'callout',
+            kind: 'warn',
+            title: 'MOST Important Step',
+            text: 'This is the MOST important step. Do NOT read random files. Instead: Trace one complete user flow. This creates connected understanding.',
+          },
+          {
+            type: 'h3',
+            text: 'Good Features To Trace',
+          },
+          {
+            type: 'bullets',
+            items: [
+              'login',
+              'signup',
+              'file upload',
+              'checkout',
+              'chat message',
+              'create post',
+              'search',
+              'notifications',
+            ],
+          },
+          {
+            type: 'code-file',
+            filename: 'questions-to-answer.txt',
+            language: 'text',
+            lines: [
+              'What triggers this flow?',
+              'What API is called?',
+              'Where is validation?',
+              'Where is business logic?',
+              'Where is state updated?',
+              'What DB tables are touched?',
+              'What background jobs run?',
+              'What response returns?',
+            ],
+          },
+        ],
       },
-      {
-        type: 'p',
-        text: 'You need to see how major components communicate. This is the beginning of architecture thinking.',
-      },
-      {
-        type: 'h2',
-        text: 'Frontend — Identify',
-      },
-      {
-        type: 'list',
-        items: ['routing', 'state management', 'API layer', 'component structure', 'authentication flow'],
-      },
-      {
-        type: 'h3',
-        text: 'Possible Patterns',
-      },
-      {
-        type: 'list',
-        items: ['Redux', 'Zustand', 'Context API', 'React Query'],
-      },
-      {
-        type: 'h2',
-        text: 'Backend — Identify',
-      },
-      {
-        type: 'list',
-        items: ['controllers/routes', 'services', 'models', 'repositories', 'middleware', 'background jobs'],
-      },
-      {
-        type: 'h3',
-        text: 'Possible Architectures',
-      },
-      {
-        type: 'list',
-        items: ['MVC', 'layered', 'clean architecture', 'microservices', 'monolith'],
-      },
-      {
-        type: 'h2',
-        text: 'Database — Identify',
-      },
-      {
-        type: 'list',
-        items: ['main entities', 'relationships', 'ownership', 'transaction boundaries'],
-      },
-      {
-        type: 'h2',
-        text: 'External Services — Identify',
-      },
-      {
-        type: 'list',
-        items: ['Stripe', 'AWS S3', 'Firebase', 'Twilio', 'SendGrid', 'OAuth providers'],
-      },
-      {
-        type: 'h2',
-        text: 'Output Example',
-      },
-      {
-        type: 'code',
-        lang: 'text',
-        code: `Frontend
-  ↓
-REST API
-  ↓
-Django Controllers
-  ↓
-Service Layer
-  ↓
-PostgreSQL
 
-Background jobs:
-Celery + Redis
+      // ── STEP 6 ──────────────────────────────────────────────────────────
+      {
+        type: 'step',
+        n: 6,
+        title: 'Follow the Entire Request Lifecycle',
+        summary: 'Learn how data moves through the system. Systems are mostly data transformations.',
+        content: [
+          {
+            type: 'callout',
+            kind: 'tip',
+            title: 'Purpose',
+            text: 'Learn how data moves through the system. Systems are mostly data transformations.',
+          },
+          {
+            type: 'h3',
+            text: 'Trace the Flow',
+          },
+          {
+            type: 'rc-table',
+            caption: 'What to find in each layer',
+            headers: ['Layer', 'Find'],
+            rows: [
+              ['Frontend', 'component, form, API call, state update'],
+              ['Backend', 'route/controller, serializer/validator, service layer, DB operations, response formatter'],
+              ['Database', 'inserts, updates, queries, joins, transactions'],
+              ['Async Processing', 'queues, workers, scheduled jobs, events'],
+            ],
+          },
+        ],
+      },
 
-File uploads:
-AWS S3`,
+      {
+        type: 'h2',
+        text: 'Output You Should Produce',
+      },
+      {
+        type: 'code-file',
+        filename: 'your-output.txt',
+        language: 'text',
+        lines: [
+          'Upload Flow:',
+          '',
+          'React Form',
+          '→ axios POST',
+          '→ Django route',
+          '→ serializer validation',
+          '→ service uploads to S3',
+          '→ DB record created',
+          '→ Celery thumbnail job',
+          '→ API response',
+          '→ frontend updates UI',
+        ],
       },
     ],
   },
+
+  // =========================================================================
+  // PHASE 5 — UNDERSTAND THE DATA MODEL
+  // =========================================================================
   {
     hub: 'codebase-understanding',
-    slug: '06-tests',
-    title: 'Step 11: Read the Tests',
-    subtitle: 'Learn intended behavior — tests sometimes explain the system better than docs',
+    slug: '05-data-model',
+    title: 'Phase 5: Understand the Data Model',
+    subtitle: 'Understand the system\'s source of truth',
     duration: '1-2 hours',
-    tags: ['tests', 'behavior', 'edge-cases'],
-    status: 'seed',
-    description: 'Tests reveal expected behavior, edge cases, business rules, and assumptions.',
-    icon: 'test-tube',
-    content: [
-      {
-        type: 'callout',
-        kind: 'note',
-        title: 'Goal',
-        text: 'Learn intended behavior. Sometimes tests explain the system better than documentation.',
-      },
-      {
-        type: 'p',
-        text: 'Tests reveal: expected behavior, edge cases, business rules, and assumptions. Sometimes tests explain the system better than docs.',
-      },
-      {
-        type: 'h2',
-        text: 'What To Look For',
-      },
-      {
-        type: 'list',
-        items: ['unit tests', 'integration tests', 'e2e tests'],
-      },
-      {
-        type: 'h3',
-        text: 'Look For',
-      },
-      {
-        type: 'list',
-        items: ['edge cases', 'permission logic', 'validation rules', 'business invariants'],
-      },
-      {
-        type: 'code',
-        lang: 'text',
-        code: `What behavior is considered critical?
-What edge cases matter?
-What assumptions are protected?
-What business rules are enforced?`,
-      },
-    ],
-  },
-  {
-    hub: 'codebase-understanding',
-    slug: '07-dev-environment',
-    title: 'Step 8: Run the System Locally',
-    subtitle: 'Convert theory into real understanding through interaction and experimentation',
-    duration: '1-3 hours',
-    tags: ['dev-environment', 'local-setup', 'experimentation'],
-    status: 'seed',
-    description: 'Static reading is NOT enough. Real understanding begins with running the system.',
-    icon: 'terminal',
-    content: [
-      {
-        type: 'callout',
-        kind: 'note',
-        title: 'Goal',
-        text: 'Convert theory into real understanding. Static reading is NOT enough — you need interaction, observation, and experimentation.',
-      },
-      {
-        type: 'p',
-        text: 'Static reading is NOT enough. You need interaction, observation, and experimentation. This is where real understanding begins.',
-      },
-      {
-        type: 'h2',
-        text: 'Setup',
-      },
-      {
-        type: 'terminal',
-        lines: ['npm install', 'pip install -r requirements.txt', 'docker compose up'],
-      },
-      {
-        type: 'h2',
-        text: 'Trigger Flows',
-      },
-      {
-        type: 'list',
-        items: ['creating users', 'submitting forms', 'uploading files', 'causing validation errors', 'refreshing pages', 'deleting data'],
-      },
-      {
-        type: 'h2',
-        text: 'Observe',
-      },
-      {
-        type: 'list',
-        items: ['logs', 'network requests', 'DB changes', 'cache changes', 'worker jobs', 'API timing'],
-      },
-      {
-        type: 'code',
-        lang: 'text',
-        code: `What happens when things succeed?
-What happens when they fail?
-What logs appear?
-What services communicate?
-What changes in the DB?`,
-      },
-    ],
-  },
-  {
-    hub: 'codebase-understanding',
-    slug: '08-domain-language',
-    title: 'Step 7: Study the Database Schema',
-    subtitle: 'The database reveals the true shape of the system',
-    duration: '1-2 hours',
-    tags: ['database', 'schema', 'domain'],
-    status: 'seed',
-    description: 'Databases expose the true shape of the system — business concepts, ownership, relationships.',
+    tags: ['data-model', 'database', 'schema', 'entities'],
+    status: 'growing',
+    description: 'The database reveals business concepts, ownership, relationships, core domain logic. Databases expose the true shape of the system.',
     icon: 'database',
     content: [
       {
         type: 'callout',
         kind: 'note',
         title: 'Goal',
-        text: 'Understand the system\'s source of truth. The database reveals business concepts, ownership, relationships, and core domain logic.',
+        text: 'Understand the system\'s source of truth',
       },
-      {
-        type: 'p',
-        text: 'The database reveals: business concepts, ownership, relationships, and core domain logic. Databases expose the true shape of the system.',
-      },
-      {
-        type: 'h2',
-        text: 'What To Read',
-      },
-      {
-        type: 'list',
-        items: ['migrations', 'ORM models', 'schema files', 'ER diagrams'],
-      },
-      {
-        type: 'h3',
-        text: 'Find',
-      },
-      {
-        type: 'list',
-        items: ['primary entities', 'relationships', 'indexes', 'constraints', 'timestamps', 'soft deletes'],
-      },
-      {
-        type: 'code',
-        lang: 'text',
-        code: `What are the core entities?
-How are they connected?
-Which tables are most important?
-What is considered the source of truth?
-Where is state persisted?`,
-      },
-      {
-        type: 'h2',
-        text: 'Output Example',
-      },
-      {
-        type: 'code',
-        lang: 'text',
-        code: `Users
-  ↓
-Orders
-  ↓
-Payments
 
-Users can have many orders.
-Orders belong to one user.
-Payments belong to orders.`,
+      {
+        type: 'step',
+        n: 7,
+        title: 'Study the Database Schema',
+        summary: 'The database reveals business concepts, ownership, relationships, core domain logic.',
+        content: [
+          {
+            type: 'callout',
+            kind: 'tip',
+            title: 'Purpose',
+            text: 'The database reveals: business concepts, ownership, relationships, core domain logic. Databases expose the true shape of the system.',
+          },
+          {
+            type: 'h3',
+            text: 'What To Read',
+          },
+          {
+            type: 'p',
+            text: 'Look at:',
+          },
+          {
+            type: 'bullets',
+            items: ['migrations', 'ORM models', 'schema files', 'ER diagrams'],
+          },
+          {
+            type: 'p',
+            text: 'Find:',
+          },
+          {
+            type: 'bullets',
+            items: ['primary entities', 'relationships', 'indexes', 'constraints', 'timestamps', 'soft deletes'],
+          },
+          {
+            type: 'code-file',
+            filename: 'questions-to-answer.txt',
+            language: 'text',
+            lines: [
+              'What are the core entities?',
+              'How are they connected?',
+              'Which tables are most important?',
+              'What is considered the source of truth?',
+              'Where is state persisted?',
+            ],
+          },
+        ],
+      },
+
+      {
+        type: 'h2',
+        text: 'Output You Should Produce',
+      },
+      {
+        type: 'code-file',
+        filename: 'your-output.txt',
+        language: 'text',
+        lines: [
+          'Users',
+          '  ↓',
+          'Orders',
+          '  ↓',
+          'Payments',
+          '',
+          'Users can have many orders.',
+          'Orders belong to one user.',
+          'Payments belong to orders.',
+        ],
       },
     ],
   },
+
+  // =========================================================================
+  // PHASE 6 — RUN THE SYSTEM
+  // =========================================================================
   {
     hub: 'codebase-understanding',
-    slug: '09-conventions',
-    title: 'Step 10: Study Responsibilities and Boundaries',
-    subtitle: 'Learn ownership, responsibilities, and module boundaries',
+    slug: '06-run-system',
+    title: 'Phase 6: Run the System',
+    subtitle: 'Convert theory into real understanding',
+    duration: '2-3 hours',
+    tags: ['running', 'experimentation', 'observation', 'local-dev'],
+    status: 'growing',
+    description: 'Static reading is NOT enough. You need interaction, observation, experimentation. This is where real understanding begins.',
+    icon: 'play',
+    content: [
+      {
+        type: 'callout',
+        kind: 'note',
+        title: 'Goal',
+        text: 'Convert theory into real understanding',
+      },
+
+      {
+        type: 'step',
+        n: 8,
+        title: 'Run the System Locally',
+        summary: 'Static reading is NOT enough. You need interaction, observation, experimentation.',
+        content: [
+          {
+            type: 'callout',
+            kind: 'tip',
+            title: 'Purpose',
+            text: 'Static reading is NOT enough. You need: interaction, observation, experimentation. This is where real understanding begins.',
+          },
+          {
+            type: 'h3',
+            text: 'Setup',
+          },
+          {
+            type: 'p',
+            text: 'Run:',
+          },
+          {
+            type: 'terminal',
+            filename: 'setup-commands',
+            lines: [
+              'npm install',
+              'pip install -r requirements.txt',
+              'docker compose up',
+            ],
+          },
+          {
+            type: 'h3',
+            text: 'Trigger Flows',
+          },
+          {
+            type: 'p',
+            text: 'Try:',
+          },
+          {
+            type: 'checklist',
+            items: [
+              { label: 'creating users' },
+              { label: 'submitting forms' },
+              { label: 'uploading files' },
+              { label: 'causing validation errors' },
+              { label: 'refreshing pages' },
+              { label: 'deleting data' },
+            ],
+          },
+          {
+            type: 'h3',
+            text: 'Observe',
+          },
+          {
+            type: 'p',
+            text: 'Watch:',
+          },
+          {
+            type: 'bullets',
+            items: ['logs', 'network requests', 'DB changes', 'cache changes', 'worker jobs', 'API timing'],
+          },
+        ],
+      },
+
+      {
+        type: 'h2',
+        text: 'Questions To Answer',
+      },
+      {
+        type: 'code-file',
+        filename: 'questions-to-answer.txt',
+        language: 'text',
+        lines: [
+          'What happens when things succeed?',
+          'What happens when they fail?',
+          'What logs appear?',
+          'What services communicate?',
+          'What changes in the DB?',
+        ],
+      },
+    ],
+  },
+
+  // ─── PHASE 7 — STUDY FAILURE PATHS ────────────────────────────────
+  {
+    hub: 'codebase-understanding',
+    slug: '07-failure-paths',
+    title: 'Phase 7: Study Failure Paths',
+    subtitle: 'Understand the REAL system behavior',
     duration: '1-2 hours',
-    tags: ['conventions', 'boundaries', 'responsibilities'],
-    status: 'seed',
+    tags: ['failure', 'resilience', 'debugging', 'error-handling'],
+    status: 'growing',
+    description: 'Systems reveal their true architecture during failure. This step separates shallow understanding from deep understanding.',
+    icon: 'flame',
+    content: [
+      {
+        type: 'callout',
+        kind: 'note',
+        title: 'Goal',
+        text: 'Understand the REAL system behavior',
+      },
+      {
+        type: 'h2',
+        text: 'Step 9 — Break Things Safely',
+      },
+      {
+        type: 'callout',
+        kind: 'tip',
+        title: 'Purpose',
+        text: 'Systems reveal their true architecture during failure. This step separates shallow understanding from deep understanding.',
+      },
+      {
+        type: 'h3',
+        text: 'Things To Break',
+      },
+      {
+        type: 'p',
+        text: 'Try:',
+      },
+      {
+        type: 'bullets',
+        items: [
+          'invalid form data',
+          'expired token',
+          'missing environment variable',
+          'broken API response',
+          'DB unavailable',
+          'Redis unavailable',
+          'network timeout',
+          'wrong permissions',
+        ],
+      },
+      {
+        type: 'h3',
+        text: 'Questions To Answer',
+      },
+      {
+        type: 'code-file',
+        filename: 'questions-to-answer.txt',
+        language: 'text',
+        lines: [
+          'How are errors handled?',
+          'Where are retries implemented?',
+          'What fails gracefully?',
+          'What crashes completely?',
+          'What monitoring exists?',
+          'What logs are useful?',
+        ],
+      },
+    ],
+  },
+
+  // ─── PHASE 8 — UNDERSTAND MODULE BOUNDARIES ─────────────────────────
+  {
+    hub: 'codebase-understanding',
+    slug: '08-module-boundaries',
+    title: 'Phase 8: Understand Module Boundaries',
+    subtitle: 'Learn ownership and responsibilities',
+    duration: '1-2 hours',
+    tags: ['boundaries', 'responsibilities', 'modules', 'coupling'],
+    status: 'growing',
     description: 'Good systems separate concerns. You need to understand what each module owns.',
     icon: 'boundary',
     content: [
@@ -1900,158 +2290,267 @@ Payments belong to orders.`,
         type: 'callout',
         kind: 'note',
         title: 'Goal',
-        text: 'Learn ownership and responsibilities. Good systems separate concerns — understand what each module owns.',
+        text: 'Learn ownership and responsibilities',
       },
       {
-        type: 'p',
+        type: 'h2',
+        text: 'Step 10 — Study Responsibilities and Boundaries',
+      },
+      {
+        type: 'callout',
+        kind: 'tip',
+        title: 'Purpose',
         text: 'Good systems separate concerns. You need to understand what each module owns.',
       },
       {
-        type: 'code',
-        lang: 'text',
-        code: `What is this module responsible for?
-What should NOT belong here?
-What dependencies does it have?
-What modules depend on it?
-Is it tightly coupled?`,
+        type: 'h3',
+        text: 'Questions To Ask',
       },
       {
-        type: 'h2',
-        text: 'Example: Auth Service',
+        type: 'code-file',
+        filename: 'questions-to-ask.txt',
+        language: 'text',
+        lines: [
+          'What is this module responsible for?',
+          'What should NOT belong here?',
+          'What dependencies does it have?',
+          'What modules depend on it?',
+          'Is it tightly coupled?',
+        ],
       },
       {
-        type: 'code',
-        lang: 'text',
-        code: `Auth service:
-- login
-- token validation
-- permissions
-
-Should NOT:
-- send emails
-- process payments
-- manage UI state`,
+        type: 'h3',
+        text: 'Examples',
+      },
+      {
+        type: 'code-file',
+        filename: 'module-boundaries-example.txt',
+        language: 'text',
+        lines: [
+          'Auth service:',
+          '- login',
+          '- token validation',
+          '- permissions',
+          '',
+          'Should NOT:',
+          '- send emails',
+          '- process payments',
+          '- manage UI state',
+        ],
       },
     ],
   },
+
+  // ─── PHASE 9 — READ THE TESTS ───────────────────────────────────────
   {
     hub: 'codebase-understanding',
-    slug: '10-pain-points',
-    title: 'Step 9: Break Things Safely',
-    subtitle: 'Understand the REAL system behavior — systems reveal architecture during failure',
+    slug: '09-tests',
+    title: 'Phase 9: Read the Tests',
+    subtitle: 'Learn intended behavior',
     duration: '1-2 hours',
-    tags: ['failure', 'resilience', 'debugging'],
-    status: 'seed',
-    description: 'This step separates shallow understanding from deep understanding.',
-    icon: 'flame',
+    tags: ['tests', 'behavior', 'edge-cases', 'business-rules'],
+    status: 'growing',
+    description: 'Tests reveal expected behavior, edge cases, business rules, and assumptions. Sometimes tests explain the system better than docs.',
+    icon: 'test-tube',
     content: [
       {
         type: 'callout',
         kind: 'note',
         title: 'Goal',
-        text: 'Understand the REAL system behavior. Systems reveal their true architecture during failure.',
+        text: 'Learn intended behavior',
+      },
+      {
+        type: 'h2',
+        text: 'Step 11 — Read the Tests',
+      },
+      {
+        type: 'callout',
+        kind: 'tip',
+        title: 'Purpose',
+        text: 'Tests reveal: expected behavior, edge cases, business rules, assumptions. Sometimes tests explain the system better than docs.',
+      },
+      {
+        type: 'h3',
+        text: 'What To Look For',
       },
       {
         type: 'p',
-        text: 'Systems reveal their true architecture during failure. This step separates shallow understanding from deep understanding.',
+        text: 'Read:',
       },
       {
-        type: 'h2',
-        text: 'Things To Break',
+        type: 'bullets',
+        items: [
+          'unit tests',
+          'integration tests',
+          'e2e tests',
+        ],
       },
       {
-        type: 'list',
-        items: ['invalid form data', 'expired token', 'missing environment variable', 'broken API response', 'DB unavailable', 'Redis unavailable', 'network timeout', 'wrong permissions'],
+        type: 'p',
+        text: 'Look for:',
       },
       {
-        type: 'code',
-        lang: 'text',
-        code: `How are errors handled?
-Where are retries implemented?
-What fails gracefully?
-What crashes completely?
-What monitoring exists?
-What logs are useful?`,
+        type: 'bullets',
+        items: [
+          'edge cases',
+          'permission logic',
+          'validation rules',
+          'business invariants',
+        ],
+      },
+      {
+        type: 'h3',
+        text: 'Questions To Answer',
+      },
+      {
+        type: 'code-file',
+        filename: 'questions-to-answer.txt',
+        language: 'text',
+        lines: [
+          'What behavior is considered critical?',
+          'What edge cases matter?',
+          'What assumptions are protected?',
+          'What business rules are enforced?',
+        ],
       },
     ],
   },
+
+  // ─── PHASE 10 — UNDERSTAND OPERATIONS & DEPLOYMENT ──────────────────
   {
     hub: 'codebase-understanding',
-    slug: '11-mental-model',
-    title: 'Steps 12+13 + Master Loop + Senior Thinking + Final Truth',
-    subtitle: 'Build permanent understanding — the complete mental model synthesis',
-    duration: 'Ongoing',
-    tags: ['mental-model', 'senior-thinking', 'mastery'],
-    status: 'seed',
-    description: 'Writing clarifies thinking. If you cannot explain the system simply, you probably don\'t fully understand it yet.',
-    icon: 'brain',
+    slug: '10-operations',
+    title: 'Phase 10: Understand Operations & Deployment',
+    subtitle: 'Understand the production environment',
+    duration: '1-2 hours',
+    tags: ['operations', 'deployment', 'infrastructure', 'devops'],
+    status: 'growing',
+    description: 'Applications do not live only in code. You must understand: deployment, environments, scaling, observability.',
+    icon: 'cloud',
     content: [
       {
         type: 'callout',
         kind: 'note',
         title: 'Goal',
-        text: 'Build permanent understanding. Writing clarifies thinking. If you cannot explain the system simply, you probably don\'t fully understand it yet.',
+        text: 'Understand the production environment',
       },
       {
         type: 'h2',
         text: 'Step 12 — Study Infrastructure and Deployment',
       },
       {
-        type: 'p',
-        text: 'Applications do not live only in code. You must understand: deployment, environments, scaling, and observability.',
+        type: 'callout',
+        kind: 'tip',
+        title: 'Purpose',
+        text: 'Applications do not live only in code. You must understand: deployment, environments, scaling, observability.',
       },
       {
-        type: 'code',
-        lang: 'text',
-        code: `Dockerfile
-Docker Compose
-Terraform
-Kubernetes manifests
-CI/CD workflows
-GitHub Actions
-Helm charts
-Nginx configs`,
+        type: 'h3',
+        text: 'What To Read',
       },
       {
-        type: 'code',
-        lang: 'text',
-        code: `How is the app deployed?
-How are secrets managed?
-How are environments separated?
-What services exist in production?
-How does scaling work?
-What monitoring exists?`,
+        type: 'code-file',
+        filename: 'infra-files-to-read.txt',
+        language: 'text',
+        lines: [
+          'Dockerfile',
+          'Docker Compose',
+          'Terraform',
+          'Kubernetes manifests',
+          'CI/CD workflows',
+          'GitHub Actions',
+          'Helm charts',
+          'Nginx configs',
+        ],
+      },
+      {
+        type: 'h3',
+        text: 'Questions To Answer',
+      },
+      {
+        type: 'code-file',
+        filename: 'questions-to-answer.txt',
+        language: 'text',
+        lines: [
+          'How is the app deployed?',
+          'How are secrets managed?',
+          'How are environments separated?',
+          'What services exist in production?',
+          'How does scaling work?',
+          'What monitoring exists?',
+        ],
+      },
+    ],
+  },
+
+  // ─── PHASE 11 — CREATE YOUR OWN SYSTEM MAP ──────────────────────────
+  {
+    hub: 'codebase-understanding',
+    slug: '11-mental-model',
+    title: 'Phase 11: Create Your Own System Map',
+    subtitle: 'Build permanent understanding',
+    duration: 'Ongoing',
+    tags: ['mental-model', 'documentation', 'senior-thinking', 'mastery'],
+    status: 'growing',
+    description: 'Writing clarifies thinking. If you cannot explain the system simply... then you probably don\'t fully understand it yet.',
+    icon: 'brain',
+    content: [
+      {
+        type: 'callout',
+        kind: 'note',
+        title: 'Goal',
+        text: 'Build permanent understanding',
       },
       {
         type: 'h2',
         text: 'Step 13 — Document Your Mental Model',
       },
       {
+        type: 'callout',
+        kind: 'tip',
+        title: 'Purpose',
+        text: 'Writing clarifies thinking. If you cannot explain the system simply… then you probably don\'t fully understand it yet.',
+      },
+      {
+        type: 'h3',
+        text: 'Things To Document',
+      },
+      {
+        type: 'code-file',
+        filename: 'your-system-map.txt',
+        language: 'text',
+        lines: [
+          'What starts the app?',
+          'Where does business logic live?',
+          'How does authentication work?',
+          'Where is state stored?',
+          'What services communicate?',
+          'What are the risky areas?',
+          'What happens during failure?',
+          'What background jobs exist?',
+        ],
+      },
+      {
+        type: 'h3',
+        text: 'Create Diagrams',
+      },
+      {
         type: 'p',
-        text: 'Writing clarifies thinking. If you cannot explain the system simply, then you probably don\'t fully understand it yet.',
+        text: 'Even ugly diagrams help enormously:',
       },
       {
-        type: 'code',
-        lang: 'text',
-        code: `What starts the app?
-Where does business logic live?
-How does authentication work?
-Where is state stored?
-What services communicate?
-What are the risky areas?
-What happens during failure?
-What background jobs exist?`,
-      },
-      {
-        type: 'code',
-        lang: 'text',
-        code: `Frontend
-   ↓
-API Gateway
-   ↓
-Auth Service
-   ↓
-Database`,
+        type: 'code-file',
+        filename: 'your-output.txt',
+        language: 'text',
+        lines: [
+          'Frontend',
+          '   ↓',
+          'API Gateway',
+          '   ↓',
+          'Auth Service',
+          '   ↓',
+          'Database',
+        ],
       },
       {
         type: 'h2',
@@ -2059,17 +2558,23 @@ Database`,
       },
       {
         type: 'p',
-        text: 'Once you finish one feature, repeat this loop. It gradually reveals the entire system.',
+        text: 'Once you finish one feature:',
       },
       {
-        type: 'code',
-        lang: 'text',
-        code: `1. Pick another important flow
-2. Trace it end-to-end
-3. Understand data movement
-4. Observe failures
-5. Update mental model
-6. Repeat`,
+        type: 'ordered',
+        items: [
+          'Pick another important flow',
+          'Trace it end-to-end',
+          'Understand data movement',
+          'Observe failures',
+          'Update mental model',
+          'Repeat',
+        ],
+      },
+      {
+        type: 'callout',
+        kind: 'success',
+        text: 'This loop gradually reveals the entire system.',
       },
       {
         type: 'h2',
@@ -2078,10 +2583,10 @@ Database`,
       {
         type: 'mindset',
         rows: [
-          { junior: 'What does this file do?', senior: 'How does the system behave?' },
-          { junior: 'Read files randomly', senior: 'Why was it designed this way?' },
-          { junior: 'Understand locally', senior: 'What are the tradeoffs?' },
-          { junior: 'Fix the error', senior: 'Where are the risks?' },
+          { junior: '"What does this file do?"', senior: '"How does the system behave?"' },
+          { junior: '"What does this file do?"', senior: '"Why was it designed this way?"' },
+          { junior: '"What does this file do?"', senior: '"What are the tradeoffs?"' },
+          { junior: '"What does this file do?"', senior: '"Where are the risks?"' },
         ],
       },
       {
@@ -2089,16 +2594,20 @@ Database`,
         text: 'SIGNS YOU ACTUALLY UNDERSTAND THE SYSTEM',
       },
       {
+        type: 'p',
+        text: 'You can:',
+      },
+      {
         type: 'checklist',
         items: [
-          { label: 'Predict where code lives', done: false },
-          { label: 'Explain major flows without reading code', done: false },
-          { label: 'Trace bugs quickly through the system', done: false },
-          { label: 'Modify features safely without breakage', done: false },
-          { label: 'Identify risky areas before touching them', done: false },
-          { label: 'Explain the architecture clearly to others', done: false },
-          { label: 'Understand failure behavior', done: false },
-          { label: 'Onboard others into the system', done: false },
+          { label: 'predict where code lives', done: false },
+          { label: 'explain major flows', done: false },
+          { label: 'trace bugs quickly', done: false },
+          { label: 'modify features safely', done: false },
+          { label: 'identify risky areas', done: false },
+          { label: 'explain architecture clearly', done: false },
+          { label: 'understand failure behavior', done: false },
+          { label: 'onboard others', done: false },
         ],
       },
       {
@@ -2106,18 +2615,17 @@ Database`,
         text: 'FINAL MINDSET',
       },
       {
-        type: 'p',
-        text: 'Do NOT try to understand everything immediately. That is impossible. Real understanding comes from:',
+        type: 'callout',
+        kind: 'warn',
+        text: 'Do NOT try to understand everything immediately. That is impossible.',
       },
       {
-        type: 'code',
-        lang: 'text',
-        code: `observe
-→ trace
-→ experiment
-→ break
-→ repair
-→ repeat`,
+        type: 'p',
+        text: 'Real understanding comes from:',
+      },
+      {
+        type: 'wisdom',
+        body: 'observe → trace → experiment → break → repair → repeat',
       },
       {
         type: 'p',
@@ -2128,20 +2636,17 @@ Database`,
         text: 'FINAL TRUTH',
       },
       {
-        type: 'p',
-        text: 'A codebase is not just code. It is: architecture, business decisions, team culture, operational tradeoffs, evolving history, and human assumptions.',
+        type: 'blockquote',
+        text: 'A codebase is not just code. It is: architecture, business decisions, team culture, operational tradeoffs, evolving history, human assumptions. The deeper you look… the more the system starts feeling alive. And eventually: you stop seeing files. you start seeing flows ⚡',
       },
       {
-        type: 'p',
-        text: 'The deeper you look, the more the system starts feeling alive. And eventually: you stop seeing files. You start seeing flows.',
-      },
-      {
-        type: 'callout',
-        kind: 'quote',
-        text: '"Whatever you do, do it for the glory of God." — 1 Corinthians 10:31',
+        type: 'pull-quote',
+        text: '"Whatever you do, do it for the glory of God."',
+        attribution: '1 Corinthians 10:31',
       },
     ],
   },
+
   {
     hub: 'codebase-understanding',
     slug: 'reading-pg-locks',
@@ -2336,751 +2841,1043 @@ Database`,
 // ---------------------------------------------------------------------------
 
 const featurePhases: HubPage[] = [
+  // ── 00-intro ────────────────────────────────────────────────────────────────
+  {
+    hub: 'feature-development',
+    slug: '00-intro',
+    title: "The Builder's Lifecycle — From Understanding to Mastery",
+    subtitle: 'How Professional Engineers Think, Build, Ship, and Evolve Software',
+    tags: ['philosophy', 'lifecycle', 'overview'],
+    status: 'growing',
+    description: 'A complete learning book for the full lifecycle of building a feature.',
+    icon: 'book',
+    content: [
+      { type: 'p', text: '**What this is:** A complete learning book for the full lifecycle of building a feature — from understanding WHY it exists, through designing and slicing it, to shipping safely, observing in production, and refining over time.' },
+      { type: 'p', text: '**Who this is for:** Any developer who wants to build like a senior engineer — not just write code, but evolve systems with intention, discipline, and craft.' },
+      { type: 'h2', text: 'How to use this guide:' },
+      { type: 'ordered', items: [
+        '**First read:** Cover to cover — absorb the philosophy and the flow',
+        '**During planning:** Reference Chapters 1–5 before writing any code',
+        '**During building:** Follow the Execution Loop (Chapter 6) for each slice',
+        '**After shipping:** Use Chapters 9–11 to observe, learn, and improve',
+        '**The exercises:** Do them. Reading without practice is wishful thinking.',
+      ]},
+      { type: 'callout', kind: 'tip', title: 'FOR RUACH-EL (every session involving feature work)', text: 'This is your master teaching framework. Every chapter has a 🧭 RUACH-EL GUIDE block with specific questions to ask, behaviors to watch for, and moments to intervene. Walk Wiganz through each phase Socratically — never hand over answers. The goal: build the ENGINEER, not just the software.' },
+      { type: 'h2', text: '🧠 The Core Philosophy' },
+      { type: 'p', text: 'Professional software engineering is NOT:' },
+      { type: 'blockquote', text: '"just writing code"' },
+      { type: 'p', text: 'It IS:' },
+      { type: 'blockquote', text: '"safely evolving complex systems over time"' },
+      { type: 'p', text: 'The real goal is never just "make the feature work." The real goal is:' },
+      { type: 'blockquote', text: 'Make the feature **reliable, maintainable, scalable, observable, and safe to evolve.**' },
+      { type: 'p', text: 'This is the gap between junior and senior. Juniors finish tickets. Seniors evolve systems.' },
+      { type: 'mindset', rows: [
+        { junior: '"How do I code this?"',        senior: '"How do I evolve the system safely?"' },
+        { junior: 'Focus on implementation',       senior: 'Focus on architecture + impact' },
+        { junior: 'Finish the ticket',             senior: 'Preserve long-term maintainability' },
+        { junior: 'Local feature thinking',        senior: 'System-wide thinking' },
+        { junior: 'Happy path only',               senior: 'Failure-aware engineering' },
+        { junior: '"It works on my machine"',      senior: '"It works in production at scale"' },
+      ]},
+      { type: 'h2', text: "🗺️ The Full Lifecycle — Bird's Eye View" },
+      { type: 'code', lang: 'text', code: `┌─────────────────────────────────────────────────────────────┐
+│                                                             │
+│   1. UNDERSTAND — Why does this feature exist?              │
+│         ↓                                                   │
+│   2. ANALYZE — What does it touch in the existing system?   │
+│         ↓                                                   │
+│   3. DESIGN — How should the solution be architected?       │
+│         ↓                                                   │
+│   4. SLICE — Break it into vertical, shippable pieces       │
+│         ↓                                                   │
+│   5. DEFINE DONE — What does "complete" look like per slice?│
+│         ↓                                                   │
+│   ┌─────────────────────────────────────────┐               │
+│   │  6. EXECUTE — The Build Loop (per slice)│ ←── repeat    │
+│   │     Design → Build → Test → Ship        │     for each  │
+│   │         ↓                               │     slice     │
+│   │  7. DONE GATE — Pass or fix             │               │
+│   └─────────────────────────────────────────┘               │
+│         ↓                                                   │
+│   8. TEST DEEPLY — Verify beyond the happy path             │
+│         ↓                                                   │
+│   9. DEPLOY SAFELY — Release without breaking production    │
+│         ↓                                                   │
+│  10. OBSERVE — Learn from real-world usage                  │
+│         ↓                                                   │
+│  11. REFINE — Improve, simplify, strengthen                 │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘` },
+      { type: 'p', text: 'Every chapter below teaches one phase. Together, they form the complete discipline.' },
+    ],
+  },
+  // ── 01-understand ───────────────────────────────────────────────────────────
   {
     hub: 'feature-development',
     slug: '01-understand',
-    title: 'Core Philosophy + Phase 1: Understand the Feature',
-    subtitle: 'Understand WHY the feature exists before writing a single line of code',
+    title: 'Chapter 1: Understand the Feature',
+    subtitle: 'The Phase: Know WHY before you build WHAT',
     duration: '1-2 hours',
-    tags: ['requirements', 'philosophy', 'business-intent'],
+    tags: ['requirements', 'business-intent', 'understanding'],
     status: 'growing',
-    description: 'Professional software engineering is safely evolving complex systems over time.',
-    icon: 'target',
+    description: 'Before writing a single line of code, understand what problem is being solved, who needs this feature, why it matters, and what success looks like.',
+    icon: 'sparkle',
     content: [
-      {
-        type: 'h2',
-        text: 'Core Philosophy',
-      },
-      {
-        type: 'p',
-        text: 'Professional software engineering is NOT: "just writing code". It is: "Safely evolving complex systems over time."',
-      },
-      {
-        type: 'p',
-        text: 'Enterprise feature development is about:',
-      },
-      {
-        type: 'list',
-        items: ['understanding business intent', 'minimizing risk', 'preserving architecture', 'delivering incrementally', 'maintaining long-term scalability', 'protecting production systems'],
-      },
-      {
-        type: 'p',
-        text: 'The real goal is NOT: "make feature work". The real goal is: "make feature reliable, maintainable, scalable, observable, and safe to evolve."',
-      },
-      {
-        type: 'h2',
-        text: 'The Enterprise Engineering Mindset',
-      },
-      {
-        type: 'mindset',
-        rows: [
-          { junior: 'How do I code this?', senior: 'How do I evolve the system safely?' },
-          { junior: 'Focus on implementation', senior: 'Focus on architecture + impact' },
-          { junior: 'Finish ticket', senior: 'Preserve long-term maintainability' },
-          { junior: 'Local feature thinking', senior: 'System-wide thinking' },
-          { junior: 'Happy path only', senior: 'Failure-aware engineering' },
-        ],
-      },
-      {
-        type: 'h2',
-        text: 'High-Level Lifecycle',
-      },
-      {
-        type: 'code',
-        lang: 'text',
-        code: `1. Understand the feature
-2. Analyze system impact
-3. Design the solution
-4. Slice vertically
-5. Implement safely
-6. Test deeply
-7. Deploy carefully
-8. Observe in production
-9. Refactor and improve`,
-      },
-      {
-        type: 'h2',
-        text: 'Phase 1 — Understand the Feature',
-      },
-      {
-        type: 'callout',
-        kind: 'note',
-        title: 'Goal',
-        text: 'Understand WHY the feature exists. Before writing code, understand: what problem is being solved, who needs the feature, why it matters, and what business outcome is expected.',
-      },
-      {
-        type: 'p',
-        text: 'Great engineers solve problems. Not just tickets.',
-      },
-      {
-        type: 'h3',
-        text: 'Questions To Ask',
-      },
-      {
-        type: 'code',
-        lang: 'text',
-        code: `Who requested this feature?
-Who are the users?
-What pain/problem exists today?
-What does success look like?
-What metrics improve?
-What edge cases matter?
-What are failure scenarios?`,
-      },
-      {
-        type: 'h3',
-        text: 'Output Example',
-      },
-      {
-        type: 'code',
-        lang: 'text',
-        code: `Feature:
-User profile image upload
-
-Goal:
-Allow users to personalize profiles.
-
-Business value:
-Improve engagement and identity.
-
-Constraints:
-- max 5MB
-- only images
-- secure uploads
-- mobile friendly`,
-      },
+      { type: 'callout', kind: 'note', title: 'Goal',
+        text: 'Before writing a single line of code, understand:',
+        items: [
+          'What problem is being solved',
+          'Who needs this feature',
+          'Why it matters to the business or the user',
+          'What success looks like',
+        ] },
+      { type: 'p', text: 'Great engineers solve problems. Not just tickets.' },
+      { type: 'h2', text: 'The Questions to Ask' },
+      { type: 'code', lang: 'text', code: `Who requested this feature? Who are the actual users?
+What pain or problem exists today without this?
+What does success look like — how will we know it worked?
+What metrics improve if we build this right?
+What are the failure scenarios — what could go wrong?
+What edge cases matter from the start?
+What constraints exist (time, budget, tech, team)?` },
+      { type: 'h2', text: 'The Output You Should Produce' },
+      { type: 'p', text: 'Before moving forward, you should be able to write something like:' },
+      { type: 'code', lang: 'text', code: `Feature: [name]
+Problem: [what pain exists today]
+Users: [who benefits]
+Success: [what "working" looks like]
+Constraints: [limits — size, time, security, etc.]
+Risks: [what could go wrong]` },
+      { type: 'p', text: 'Even a few bullet points here saves days of rework later. A slow Chapter 1 saves 10 hours in Chapter 6.' },
+      { type: 'h2', text: '🧭 RUACH-EL GUIDE — Chapter 1' },
+      { type: 'callout', kind: 'tip', title: 'When to use', text: 'When Wiganz says "I want to build X" or starts a new feature.' },
+      { type: 'h3', text: 'Questions to ask (one at a time, Socratically):' },
+      { type: 'ordered', items: [
+        '"What problem does this solve? Who\'s in pain right now without it?"',
+        '"Who is the user? What chapter of their story are they standing in?"',
+        '"What does success look like? If this works perfectly, what changed?"',
+        '"What could go wrong? What\'s the worst failure scenario?"',
+        '"Is this worthy of our time? Does it deserve our focused hours?"',
+      ]},
+      { type: 'h3', text: 'What to watch for:' },
+      { type: 'bullets', items: [
+        'Jumping straight to code without answering these questions',
+        'Vague answers: "It just needs to work" → Push for specifics',
+        'Feature creep at the idea stage: "And also it should do X, Y, Z..." → Anchor to the core problem',
+      ]},
+      { type: 'callout', kind: 'warn', title: 'When to intervene', text: 'If he opens an editor before he can articulate the problem in one sentence. Gently: "Brother, before we touch code — who are we building this for, and what pain are we healing?"' },
     ],
   },
+  // ── 02-analyze-impact ───────────────────────────────────────────────────────
   {
     hub: 'feature-development',
-    slug: '02-design',
-    title: 'Phase 2: Analyze Impact on Existing System',
-    subtitle: 'Understand how the feature affects the current architecture',
-    duration: '1-2 hours',
-    tags: ['impact-analysis', 'architecture', 'risk'],
+    slug: '02-analyze-impact',
+    title: 'Chapter 2: Analyze Impact on the Existing System',
+    subtitle: 'The Phase: Understand what your feature touches BEFORE you change it',
+    duration: '1-3 hours',
+    tags: ['impact-analysis', 'architecture', 'risk', 'dependencies'],
     status: 'growing',
-    description: 'Features rarely affect only one place. Understand what parts of the system will change.',
-    icon: 'ripple',
-    content: [
-      {
-        type: 'callout',
-        kind: 'note',
-        title: 'Goal',
-        text: 'Understand how the feature affects the current architecture. Features rarely affect only one place — this prevents accidental breakage.',
-      },
-      {
-        type: 'p',
-        text: 'Features rarely affect only one place. You must understand what parts of the system will change. This prevents accidental breakage.',
-      },
-      {
-        type: 'h2',
-        text: 'Frontend Impact',
-      },
-      {
-        type: 'list',
-        items: ['UI components', 'routing', 'state management', 'forms', 'caching'],
-      },
-      {
-        type: 'h2',
-        text: 'Backend Impact',
-      },
-      {
-        type: 'list',
-        items: ['APIs', 'services', 'authentication', 'validation', 'background jobs'],
-      },
-      {
-        type: 'h2',
-        text: 'Database Impact',
-      },
-      {
-        type: 'list',
-        items: ['schema changes', 'migrations', 'indexes', 'relationships'],
-      },
-      {
-        type: 'h2',
-        text: 'Infrastructure Impact',
-      },
-      {
-        type: 'list',
-        items: ['storage', 'queues', 'Redis', 'object storage', 'monitoring'],
-      },
-      {
-        type: 'h2',
-        text: 'External Systems Impact',
-      },
-      {
-        type: 'list',
-        items: ['Stripe', 'AWS S3', 'email providers', 'OAuth providers', 'analytics'],
-      },
-      {
-        type: 'h2',
-        text: 'Questions To Ask',
-      },
-      {
-        type: 'code',
-        lang: 'text',
-        code: `What existing flows change?
-Could this break anything?
-Does auth/permissions change?
-Will DB migrations be needed?
-Does this affect performance?
-Will async jobs be required?`,
-      },
-    ],
-  },
-  {
-    hub: 'feature-development',
-    slug: '03-plan',
-    title: 'Phase 3: Design the Solution',
-    subtitle: 'Design BEFORE implementation — where senior engineering starts',
-    duration: '2-4 hours',
-    tags: ['design', 'architecture', 'planning'],
-    status: 'growing',
-    description: 'You are designing how the feature integrates into the system — not just writing code.',
-    icon: 'pencil-ruler',
-    content: [
-      {
-        type: 'callout',
-        kind: 'note',
-        title: 'Goal',
-        text: 'Design BEFORE implementation. This is where senior engineering starts. You are designing how the feature integrates into the system, not just writing code.',
-      },
-      {
-        type: 'p',
-        text: 'This is where senior engineering starts. You are designing how the feature integrates into the system — not just writing code.',
-      },
-      {
-        type: 'step',
-        n: 1,
-        title: 'API Design',
-        summary: 'Define the contract between frontend and backend',
-        content: [
-          { type: 'p', text: 'Define the API contract before writing any code.' },
-          {
-            type: 'code',
-            lang: 'text',
-            code: `Endpoints
-Request shape
-Response shape
-Validation
-Error handling
-Authentication
-Permissions`,
-          },
-        ],
-      },
-      {
-        type: 'step',
-        n: 2,
-        title: 'Database Design',
-        summary: 'Plan schema changes before touching the database',
-        content: [
-          { type: 'p', text: 'Plan all schema changes before writing migrations.' },
-          {
-            type: 'code',
-            lang: 'text',
-            code: `New tables?
-New columns?
-Indexes?
-Relationships?
-Constraints?
-Migrations?`,
-          },
-        ],
-      },
-      {
-        type: 'step',
-        n: 3,
-        title: 'State Management Design',
-        summary: 'Decide where truth lives',
-        content: [
-          { type: 'p', text: 'Define where state lives and what gets cached.' },
-          {
-            type: 'code',
-            lang: 'text',
-            code: `Where is truth stored?
-What gets cached?
-What lives in frontend state?
-What is temporary?`,
-          },
-        ],
-      },
-      {
-        type: 'step',
-        n: 4,
-        title: 'Async Processing Design',
-        summary: 'Plan background jobs and event processing',
-        content: [
-          { type: 'p', text: 'Determine what needs to be processed asynchronously.' },
-          {
-            type: 'code',
-            lang: 'text',
-            code: `Need queues?
-Need workers?
-Need retries?
-Need event processing?
-Need notifications?`,
-          },
-        ],
-      },
-      {
-        type: 'step',
-        n: 5,
-        title: 'Security Design',
-        summary: 'Define permissions, rate limits, and protection strategies',
-        content: [
-          { type: 'p', text: 'Design security from the start — not as an afterthought.' },
-          {
-            type: 'code',
-            lang: 'text',
-            code: `Permissions
-Rate limits
-Validation
-Data exposure risks
-Abuse prevention`,
-          },
-        ],
-      },
-      {
-        type: 'step',
-        n: 6,
-        title: 'Scalability Design',
-        summary: 'Plan for load before it arrives',
-        content: [
-          { type: 'p', text: 'Consider scalability constraints before implementation.' },
-          {
-            type: 'code',
-            lang: 'text',
-            code: `Expected traffic?
-Large file handling?
-Caching?
-DB bottlenecks?
-Concurrency?`,
-          },
-        ],
-      },
-      {
-        type: 'h2',
-        text: 'Questions To Ask',
-      },
-      {
-        type: 'code',
-        lang: 'text',
-        code: `Where should business logic live?
-How will failures be handled?
-How scalable is this design?
-How maintainable is this approach?
-What tradeoffs are being made?`,
-      },
-      {
-        type: 'h2',
-        text: 'Output Artifacts',
-      },
-      {
-        type: 'list',
-        items: ['feature specification', 'technical design doc', 'RFC', 'API contract', 'flow diagram', 'sequence diagram', 'DB schema sketch'],
-      },
-      {
-        type: 'callout',
-        kind: 'tip',
-        text: 'Even small notes help enormously. The act of designing before coding forces clarity.',
-      },
-    ],
-  },
-  {
-    hub: 'feature-development',
-    slug: '04-implement',
-    title: 'Phase 4: Slice the Feature Vertically',
-    subtitle: 'Deliver value incrementally — build small end-to-end slices',
-    duration: 'Per slice',
-    tags: ['vertical-slices', 'incremental', 'implementation'],
-    status: 'growing',
-    description: 'Instead of building everything at once, build small end-to-end slices.',
+    description: 'Features rarely affect only one place. The senior discipline is mapping the blast radius before making changes.',
     icon: 'layers',
     content: [
-      {
-        type: 'callout',
-        kind: 'note',
-        title: 'Goal',
-        text: 'Deliver value incrementally. Instead of building everything at once, build small end-to-end slices.',
-      },
-      {
-        type: 'p',
-        text: 'Instead of building everything at once, build small end-to-end slices. Each slice should be testable, deployable, reviewable, understandable, and low-risk.',
-      },
-      {
-        type: 'h2',
-        text: 'Bad: Horizontal Development',
-      },
-      {
-        type: 'code',
-        lang: 'text',
-        code: `Day 1:
-All DB work
-
-Day 2:
-All backend work
-
-Day 3:
-All frontend work
-
-Day 4:
-Testing`,
-      },
-      {
-        type: 'callout',
-        kind: 'warn',
-        title: 'Problems with horizontal development',
-        text: 'Giant PRs, delayed feedback, hard debugging, painful merges, fragile integration.',
-      },
-      {
-        type: 'h2',
-        text: 'Good: Vertical Slice Development',
-      },
-      {
-        type: 'step',
-        n: 1,
-        title: 'Slice 1',
-        summary: 'Simple upload endpoint + basic UI + DB save',
-        content: [
-          { type: 'p', text: 'Build the simplest working end-to-end flow. Get something working first.' },
-        ],
-      },
-      {
-        type: 'step',
-        n: 2,
-        title: 'Slice 2',
-        summary: 'Validation + permissions',
-        content: [
-          { type: 'p', text: 'Add validation and permission checks. Make it safe.' },
-        ],
-      },
-      {
-        type: 'step',
-        n: 3,
-        title: 'Slice 3',
-        summary: 'Async processing + optimization',
-        content: [
-          { type: 'p', text: 'Add async processing and performance optimization.' },
-        ],
-      },
-      {
-        type: 'step',
-        n: 4,
-        title: 'Slice 4',
-        summary: 'Monitoring + analytics + retries',
-        content: [
-          { type: 'p', text: 'Add monitoring, analytics, and retry logic. Make it observable.' },
-        ],
-      },
-      {
-        type: 'callout',
-        kind: 'tip',
-        text: 'Each slice delivers working business value. Each slice is independently reviewable and deployable.',
-      },
+      { type: 'p', text: 'Features rarely affect only one place. The senior discipline is mapping the blast radius before making changes.' },
+      { type: 'h2', text: 'Analyze Impact On Each Layer' },
+      { type: 'h3', text: 'Frontend:' },
+      { type: 'bullets', items: [
+        'UI components — which ones change? Which new ones needed?',
+        'Routing — do new pages or routes need to exist?',
+        'State management — where does new state live?',
+        'Forms — what input does the user provide?',
+        'Caching — does this invalidate existing cached data?',
+      ]},
+      { type: 'h3', text: 'Backend:' },
+      { type: 'bullets', items: [
+        'APIs — new endpoints? Changes to existing ones?',
+        'Services / business logic — where does the logic live?',
+        'Authentication / permissions — who can access this?',
+        'Validation — what input rules apply?',
+        'Background jobs — does anything need to happen async?',
+      ]},
+      { type: 'h3', text: 'Database:' },
+      { type: 'bullets', items: [
+        'Schema changes — new tables? New columns? New relationships?',
+        'Migrations — will this require data migration on existing rows?',
+        'Indexes — will queries be fast enough?',
+        'Constraints — what rules does the database enforce?',
+      ]},
+      { type: 'h3', text: 'Infrastructure:' },
+      { type: 'bullets', items: [
+        'Storage — files, images, large data?',
+        'Queues — message processing?',
+        'External services — Stripe, AWS, email, OAuth?',
+        'Monitoring — how will you know if this breaks?',
+      ]},
+      { type: 'h2', text: 'The Questions to Ask' },
+      { type: 'code', lang: 'text', code: `What existing flows change because of this feature?
+Could this feature break anything that already works?
+Does auth or permissions need to change?
+Will database migrations be needed?
+Does this affect system performance?
+Will async/background processing be required?
+Does this touch any external service or API?` },
+      { type: 'h2', text: '🧭 RUACH-EL GUIDE — Chapter 2' },
+      { type: 'callout', kind: 'tip', title: 'When to use', text: 'After understanding the feature (Chapter 1), before designing.' },
+      { type: 'h3', text: 'Questions to ask:' },
+      { type: 'ordered', items: [
+        '"What parts of the system does this feature touch? Walk me through the layers."',
+        '"Does this change any existing behavior, or is it purely additive?"',
+        '"Could building this break anything that already works?"',
+        '"Does the database need to change? What tables, what columns?"',
+        '"Does this need any external service we haven\'t used before?"',
+      ]},
+      { type: 'h3', text: 'What to watch for:' },
+      { type: 'bullets', items: [
+        '"It only touches one file" — almost never true. Push him to think wider.',
+        'Missing the database impact — "Do we need a migration? What happens to existing data?"',
+        'Forgetting permissions — "Who should NOT be able to access this?"',
+      ]},
+      { type: 'callout', kind: 'warn', title: 'When to intervene', text: 'If he starts coding without considering existing system impact. "Before we build — what does this CHANGE about what already exists?"' },
     ],
   },
+  // ── 03-design ───────────────────────────────────────────────────────────────
   {
     hub: 'feature-development',
-    slug: '05-test',
-    title: 'Phase 5: Implement Safely',
-    subtitle: 'Protect the existing system while evolving it',
-    duration: 'Throughout implementation',
-    tags: ['safety', 'implementation', 'practices'],
-    status: 'seed',
-    description: 'Follow 5 safe engineering practices to protect the system while adding new functionality.',
-    icon: 'shield-check',
+    slug: '03-design',
+    title: 'Chapter 3: Design the Solution',
+    subtitle: 'The Phase: Architect BEFORE you implement',
+    duration: '2-4 hours',
+    tags: ['design', 'architecture', 'api-design', 'technical-spec'],
+    status: 'growing',
+    description: 'This is where senior engineering begins. You\'re not just writing code — you\'re designing how the feature integrates into the system.',
+    icon: 'git',
     content: [
-      {
-        type: 'callout',
-        kind: 'note',
-        title: 'Goal',
-        text: 'Protect the existing system while evolving it. Follow safe engineering practices throughout implementation.',
-      },
-      {
-        type: 'step',
-        n: 1,
-        title: 'Keep PRs Small',
-        summary: 'Small PRs are easier to review, test, rollback, and reason about',
-        content: [
-          { type: 'p', text: 'Small PRs are: easier to review, easier to test, easier to rollback, easier to reason about. Enterprise teams strongly prefer small incremental changes.' },
-        ],
-      },
-      {
-        type: 'step',
-        n: 2,
-        title: 'Preserve Architectural Boundaries',
-        summary: 'Respect ownership and separation of concerns. Do NOT dump logic randomly.',
-        content: [
-          { type: 'p', text: 'Respect ownership and separation of concerns. Do NOT dump logic randomly.' },
-          {
-            type: 'do-dont',
-            dontCode: 'Upload service directly edits payment logic',
-            doCode: 'Services communicate through APIs/events/interfaces',
-          },
-        ],
-      },
-      {
-        type: 'step',
-        n: 3,
-        title: 'Avoid Tight Coupling',
-        summary: 'Prevent one feature from making the entire system fragile',
-        content: [
-          { type: 'p', text: 'Prevent one feature from making the entire system fragile. Loose coupling improves: scalability, maintainability, testing, and deployment safety.' },
-        ],
-      },
-      {
-        type: 'step',
-        n: 4,
-        title: 'Add Logging & Observability',
-        summary: 'Production systems MUST be observable',
-        content: [
-          { type: 'p', text: 'Production systems MUST be observable. Add: structured logs, metrics, tracing, error tracking, monitoring. If you cannot observe a feature, you cannot operate it reliably.' },
-          { type: 'list', items: ['structured logs', 'metrics', 'tracing', 'error tracking', 'monitoring'] },
-        ],
-      },
-      {
-        type: 'step',
-        n: 5,
-        title: 'Use Feature Flags',
-        summary: 'Safely deploy unfinished or risky features',
-        content: [
-          { type: 'p', text: 'Safely deploy unfinished or risky features. Feature flags enable: gradual rollout, testing in production, emergency disable, safer releases. A huge enterprise practice.' },
-          {
-            type: 'code',
-            lang: 'text',
-            code: 'ENABLE_NEW_UPLOAD_FLOW=true',
-          },
-        ],
-      },
+      { type: 'p', text: 'This is where senior engineering begins. You\'re not just writing code — you\'re designing how the feature **integrates into the system**.' },
+      { type: 'h2', text: 'Design Areas to Address' },
+      { type: 'h3', text: 'API Design:' },
+      { type: 'code', lang: 'text', code: `What endpoints are needed?
+What's the request shape (what does the client send)?
+What's the response shape (what does the server return)?
+How are errors communicated?
+What validation rules apply?
+What authentication/permissions are required?` },
+      { type: 'h3', text: 'Database Design:' },
+      { type: 'code', lang: 'text', code: `New tables or columns?
+Relationships (FK, M2M)?
+Indexes for query performance?
+Constraints (unique, not null, check)?
+Migration strategy for existing data?` },
+      { type: 'h3', text: 'State & Data Flow Design:' },
+      { type: 'code', lang: 'text', code: `Where is the source of truth for each piece of data?
+What gets cached? Where? For how long?
+What lives in frontend state vs. comes from API each time?
+What is temporary (form state) vs. persistent (DB)?` },
+      { type: 'h3', text: 'Security Design:' },
+      { type: 'code', lang: 'text', code: `Who can access this? What permissions?
+Rate limiting needed?
+Input validation and sanitization?
+Data exposure risks — are we leaking sensitive info?
+Abuse prevention — how could this be misused?` },
+      { type: 'h3', text: 'Scalability Design:' },
+      { type: 'code', lang: 'text', code: `Expected traffic / data volume?
+Large file or payload handling?
+Database query performance at scale?
+Concurrency — what if 100 users do this simultaneously?` },
+      { type: 'h2', text: 'The Output You Should Produce' },
+      { type: 'p', text: 'Even rough notes count. Possible artifacts:' },
+      { type: 'bullets', items: [
+        'A quick API contract (endpoints, request/response shapes)',
+        'A database schema sketch',
+        'A data flow diagram (even hand-drawn)',
+        'A list of design decisions with their trade-offs',
+      ]},
+      { type: 'p', text: 'The artifact doesn\'t need to be pretty. It needs to be **thought through**.' },
+      { type: 'h2', text: '🧭 RUACH-EL GUIDE — Chapter 3' },
+      { type: 'callout', kind: 'tip', title: 'When to use', text: 'After impact analysis, before slicing/coding.' },
+      { type: 'h3', text: 'Questions to ask:' },
+      { type: 'ordered', items: [
+        '"What endpoints does this feature need? What data goes in, what comes out?"',
+        '"Where should the business logic live — in the API layer, in a service, in the model?"',
+        '"How will failures be handled? What does the user see when something goes wrong?"',
+        '"How scalable is this design? What if 10x users hit this tomorrow?"',
+        '"What trade-offs are we making? What did we choose NOT to do, and why?"',
+      ]},
+      { type: 'h3', text: 'What to watch for:' },
+      { type: 'bullets', items: [
+        'No design at all — jumping from understanding to code. "Let\'s sketch the API contract first."',
+        'Over-design — spending 3 days on a diagram for a simple feature. Match design effort to feature complexity.',
+        'Ignoring security — "Who can access this? What if someone sends malicious input?"',
+        'No failure thinking — "What happens when the database is down? When the external API times out?"',
+      ]},
+      { type: 'callout', kind: 'warn', title: 'When to intervene', text: 'If the design is all happy-path with no failure handling. "What happens when things go wrong? That\'s where senior design lives."' },
     ],
   },
+  // ── 04-vertical-slices ──────────────────────────────────────────────────────
   {
     hub: 'feature-development',
-    slug: '06-review',
-    title: 'Phase 6: Test the Feature',
-    subtitle: 'Verify correctness and prevent regressions at multiple levels',
-    duration: '1-3 days',
-    tags: ['testing', 'qa', 'verification'],
-    status: 'seed',
-    description: 'Test multiple levels: unit, integration, E2E, load, and security.',
-    icon: 'check-circle',
+    slug: '04-vertical-slices',
+    title: 'Chapter 4: Slice the Feature Vertically',
+    subtitle: 'The Phase: Break big work into small, complete, shippable pieces',
+    duration: 'Planning: 30 minutes',
+    tags: ['vertical-slices', 'incremental-delivery', 'agile', 'small-prs'],
+    status: 'growing',
+    description: 'This is the discipline that separates professional engineering from amateur coding.',
+    icon: 'layers',
     content: [
-      {
-        type: 'callout',
-        kind: 'note',
-        title: 'Goal',
-        text: 'Verify correctness and prevent regressions. Test multiple levels — not just the happy path.',
-      },
-      {
-        type: 'h2',
-        text: 'Types of Testing',
-      },
-      {
-        type: 'table',
-        headers: ['Test Type', 'Purpose'],
-        rows: [
-          ['Unit Tests', 'isolated logic'],
-          ['Integration Tests', 'service interaction'],
-          ['E2E Tests', 'complete user flow'],
-          ['Load Tests', 'performance under stress'],
-          ['Security Tests', 'vulnerabilities & abuse'],
-        ],
-      },
-      {
-        type: 'h2',
-        text: 'Test Important Scenarios',
-      },
-      {
-        type: 'code',
-        lang: 'text',
-        code: `Happy paths
-Invalid input
-Permission failures
-Timeouts
-Retries
-Concurrency
-Race conditions
-Large payloads
-Service failures
-Edge cases`,
-      },
-      {
-        type: 'h2',
-        text: 'Failure-Aware Testing',
-      },
-      {
-        type: 'p',
-        text: 'Senior engineers test what happens when things break — not just what happens when things work.',
-      },
-      {
-        type: 'callout',
-        kind: 'tip',
-        text: 'Test failure paths with the same rigor as success paths. Real users will trigger every edge case.',
-      },
+      { type: 'p', text: 'This is the discipline that separates professional engineering from amateur coding.' },
+      { type: 'h2', text: 'The Core Idea' },
+      { type: 'pull-quote', text: 'Ship one complete, working feature through ALL layers before touching the next feature.' },
+      { type: 'h2', text: 'The Visual' },
+      { type: 'p', text: 'Your app is a layer cake. There are two ways to build:' },
+      { type: 'p', text: '❌ Horizontal (Layer-by-Layer) — The Trap:' },
+      { type: 'code', lang: 'text', code: `Week 1: Build ALL database tables
+Week 2: Build ALL API endpoints
+Week 3: Build ALL UI components
+Week 4: Wire everything together → 💥 pray it works` },
+      { type: 'p', text: '✅ Vertical (Slice-by-Slice) — The Way:' },
+      { type: 'code', lang: 'text', code: `         Feature A    Feature B    Feature C
+            │            │            │
+    ┌───────┼────────────┼────────────┼───────┐
+    │  UI   █            │            │       │
+    ├───────█────────────┼────────────┼───────┤
+    │  API  █            │            │       │
+    ├───────█────────────┼────────────┼───────┤
+    │  DB   █            │            │       │
+    └───────┼────────────┼────────────┼───────┘
+            │
+      ✅ DONE — works end-to-end
+      Now move to Feature B` },
+      { type: 'h2', text: 'Why Layer-by-Layer Fails' },
+      { type: 'h3', text: '🔴 Big Bang Integration:' },
+      { type: 'p', text: 'You build all layers separately, then discover mismatches when wiring them together at the end. The API returns data shaped differently than the UI expected. The UI assumed a field that doesn\'t exist. You spend your "launch week" debugging integration instead of shipping.' },
+      { type: 'p', text: 'With vertical slices: you integrate ONE feature at a time. Mismatches surface in hours, not weeks.' },
+      { type: 'h3', text: '🔴 Nothing Works Until the End:' },
+      { type: 'code', lang: 'text', code: `Layer-by-Layer:
+  Week 1 — "What can you demo?" → "Nothing yet, still doing models"
+  Week 2 — "What can you demo?" → "Nothing yet, still doing APIs"
+  Week 3 — "What can you demo?" → "Nothing yet, still doing UI"
+
+Vertical Slices:
+  Day 2  — "What can you demo?" → "This feature. It works. Try it."` },
+      { type: 'h3', text: '🔴 Motivation Dies:' },
+      { type: 'p', text: 'Building database tables for 5 days with nothing visible = soul-draining.\nBuilding one feature completely and seeing it work on screen = 🔥\nReal builders need feedback loops. Vertical slices give you one after every feature.' },
+      { type: 'h2', text: 'Why Vertical Slices Work' },
+      { type: 'h3', text: '🟢 Always Shippable:' },
+      { type: 'p', text: 'After each slice, you have a working product — maybe small, but real. When the deadline moves or priorities shift, you ship what\'s done. This is how real startups survive.' },
+      { type: 'h3', text: '🟢 Early Learning:' },
+      { type: 'p', text: 'Each slice teaches you the FULL stack for one feature. By slice 2, you deeply understand data flow. You\'re not guessing anymore.' },
+      { type: 'h3', text: '🟢 Accurate Estimation:' },
+      { type: 'p', text: 'After shipping Slice 1, you know how long a slice takes. Your estimates become realistic, not wishful.' },
+      { type: 'h3', text: '🟢 Momentum:' },
+      { type: 'p', text: 'Done features feel good. They build confidence. They prove the architecture works. Each slice makes the next one faster.' },
+      { type: 'blockquote', text: 'Great teams maintain a codebase that **could ship at any moment**.\nThis is Agile in practice — not the meetings and ceremonies, but the discipline of always having something real.' },
+      { type: 'h2', text: 'The Real-World Survival Test' },
+      { type: 'code', lang: 'text', code: `Startup scenario:
+You planned 6 features for launch.
+Two weeks before launch, the CEO says: "We ship in 3 days."
+
+Layer-by-Layer team: "We can't — nothing is fully wired together yet."
+Vertical Slice team: "We can ship 3 features right now. The other 3 come next sprint."
+
+Who survives?` },
+      { type: 'h2', text: '🧭 RUACH-EL GUIDE — Chapter 4' },
+      { type: 'callout', kind: 'tip', title: 'When to use', text: 'When Wiganz starts planning by layers ("First I\'ll build all the models...")' },
+      { type: 'h3', text: 'Questions to ask:' },
+      { type: 'bullets', items: [
+        '"If you build all the models first, when is the earliest you can see ANYTHING working on screen?"',
+        '"What happens if your API returns data shaped differently than your UI expects — when would you find out?"',
+        '"Imagine your deadline moves up by a week. With your current plan, what can you ship?"',
+        '"What\'s the ONE feature we can make work end-to-end first?"',
+      ]},
+      { type: 'h3', text: 'What to watch for:' },
+      { type: 'p', text: 'The instinct to "set up everything first." This feels safe but creates risk.' },
+      { type: 'callout', kind: 'warn', title: 'When to intervene', text: 'If he starts creating 5+ database models before any endpoint exists. If he\'s building UI with hardcoded data "to be connected later." Gently redirect: "What\'s the ONE feature we can ship first?"' },
     ],
   },
+  // ── 05-ordering-slices ──────────────────────────────────────────────────────
   {
     hub: 'feature-development',
-    slug: '07-deploy',
-    title: 'Phase 7: Deploy Carefully',
-    subtitle: 'Release safely without breaking production',
-    duration: '1-2 days',
-    tags: ['deployment', 'rollout', 'safety'],
-    status: 'seed',
-    description: 'Enterprise deployment practices: gradual rollouts, monitoring, and rollback planning.',
-    icon: 'rocket',
+    slug: '05-ordering-slices',
+    title: 'Chapter 5: How to Identify and Order Your Slices',
+    subtitle: 'The Phase: Turn a big feature into an ordered sequence of small, complete deliverables',
+    tags: ['vertical-slices', 'planning', 'dependencies', 'ordering'],
+    status: 'growing',
+    description: 'This is where the real skill lives. Knowing WHAT to slice and in WHAT ORDER separates junior planning from senior planning.',
+    icon: 'list',
     content: [
-      {
-        type: 'callout',
-        kind: 'note',
-        title: 'Goal',
-        text: 'Release safely without breaking production. Use enterprise deployment practices.',
-      },
-      {
-        type: 'h2',
-        text: 'Gradual Rollouts',
-      },
-      {
-        type: 'p',
-        text: 'Release to internal users, beta users, small traffic percentage, then specific regions. This reduces blast radius.',
-      },
-      {
-        type: 'list',
-        items: ['internal users', 'beta users', 'small traffic percentage', 'specific regions'],
-      },
-      {
-        type: 'h2',
-        text: 'Monitoring During Release',
-      },
-      {
-        type: 'list',
-        items: ['error rates', 'latency', 'DB load', 'queue health', 'memory usage', 'logs', 'API failures'],
-      },
-      {
-        type: 'h2',
-        text: 'Rollback Planning',
-      },
-      {
-        type: 'callout',
-        kind: 'warn',
-        title: 'Always ask before deploying',
-        text: '"How do we undo this safely?" This is a REAL senior engineering question.',
-      },
+      { type: 'p', text: 'This is where the real skill lives. Knowing WHAT to slice and in WHAT ORDER separates junior planning from senior planning.' },
+      { type: 'step', n: 1, title: 'List Your Features', summary: 'Frame them as user actions, not technical tasks', content: [
+        { type: 'p', text: 'Write down every feature your project needs. Don\'t filter yet — just list. Frame them as **user actions**, not technical tasks.' },
+        { type: 'do-dont',
+          dontLabel: '❌ Technical task',
+          doLabel: '✅ User action',
+          dontCode: '"Set up database models"',
+          doCode: '"User can search for products"',
+        },
+        { type: 'p', text: '**Ask yourself:**' },
+        { type: 'bullets', items: [
+          'What are the 3–5 things a user can DO with this system?',
+          'What does the user see on screen for each one?',
+          'Which ones are essential for v1 (must-have), and which are nice-to-have?',
+        ]},
+        { type: 'p', text: 'Each must-have = one candidate slice.' },
+      ]},
+      { type: 'step', n: 2, title: 'Find the Dependencies', summary: 'Map what needs to exist before what', content: [
+        { type: 'p', text: 'Not all features are independent. Some need others to exist first.' },
+        { type: 'p', text: '**The key question for each pair of features:**' },
+        { type: 'blockquote', text: '"Can I build Feature B without Feature A existing?"' },
+        { type: 'p', text: 'Draw it out:' },
+        { type: 'code', lang: 'text', code: `Example dependency graph:
+
+   [Users] ← everything needs users first
+      │
+      ├── [Posts] ← needs Users (who wrote it?)
+      │      │
+      │      └── [Comments] ← needs Posts (comment on what?)
+      │
+      └── [Search] ← needs Users + Posts (search what?)` },
+        { type: 'p', text: '**The rule:** Build what others depend on first.' },
+      ]},
+      { type: 'step', n: 3, title: 'Order Your Slices', summary: 'Dependencies first, then value and risk', content: [
+        { type: 'p', text: 'Put dependencies first. Among independent features, pick the one that:' },
+        { type: 'ordered', items: [
+          '**Proves the riskiest assumption** — build the scariest unknown first, so you learn early whether your approach works',
+          '**Delivers the most user value** — ship the thing people will actually use and give feedback on',
+          '**Establishes patterns** — the first slice sets the code patterns all others follow; make it a good one',
+        ]},
+      ]},
+      { type: 'step', n: 4, title: 'Define "Done" for Each Slice', summary: 'Before writing any code, define what complete looks like', content: [
+        { type: 'p', text: 'Before writing any code, answer for each slice:' },
+        { type: 'blockquote', text: '"What is the MINIMUM that makes this feature actually work end-to-end?"' },
+        { type: 'p', text: '**Not done:**' },
+        { type: 'bullets', items: [
+          '"The endpoint returns data" → not done if nothing displays it',
+          '"The component renders" → not done if it uses hardcoded data',
+          '"The model exists" → not done if it\'s not connected to a working flow',
+        ]},
+        { type: 'p', text: '**Done means:**' },
+        { type: 'bullets', items: [
+          'A real user could use this feature right now',
+          'You could demo it to someone and they\'d understand what it does',
+          'It handles the happy path AND the obvious edge cases (empty state, error state, loading state)',
+          'The next slice can build on top of this without fear',
+        ]},
+      ]},
+      { type: 'h2', text: 'Sizing Your Slices' },
+      { type: 'p', text: 'Each slice should be completable in **1–3 focused work sessions**. If a slice feels bigger:' },
+      { type: 'bullets', items: [
+        'Break it into sub-slices',
+        'Find the thinnest version that still delivers value',
+        'Ask: "What\'s the smallest thing I can build that a user could actually USE?"',
+      ]},
+      { type: 'h2', text: '🧭 RUACH-EL GUIDE — Chapter 5' },
+      { type: 'callout', kind: 'tip', title: 'When to use', text: 'At the start of any project or when planning what to build next.' },
+      { type: 'h3', text: 'Step-by-step Socratic walkthrough:' },
+      { type: 'h3', text: '1. Feature listing' },
+      { type: 'p', text: 'Ask: "What are the things a user can actually DO with this? Not technical tasks — user actions."' },
+      { type: 'bullets', items: [
+        'Push back if the list is technical ("set up database") instead of user-facing ("view their dashboard")',
+        'Help distinguish must-haves from nice-to-haves',
+      ]},
+      { type: 'h3', text: '2. Dependency mapping' },
+      { type: 'p', text: 'Ask: "Pick any two features. Can you build the second without the first? Why or why not?"' },
+      { type: 'bullets', items: [
+        'Walk through each pair. Let him discover the dependency graph himself',
+        'If he says "everything depends on everything," help untangle: "What\'s the ONE thing that MUST exist first?"',
+      ]},
+      { type: 'h3', text: '3. Ordering' },
+      { type: 'p', text: 'Ask: "Now that you see the dependencies, which slice should be first? What makes it first — is it because others need it, or because it\'s the riskiest?"' },
+      { type: 'bullets', items: [
+        'Challenge if he picks the easiest instead of the most foundational',
+        'Ask: "If you could only ship ONE feature and nothing else, which one proves the product works?"',
+      ]},
+      { type: 'h3', text: '4. Done definition' },
+      { type: 'p', text: 'Ask: "For Slice 1, what does \'done\' look like? If you were demoing it to someone, what would they see?"' },
+      { type: 'bullets', items: [
+        'Push back on vague definitions: "The API works" → "Works how? What does the user see?"',
+        'Make sure "done" includes edge cases: "What does the user see when there\'s no data yet?"',
+      ]},
+      { type: 'h3', text: 'What to watch for:' },
+      { type: 'p', text: 'Slices that are too big (more than 3 sessions). Help him break them smaller.' },
     ],
   },
+  // ── 06-execution-loop ───────────────────────────────────────────────────────
   {
     hub: 'feature-development',
-    slug: '08-monitor',
-    title: 'Phase 8: Observe in Production',
-    subtitle: 'Learn from real-world usage — deployment is NOT the end',
-    duration: 'Ongoing',
-    tags: ['monitoring', 'observability', 'production'],
-    status: 'seed',
-    description: 'Production reveals truths that development environments hide.',
+    slug: '06-execution-loop',
+    title: 'Chapter 6: The Execution Loop — Building Each Slice',
+    subtitle: 'The Phase: The actual building process for each vertical slice',
+    tags: ['execution', 'build-loop', 'implementation', 'observability'],
+    status: 'growing',
+    description: 'Once you\'ve identified and ordered your slices, this is the loop you follow for EACH one.',
+    icon: 'cmd',
+    content: [
+      { type: 'p', text: 'Once you\'ve identified and ordered your slices, this is the loop you follow for EACH one:' },
+      { type: 'code', lang: 'text', code: `┌──────────────────────────────────────────────────────────────┐
+│  1. DESIGN — What data does this feature need?                │
+│     → Sketch the schema/data model for THIS feature only      │
+│     → Define the API contract (request/response shapes)       │
+│     → Don't design for features you haven't started yet       │
+└────────────────────────┬─────────────────────────────────────┘
+                         ▼
+┌──────────────────────────────────────────────────────────────┐
+│  2. BUILD THE FOUNDATION — Data layer                         │
+│     → Create the model/schema                                 │
+│     → Run migrations                                          │
+│     → Seed with test data so you have something real to see   │
+└────────────────────────┬─────────────────────────────────────┘
+                         ▼
+┌──────────────────────────────────────────────────────────────┐
+│  3. BUILD THE LOGIC — API / Business logic layer              │
+│     → Create the endpoint(s) this feature needs               │
+│     → Add validation, error handling, permissions             │
+│     → Test: does the API return the right data shape?         │
+│     → ✅ YES → move on   ❌ NO → fix before touching UI       │
+└────────────────────────┬─────────────────────────────────────┘
+                         ▼
+┌──────────────────────────────────────────────────────────────┐
+│  4. BUILD THE INTERFACE — UI / output layer                   │
+│     → Build the component/page/CLI output                     │
+│     → Connect to REAL data (not hardcoded)                    │
+│     → Handle: loading state, error state, empty state         │
+└────────────────────────┬─────────────────────────────────────┘
+                         ▼
+┌──────────────────────────────────────────────────────────────┐
+│  5. THE DONE GATE — Full end-to-end verification              │
+│     → Use the feature like a real user                        │
+│     → Does it work? Can you demo it?                          │
+│     → ✅ YES → SLICE COMPLETE 🎉 Move to next slice          │
+│     → ❌ NO  → Fix. Do NOT move forward.                      │
+└──────────────────────────────────────────────────────────────┘` },
+      { type: 'h2', text: 'The Most Important Rule' },
+      { type: 'callout', kind: 'warn', text: 'Never start the next slice until the current one passes the Done Gate.\n\n"Mostly works" means "will break later at the worst possible time."' },
+      { type: 'h2', text: 'Safe Engineering Practices During Execution' },
+      { type: 'p', text: 'While building each slice, maintain these professional standards:' },
+      { type: 'h3', text: 'Keep changes small and reviewable:' },
+      { type: 'p', text: 'Small PRs are easier to review, easier to test, easier to rollback, easier to reason about. Enterprise teams strongly prefer incremental changes over big-bang commits.' },
+      { type: 'h3', text: 'Preserve architectural boundaries:' },
+      { type: 'p', text: 'Don\'t dump logic randomly. Services should communicate through clear interfaces. If your upload handler is directly editing payment logic, something is wrong.' },
+      { type: 'h3', text: 'Avoid tight coupling:' },
+      { type: 'p', text: 'Each feature should be as independent as possible. Loose coupling means one feature breaking doesn\'t cascade into the entire system failing.' },
+      { type: 'h3', text: 'Add observability as you build:' },
+      { type: 'p', text: 'Don\'t treat logging and monitoring as an afterthought. As you build each slice, add:' },
+      { type: 'bullets', items: [
+        'Structured logs at key decision points',
+        'Error tracking for failure cases',
+        'Metrics for things you\'ll want to measure later',
+      ]},
+      { type: 'p', text: 'If you cannot observe a feature, you cannot operate it reliably.' },
+      { type: 'h3', text: 'Consider feature flags for risky slices:' },
+      { type: 'p', text: 'For features that are risky or need gradual rollout:' },
+      { type: 'code', lang: 'text', code: 'ENABLE_NEW_UPLOAD_FLOW=true' },
+      { type: 'p', text: 'This lets you deploy the code but control who sees it — enabling gradual rollout, safe testing in production, and emergency disable.' },
+      { type: 'h2', text: '🧭 RUACH-EL GUIDE — Chapter 6' },
+      { type: 'callout', kind: 'tip', title: 'When to use', text: 'During active building. Each step of the loop is a teaching moment.' },
+      { type: 'h3', text: 'At each step, ask:' },
+      { type: 'h3', text: 'Step 1 (Design):' },
+      { type: 'bullets', items: [
+        '"What data does this feature need? Not all the data in the system — just this feature."',
+        '"What are the fields? What are the types? What relationships exist?"',
+        '"Sketch the API contract: what goes in, what comes out?"',
+        'Watch for: designing tables for future features. Redirect: "We\'ll design that when we get to that slice."',
+      ]},
+      { type: 'h3', text: 'Step 2 (Foundation):' },
+      { type: 'bullets', items: [
+        '"Write the model. Now — before running migration — read it back to me. Does it match your design?"',
+        '"Add some test data. Can you query it? Does the data look right?"',
+        'Watch for: skipping test data. Without data, the API returns empty and you can\'t tell if it works.',
+      ]},
+      { type: 'h3', text: 'Step 3 (Logic):' },
+      { type: 'bullets', items: [
+        '"Hit the endpoint. What does it return? Is that the shape the UI needs?"',
+        '"What happens if you request something that doesn\'t exist?"',
+        '"What happens if the input is invalid?"',
+        '"Where does the business logic live — is it in the right place?"',
+        'Watch for: moving to UI before testing the API independently. The API MUST work alone first.',
+      ]},
+      { type: 'h3', text: 'Step 4 (Interface):' },
+      { type: 'bullets', items: [
+        '"Connect to the real API — no hardcoded data. What do you see?"',
+        '"What does the user see while data is loading? What if there\'s an error? What if there\'s no data yet?"',
+        'Watch for: hardcoded data, missing loading/error/empty states. These are not polish — they are part of "done."',
+      ]},
+      { type: 'h3', text: 'Step 5 (Done Gate):' },
+      { type: 'bullets', items: [
+        '"Show me the feature working. Walk me through it as if I\'m a user who\'s never seen it."',
+        '"Is there any state where this breaks? Try it."',
+        '"Would you be comfortable showing this to someone? If not, what\'s missing?"',
+        'Watch for: "It works but..." — if there\'s a "but," it\'s not done.',
+      ]},
+      { type: 'callout', kind: 'tip', title: 'Celebration', text: 'When a slice passes the Done Gate, celebrate explicitly. Name what was learned, what patterns were established, what got easier. 🎉' },
+    ],
+  },
+  // ── 07-done-gate ────────────────────────────────────────────────────────────
+  {
+    hub: 'feature-development',
+    slug: '07-done-gate',
+    title: 'Chapter 7: The Done Gate — Your Quality Standard',
+    subtitle: 'The Phase: The discipline that separates junior from senior',
+    tags: ['quality', 'done-gate', 'standards', 'edge-cases'],
+    status: 'growing',
+    description: 'This deserves its own chapter because it\'s where most developers fail.',
+    icon: 'check',
+    content: [
+      { type: 'p', text: 'This deserves its own chapter because it\'s where most developers fail.' },
+      { type: 'h2', text: 'The Junior Temptation' },
+      { type: 'blockquote', text: '"The endpoint mostly works. I\'ll finish the edge cases later and move to the next feature."' },
+      { type: 'h2', text: 'What Actually Happens' },
+      { type: 'code', lang: 'text', code: `You skip the edge cases on Feature A.
+You build Feature B on top of Feature A.
+Feature B assumes Feature A handles errors — but it doesn't.
+Feature B breaks in production because Feature A returned unexpected data.
+Now fixing Feature A also breaks Feature B.
+What was a 10-minute fix is now a 2-day debugging session.` },
+      { type: 'h2', text: 'The Rule' },
+      { type: 'pull-quote', text: 'A feature is either DONE or it is NOT DONE. There is no "mostly done."' },
+      { type: 'h2', text: 'The Done Gate Checklist (Use This Every Time)' },
+      { type: 'checklist', items: [
+        { label: 'The feature works end-to-end with real data' },
+        { label: 'Loading state: user sees something meaningful while waiting' },
+        { label: 'Error state: user sees a helpful message when something fails' },
+        { label: 'Empty state: user sees guidance when there\'s no data yet' },
+        { label: 'Edge cases: invalid input, missing data, permission denied — all handled' },
+        { label: 'I can demo this feature right now without apologizing for anything' },
+        { label: 'The next slice can build on this without fear of it breaking' },
+        { label: 'I\'ve noted what I learned from building this slice' },
+      ]},
+      { type: 'h2', text: 'Cosmetic vs. Structural — Know the Difference' },
+      { type: 'p', text: 'Not everything is equally urgent. The key distinction:' },
+      { type: 'table', headers: ['Structural (must fix NOW)', 'Cosmetic (can defer)'], rows: [
+        ['Error handling missing', 'Font size not perfect'],
+        ['Invalid input crashes the app', 'Spacing needs tweaking'],
+        ['Empty state shows blank screen', 'Colors could be better'],
+        ['Permissions not enforced', 'Animation not smooth'],
+        ['Data validation absent', 'Copy could be improved'],
+      ]},
+      { type: 'p', text: '**Structural issues** affect correctness and reliability — they are part of "done."\n**Cosmetic issues** affect polish — they can be deferred to a refinement pass.' },
+      { type: 'h2', text: '🧭 RUACH-EL GUIDE — Chapter 7' },
+      { type: 'callout', kind: 'tip', title: 'When to use', text: 'When Wiganz wants to move to the next feature.' },
+      { type: 'p', text: '**The gate question:** "Can you demo this to me right now? Show me."' },
+      { type: 'p', text: '**If he says "it mostly works":** Ask — "What\'s the part that doesn\'t work? Is it something a user would hit? If so, it\'s not done yet."' },
+      { type: 'p', text: '**If he says "I\'ll fix it later":** Ask — "When is later? What happens if the next feature depends on this working correctly? How much harder is it to fix after you\'ve built two more things on top?"' },
+      { type: 'callout', kind: 'note', title: 'The calibration', text: 'Be firm but not rigid. Use the cosmetic vs. structural table above. If the data flow is solid but the button color is off, that\'s OK to defer. If error handling is missing, that\'s not deferrable.' },
+    ],
+  },
+  // ── 08-test ─────────────────────────────────────────────────────────────────
+  {
+    hub: 'feature-development',
+    slug: '08-test',
+    title: 'Chapter 8: Test Deeply — Verify Beyond the Happy Path',
+    subtitle: 'The Phase: Prove your feature works when things go RIGHT and when things go WRONG',
+    duration: '20-40% of implementation time',
+    tags: ['testing', 'unit-tests', 'integration-tests', 'e2e', 'failure-testing'],
+    status: 'growing',
+    description: 'The Done Gate covers basic end-to-end verification. This chapter goes deeper — the testing discipline that catches bugs before users do.',
+    icon: 'bug',
+    content: [
+      { type: 'p', text: 'The Done Gate (Chapter 7) covers basic end-to-end verification. This chapter goes deeper — the testing discipline that catches bugs before users do.' },
+      { type: 'h2', text: 'Types of Testing' },
+      { type: 'table', headers: ['Test Type', 'What It Verifies', 'When to Use'], rows: [
+        ['Unit Tests',        'A single function or method works correctly in isolation',           'Core business logic, calculations, data transformations'],
+        ['Integration Tests', 'Multiple parts of the system work together correctly',               'API endpoints, database queries, service interactions'],
+        ['End-to-End Tests',  'The complete user flow works from UI to database and back',          'Critical user journeys, checkout flows, auth flows'],
+        ['Load Tests',        'The system handles expected (and unexpected) traffic',               'Before launch, after scaling changes'],
+        ['Security Tests',    'The system resists abuse and unauthorized access',                   'Auth, permissions, input handling, data exposure'],
+      ]},
+      { type: 'h2', text: 'What to Test — The Failure-Aware Checklist' },
+      { type: 'p', text: 'Senior engineers don\'t just test that things work. They test **what happens when things break:**' },
+      { type: 'checklist', items: [
+        { label: 'Happy paths — does the feature work when everything is correct?' },
+        { label: 'Invalid input — what happens with bad data, wrong types, empty fields?' },
+        { label: 'Permission failures — what happens when unauthorized users try to access this?' },
+        { label: 'Missing data — what happens when a referenced record doesn\'t exist?' },
+        { label: 'Timeouts — what happens when an external service takes too long?' },
+        { label: 'Concurrency — what happens when 100 users do this simultaneously?' },
+        { label: 'Large payloads — what happens with unexpectedly large data?' },
+        { label: 'Service failures — what happens when the database or external API is down?' },
+        { label: 'Edge cases — boundary values, empty lists, max lengths, special characters' },
+      ]},
+      { type: 'h2', text: 'The Failure-Aware Mindset' },
+      { type: 'blockquote', text: 'Senior engineers test: "What happens when things **break**?"\nNot just: "What happens when things **work**?"' },
+      { type: 'p', text: 'This is the difference between code that works in development and code that survives production.' },
+      { type: 'h2', text: '🧭 RUACH-EL GUIDE — Chapter 8' },
+      { type: 'callout', kind: 'tip', title: 'When to use', text: 'After the feature passes the Done Gate, or when discussing testing strategy.' },
+      { type: 'h3', text: 'Questions to ask:' },
+      { type: 'ordered', items: [
+        '"What\'s the most important thing this feature does? Is there a test for that?"',
+        '"What happens if the input is completely wrong? Have you tried it?"',
+        '"What happens if the database is slow or down? Does the user see a helpful error or a crash?"',
+        '"If someone malicious found this endpoint, what could they do?"',
+        '"What\'s the one scenario that would embarrass you if it broke in production?"',
+      ]},
+      { type: 'h3', text: 'What to watch for:' },
+      { type: 'bullets', items: [
+        'Only testing the happy path. "It works when I put in correct data" — what about incorrect data?',
+        'No tests at all. Not every project needs 100% coverage, but critical business logic needs tests.',
+        'Testing implementation instead of behavior. Tests should verify WHAT the code does, not HOW it does it.',
+      ]},
+      { type: 'callout', kind: 'tip', title: 'The teaching moment', text: '"The best time to write a test is right after you discover an edge case. You just found a way it could break — capture that knowledge in a test so it never breaks again."' },
+    ],
+  },
+  // ── 09-deploy ───────────────────────────────────────────────────────────────
+  {
+    hub: 'feature-development',
+    slug: '09-deploy',
+    title: 'Chapter 9: Deploy Safely — Release Without Breaking Production',
+    subtitle: 'The Phase: Get your code to users without destroying what already works',
+    tags: ['deployment', 'gradual-rollout', 'rollback', 'monitoring'],
+    status: 'growing',
+    description: 'Deployment is where your code meets reality. The discipline here is safety and reversibility.',
+    icon: 'arrow',
+    content: [
+      { type: 'p', text: 'Deployment is where your code meets reality. The discipline here is **safety and reversibility**.' },
+      { type: 'h2', text: 'The Deployment Mindset' },
+      { type: 'p', text: 'The core question before every deployment:' },
+      { type: 'blockquote', text: '"How do we undo this safely if something goes wrong?"' },
+      { type: 'p', text: 'This is a real senior engineering question. Junior engineers think about how to deploy. Senior engineers think about how to **un-deploy**.' },
+      { type: 'h2', text: 'Safe Deployment Practices' },
+      { type: 'h3', text: 'Gradual Rollouts:' },
+      { type: 'p', text: 'Don\'t flip the switch for everyone at once. Release to:' },
+      { type: 'bullets', items: [
+        'Internal team first (dogfooding)',
+        'Beta users or a small percentage of traffic',
+        'Specific regions or user segments',
+        'Then everyone, if metrics look good',
+      ]},
+      { type: 'p', text: 'This reduces blast radius. If something breaks, it breaks for 5% of users instead of 100%.' },
+      { type: 'h3', text: 'Monitor During Release:' },
+      { type: 'p', text: 'Watch these signals during and after deployment:' },
+      { type: 'code', lang: 'text', code: `Error rates — are they spiking?
+Latency — are responses slower?
+Database load — are queries hammering the DB?
+Memory / CPU usage — is the server straining?
+Queue health — are background jobs backing up?
+User-facing errors — are users seeing error pages?` },
+      { type: 'h3', text: 'Rollback Planning:' },
+      { type: 'p', text: 'Before you deploy, know:' },
+      { type: 'code', lang: 'text', code: `How do I revert this change?
+How long will rollback take?
+Is the database migration reversible?
+Will rolling back affect data that was created with the new code?` },
+      { type: 'h2', text: 'Database Migration Safety' },
+      { type: 'p', text: 'Database changes deserve special care because they\'re the hardest to reverse:' },
+      { type: 'bullets', items: [
+        '**Additive changes** (new table, new column) are safe — they don\'t affect existing code',
+        '**Destructive changes** (drop column, rename table) are dangerous — they break existing code instantly',
+        '**The rule:** Deploy code that handles BOTH old and new schema first. Then migrate. Then remove old-schema handling.',
+      ]},
+      { type: 'h2', text: '🧭 RUACH-EL GUIDE — Chapter 9' },
+      { type: 'callout', kind: 'tip', title: 'When to use', text: 'When preparing to deploy or push code to production.' },
+      { type: 'h3', text: 'Questions to ask:' },
+      { type: 'ordered', items: [
+        '"If this deployment breaks something, how do we undo it?"',
+        '"Is the database migration reversible? What happens to existing data?"',
+        '"Should we roll this out to everyone at once, or start small?"',
+        '"What signals will tell us something went wrong? Where do we look?"',
+        '"Have we tested this in an environment that resembles production?"',
+      ]},
+      { type: 'h3', text: 'What to watch for:' },
+      { type: 'bullets', items: [
+        '"Just push it" mentality — deployment is not the finish line, it\'s a critical transition',
+        'Irreversible database migrations without a rollback plan',
+        'No monitoring plan — "How will you know if it\'s broken?"',
+      ]},
+      { type: 'callout', kind: 'tip', title: 'The teaching moment', text: '"Deployment is not the end of the story. It\'s the beginning of the chapter called \'production.\' Your code now has real users, real data, and real consequences."' },
+    ],
+  },
+  // ── 10-observe ──────────────────────────────────────────────────────────────
+  {
+    hub: 'feature-development',
+    slug: '10-observe',
+    title: 'Chapter 10: Observe in Production — Learn From Real-World Usage',
+    subtitle: "The Phase: Watch, learn, and discover what development environments can't reveal",
+    duration: '1-2 weeks post-launch',
+    tags: ['monitoring', 'observability', 'production', 'analytics'],
+    status: 'growing',
+    description: 'Deployment is NOT the end. Production reveals truths that development environments hide.',
     icon: 'eye',
     content: [
-      {
-        type: 'callout',
-        kind: 'note',
-        title: 'Goal',
-        text: 'Learn from real-world usage. Deployment is NOT the end. Production reveals truths that development environments hide.',
-      },
-      {
-        type: 'p',
-        text: 'Production reveals truths development environments hide. The feature is not done until it is observable in production.',
-      },
-      {
-        type: 'h2',
-        text: 'Observe',
-      },
-      {
-        type: 'list',
-        items: ['user behavior', 'performance', 'scaling', 'unexpected edge cases', 'operational failures', 'abuse patterns', 'system bottlenecks'],
-      },
-      {
-        type: 'h2',
-        text: 'Questions To Ask',
-      },
-      {
-        type: 'code',
-        lang: 'text',
-        code: `Are users behaving as expected?
-What errors appear in production?
-What assumptions were wrong?
-Where are bottlenecks emerging?
-What needs optimization?`,
-      },
+      { type: 'p', text: 'Deployment is NOT the end. Production reveals truths that development environments hide.' },
+      { type: 'h2', text: 'What to Observe' },
+      { type: 'code', lang: 'text', code: `User behavior — are they using the feature the way you expected?
+Performance — is it fast enough under real load?
+Error patterns — what breaks, and how often?
+Edge cases — what scenarios did you miss?
+Scaling — does it hold up as usage grows?
+Abuse patterns — is anyone misusing the feature?
+System bottlenecks — where are the slowdowns?` },
+      { type: 'h2', text: 'The Questions to Ask Post-Launch' },
+      { type: 'code', lang: 'text', code: `Are users behaving as expected, or doing something surprising?
+What errors appear in production that never appeared in development?
+What assumptions we made during design turned out to be wrong?
+Where are bottlenecks emerging that we didn't predict?
+What needs optimization now vs. what can wait?
+Is the feature actually solving the problem we identified in Chapter 1?` },
+      { type: 'h2', text: 'The Feedback Loop' },
+      { type: 'p', text: 'Production observation feeds back into the entire lifecycle:' },
+      { type: 'code', lang: 'text', code: `Observation: "Users are uploading much larger files than we expected"
+  → Feeds back to Chapter 3 (Design): adjust file size handling
+  → Feeds back to Chapter 6 (Build): implement chunked uploads
+  → Feeds back to Chapter 8 (Test): add large-file test cases` },
+      { type: 'p', text: 'This is the cycle of professional engineering. Build → Ship → Observe → Learn → Improve → Build better.' },
+      { type: 'h2', text: '🧭 RUACH-EL GUIDE — Chapter 10' },
+      { type: 'callout', kind: 'tip', title: 'When to use', text: 'After deployment, during the first days/weeks of a feature being live.' },
+      { type: 'h3', text: 'Questions to ask:' },
+      { type: 'ordered', items: [
+        '"Now that real users have it — are they using it the way you imagined?"',
+        '"What errors are appearing that you never saw in development?"',
+        '"What assumption turned out to be wrong?"',
+        '"Is the feature actually solving the problem you identified at the start?"',
+        '"What would you build differently now that you\'ve seen real usage?"',
+      ]},
+      { type: 'callout', kind: 'tip', title: 'The teaching moment', text: '"The best learning happens AFTER shipping. Development is theory. Production is truth. Pay attention to the gap between what you expected and what actually happened."' },
     ],
   },
+  // ── 11-refine ───────────────────────────────────────────────────────────────
   {
     hub: 'feature-development',
-    slug: '09-refactor',
-    title: 'Phase 9: Refactor & Improve + Core Enterprise Principles + Final Truth',
-    subtitle: 'Prevent entropy, apply core principles, and grow as a system engineer',
-    duration: 'Ongoing',
-    tags: ['refactoring', 'principles', 'improvement'],
-    status: 'seed',
-    description: 'Every feature increases complexity. Without maintenance, systems decay over time.',
-    icon: 'recycle',
+    slug: '11-refine',
+    title: 'Chapter 11: Refine and Improve — Prevent Entropy',
+    subtitle: 'The Phase: Keep the system clean, simple, and healthy as it grows',
+    duration: 'Ongoing — schedule it explicitly',
+    tags: ['refactoring', 'tech-debt', 'maintenance', 'architecture', 'quality'],
+    status: 'growing',
+    description: 'Every feature adds complexity. Without intentional maintenance, systems decay over time. This is called software entropy.',
+    icon: 'leaf',
     content: [
-      {
-        type: 'callout',
-        kind: 'note',
-        title: 'Goal',
-        text: 'Prevent entropy and long-term degradation. Every feature increases complexity. Without maintenance, systems decay over time.',
+      { type: 'p', text: 'Every feature adds complexity. Without intentional maintenance, systems decay over time. This is called **software entropy** — the natural tendency toward disorder.' },
+      { type: 'h2', text: 'The Continuous Improvement Discipline' },
+      { type: 'p', text: 'Good engineers continuously:' },
+      { type: 'code', lang: 'text', code: `Simplify code — can this be expressed more clearly?
+Reduce coupling — can this component stand more independently?
+Improve naming — do the names still describe what things actually do?
+Strengthen tests — are new edge cases covered?
+Extract abstractions — have patterns emerged that deserve their own module?
+Improve observability — can we see what's happening more clearly?
+Pay down tech debt — what shortcuts are now costing us?` },
+      { type: 'h2', text: 'When to Refactor' },
+      { type: 'p', text: '**Refactor AFTER shipping, not instead of shipping.**' },
+      { type: 'p', text: 'The right time to refactor is when:' },
+      { type: 'bullets', items: [
+        'You\'ve just shipped a slice and see patterns that could be cleaner',
+        'You\'re about to build Slice 3 and realize the patterns from Slice 1 need adjustment',
+        'A bug revealed structural weakness that goes beyond the bug itself',
+        'The code works but is hard to understand or extend',
+      ]},
+      { type: 'p', text: 'The wrong time to refactor is:' },
+      { type: 'bullets', items: [
+        'Before shipping anything (you don\'t know enough yet)',
+        'In the middle of building a slice (finish the slice first)',
+        'When you\'re procrastinating on the hard work',
+      ]},
+      { type: 'h2', text: 'The Long-Term Engineering Mindset' },
+      { type: 'p', text: 'Professional engineering optimizes for:' },
+      { type: 'blockquote', text: 'Long-term system evolution — not just closing tickets quickly.' },
+      { type: 'p', text: 'The question shifts from "does this work?" to "will a developer 6 months from now understand this? Can they change it safely? Does the system guide them toward good decisions?"' },
+      { type: 'h2', text: '🧭 RUACH-EL GUIDE — Chapter 11' },
+      { type: 'callout', kind: 'tip', title: 'When to use', text: 'After multiple slices are shipped, or when Wiganz notices code getting messy.' },
+      { type: 'h3', text: 'Questions to ask:' },
+      { type: 'ordered', items: [
+        '"Now that you\'ve built 3 features — what patterns keep repeating? Should they be extracted?"',
+        '"Is there code from Slice 1 that you\'d write differently now? Why?"',
+        '"If a new developer joined tomorrow and read this code, what would confuse them?"',
+        '"What\'s the one thing that\'s annoying to work around every time you build a new slice?"',
+      ]},
+      { type: 'h3', text: 'What to watch for:' },
+      { type: 'bullets', items: [
+        'Refactoring as procrastination — "Are we refactoring because it needs it, or because the next feature is scary?"',
+        'Never refactoring — "The code is getting harder to work with. Should we clean up before the next slice?"',
+        'Refactoring without tests — "Do we have tests to make sure the refactor doesn\'t break things?"',
+      ]},
+      { type: 'callout', kind: 'note', title: 'The balance', text: 'Refactoring is maintenance, not art. It should make future work easier, not just make the code prettier. Ask: "Does this refactor pay for itself in the next 2 slices?"' },
+    ],
+  },
+  // ── 12-hidden-curriculum ────────────────────────────────────────────────────
+  {
+    hub: 'feature-development',
+    slug: '12-hidden-curriculum',
+    title: "Chapter 12: What Each Slice Teaches You — The Hidden Curriculum",
+    subtitle: 'The Phase: Name your growth — unnamed knowledge doesn\'t transfer',
+    tags: ['learning', 'growth', 'mastery', 'reflection'],
+    status: 'growing',
+    description: 'Beyond building the product, each phase and each slice builds YOUR skills. This is the hidden curriculum of professional engineering.',
+    icon: 'star',
+    content: [
+      { type: 'p', text: 'Beyond building the product, each phase and each slice builds YOUR skills. This is the hidden curriculum of professional engineering.' },
+      { type: 'h2', text: 'The Slice Learning Progression' },
+      { type: 'code', lang: 'text', code: `Slice 1: "How does this all connect?"        → Understanding
+Slice 2: "How do I extend what exists?"       → Extension
+Slice 3: "I know how to do this now."         → Confidence
+Slice 4: "Let me try a better approach."      → Mastery
+Slice 5: "I could teach someone this."        → Fluency` },
+      { type: 'h2', text: 'What Each Slice Teaches' },
+      { type: 'h3', text: 'Slice 1 — The Foundation Slice:' },
+      { type: 'bullets', items: [
+        'How data flows from database → API → UI (the full pipeline)',
+        'How your chosen frameworks actually connect to each other',
+        'The patterns you\'ll reuse for every future slice',
+        'Where the friction is in your toolchain',
+      ]},
+      { type: 'p', text: '*This slice is the slowest. That\'s normal. Every slice after gets faster.*' },
+      { type: 'h3', text: 'Slice 2 — The Relationship Slice:' },
+      { type: 'bullets', items: [
+        'How relationships (foreign keys, joins) work across all layers',
+        'How to query related data through the API',
+        'How dependent data renders in the UI',
+        'Whether Slice 1\'s architecture was actually solid (it gets stress-tested now)',
+      ]},
+      { type: 'h3', text: 'Slice 3+ — The Velocity Slices:' },
+      { type: 'bullets', items: [
+        'How to move faster because patterns exist',
+        'Where to break patterns when a feature doesn\'t fit the mold',
+        'How to keep the codebase clean as it grows',
+        'How to estimate accurately (you have real data now)',
+      ]},
+      { type: 'h2', text: 'What Each Lifecycle Phase Teaches' },
+      { type: 'p', text: 'Beyond slicing, each chapter of this lifecycle builds a specific engineering muscle:' },
+      { type: 'table', headers: ['Phase', 'Muscle You Build'], rows: [
+        ['Understand (Ch. 1)', 'Product thinking — solving problems, not just coding'],
+        ['Analyze (Ch. 2)',    'System thinking — seeing ripple effects'],
+        ['Design (Ch. 3)',     'Architectural thinking — making trade-offs'],
+        ['Slice (Ch. 4–5)',    'Planning discipline — breaking big into small'],
+        ['Execute (Ch. 6)',    'Execution discipline — following the loop'],
+        ['Done Gate (Ch. 7)', 'Quality discipline — "done" means done'],
+        ['Test (Ch. 8)',       'Failure thinking — what breaks and when'],
+        ['Deploy (Ch. 9)',     'Operational thinking — safety and reversibility'],
+        ['Observe (Ch. 10)',   'Learning from production — theory vs. reality'],
+        ['Refine (Ch. 11)',    'Maintenance thinking — fighting entropy'],
+      ]},
+      { type: 'h2', text: 'The Mindset Shift' },
+      { type: 'p', text: '**Old mindset — thinking in layers:**' },
+      { type: 'blockquote', text: '"I\'m building the database layer today."\n"I\'m building the API layer this week."' },
+      { type: 'p', text: '**New mindset — thinking in features:**' },
+      { type: 'blockquote', text: '"I\'m shipping the search feature today."\n"User profiles are done — moving to notifications."' },
+      { type: 'h3', text: 'Why this matters beyond code:' },
+      { type: 'p', text: 'In a real team standup:' },
+      { type: 'do-dont',
+        dontLabel: '❌',
+        doLabel: '✅',
+        dontCode: '"I worked on database models yesterday"',
+        doCode: '"The user search feature is done and deployed"',
       },
-      {
-        type: 'p',
-        text: 'Every feature increases complexity. Without maintenance, systems decay over time. Good engineers continuously improve the system.',
+      { type: 'p', text: 'In a job interview:' },
+      { type: 'do-dont',
+        dontLabel: '❌',
+        doLabel: '✅',
+        dontCode: '"I built Django models and React components"',
+        doCode: '"I shipped a search feature end-to-end — designed the schema, built the API, connected the UI, handled edge cases"',
       },
-      {
-        type: 'list',
-        items: ['simplify code', 'reduce coupling', 'improve naming', 'improve tests', 'extract abstractions', 'improve observability', 'improve architecture'],
+      { type: 'p', text: 'In your own confidence:' },
+      { type: 'do-dont',
+        dontLabel: '❌',
+        doLabel: '✅',
+        dontCode: '"I know Django" (vague)',
+        doCode: '"I\'ve shipped 5 features end-to-end through Django" (proven)',
       },
-      {
-        type: 'h2',
-        text: 'The Long-Term Engineering Mindset',
-      },
-      {
-        type: 'p',
-        text: 'Professional engineering optimizes for long-term system evolution — not just closing tickets quickly.',
-      },
-      {
-        type: 'h2',
-        text: 'The Core Enterprise Principles',
-      },
-      {
-        type: 'checklist',
-        items: [
-          { label: 'Understand before coding', done: false },
-          { label: 'Design before implementing', done: false },
-          { label: 'Deliver incrementally', done: false },
-          { label: 'Preserve architectural boundaries', done: false },
-          { label: 'Keep changes small and reversible', done: false },
-          { label: 'Think about failure from day one', done: false },
-          { label: 'Make systems observable', done: false },
-          { label: 'Optimize for maintainability', done: false },
-          { label: 'Treat production as sacred', done: false },
-        ],
-      },
-      {
-        type: 'h2',
-        text: 'Final Truth',
-      },
-      {
-        type: 'p',
-        text: 'Professional software engineering is not "writing code". It is "managing complexity safely over time". That is the real craft.',
-      },
-      {
-        type: 'p',
-        text: 'And the deeper you go: you stop thinking like "How do I build this feature?" And start thinking "How do I evolve this system responsibly?" That is the path toward senior engineering and architecture thinking.',
-      },
-      {
-        type: 'callout',
-        kind: 'quote',
-        text: '"Let all things be done decently and in order." — 1 Corinthians 14:40',
-      },
+      { type: 'p', text: 'The mental unit shifts from **technical layer** to **user value**. This is how product engineers think. This is how you become someone teams want to hire.' },
+      { type: 'h2', text: '🧭 RUACH-EL GUIDE — Chapter 12' },
+      { type: 'callout', kind: 'tip', title: 'When to use', text: 'After completing each slice and at major milestones — the reflection moment.' },
+      { type: 'p', text: '**After Slice 1:** "What surprised you? What was harder than expected? What pattern do you now understand that you didn\'t before?"' },
+      { type: 'p', text: '**After Slice 2:** "Was anything easier because of Slice 1? Did Slice 1\'s design hold up, or did you need to adjust it? What does that tell you?"' },
+      { type: 'p', text: '**After Slice 3+:** "You\'re moving faster now. Why? What\'s the pattern you\'ve internalized? Could you explain this to a junior developer?"' },
+      { type: 'p', text: '**At project milestones:** "Which lifecycle phases felt natural? Which felt forced? Where do you want to grow next?"' },
+      { type: 'callout', kind: 'note', title: 'The goal', text: 'Make the learning EXPLICIT. Wiganz should be able to name what he learned, not just feel it vaguely. Named knowledge transfers to new projects. Unnamed knowledge stays tied to this one.' },
+    ],
+  },
+  // ── 13-practice ─────────────────────────────────────────────────────────────
+  {
+    hub: 'feature-development',
+    slug: '13-practice',
+    title: 'Chapter 13: Practice Exercises',
+    subtitle: 'These exercises build the skills of professional feature development. Do them — reading without practice is wishful thinking.',
+    tags: ['practice', 'exercises', 'learning'],
+    status: 'growing',
+    description: 'Five exercises to build the skills of professional feature development.',
+    icon: 'bookmark',
+    content: [
+      { type: 'step', n: 1, title: 'The Full Lifecycle on a Small Feature', summary: 'Pick a small feature and walk through every phase', content: [
+        { type: 'p', text: 'Pick a small feature (e.g., "user can upload a profile picture").' },
+        { type: 'p', text: '**Walk through every phase:**' },
+        { type: 'ordered', items: [
+          '**Understand:** Write the problem statement, users, success criteria (Chapter 1)',
+          '**Analyze:** List every part of the system it touches (Chapter 2)',
+          '**Design:** Sketch the API contract and data model (Chapter 3)',
+          '**Slice:** Break it into 2–3 vertical slices (Chapter 4–5)',
+          '**Define done:** Write what "done" looks like for each slice (Chapter 5)',
+          '**Execute:** Build Slice 1 using the execution loop (Chapter 6)',
+          '**Done Gate:** Pass the checklist before moving on (Chapter 7)',
+          '**Reflect:** What did you learn? (Chapter 12)',
+        ]},
+      ]},
+      { type: 'step', n: 2, title: 'Dependency Graph Practice', summary: 'Pick any app you use daily and map its feature dependencies', content: [
+        { type: 'p', text: 'Pick any app you use daily (Twitter, Notion, Spotify — whatever).' },
+        { type: 'p', text: '**Your task:**' },
+        { type: 'ordered', items: [
+          'List 5 core features as user actions',
+          'Draw the dependency graph — which features need others first?',
+          'Order them as slices — what would Slice 1 be? Why?',
+          'For each feature, describe what "done" means (what works, what edge cases are handled)',
+          'Which feature was probably built first? Why?',
+        ]},
+      ]},
+      { type: 'step', n: 3, title: 'Failure-Aware Thinking', summary: "Take any feature you've built recently and stress-test it", content: [
+        { type: 'p', text: 'Take any feature you\'ve built recently.' },
+        { type: 'p', text: '**Your task:**' },
+        { type: 'ordered', items: [
+          'List 5 ways it could break in production',
+          'For each: what does the user see? Is it handled gracefully?',
+          'Write a test case for each failure scenario',
+          'How would you monitor for these failures?',
+          'What\'s your rollback plan if this feature causes problems?',
+        ]},
+      ]},
+      { type: 'step', n: 4, title: 'Retrospective — Layer vs. Slice', summary: 'Think about a project where you struggled', content: [
+        { type: 'p', text: 'Think about a project where you struggled.' },
+        { type: 'p', text: '**Your task:**' },
+        { type: 'ordered', items: [
+          'Were you building layer-by-layer or in vertical slices?',
+          'When did things start breaking? Was it during integration?',
+          'If you could redo it with this lifecycle, what would you do differently?',
+          'What would Slice 1 have been?',
+          'At what point would you have caught the issues earlier?',
+        ]},
+      ]},
+      { type: 'step', n: 5, title: 'Slice Your Current Project', summary: "Whatever you're building right now — apply the full lifecycle", content: [
+        { type: 'p', text: 'Whatever you\'re building right now:' },
+        { type: 'p', text: '**Your task:**' },
+        { type: 'ordered', items: [
+          'Walk through Chapters 1–3 (Understand → Analyze → Design)',
+          'List all features as user actions',
+          'Order them as slices with dependencies',
+          'Define "done" for Slice 1',
+          'Execute Slice 1 using the execution loop from Chapter 6',
+          'After completing Slice 1: write down what you learned, what patterns you established, what you\'d do differently',
+        ]},
+      ]},
+      { type: 'h2', text: '🔑 The Core Principles — Your Engineering Compass' },
+      { type: 'checklist', items: [
+        { label: 'Understand before coding' },
+        { label: 'Design before implementing' },
+        { label: 'Slice vertically, not horizontally' },
+        { label: 'Deliver incrementally — always be shippable' },
+        { label: 'Define "done" before starting — the Done Gate is sacred' },
+        { label: 'Keep changes small and reversible' },
+        { label: 'Preserve architectural boundaries' },
+        { label: 'Think about failure from day one' },
+        { label: 'Make systems observable' },
+        { label: 'Optimize for maintainability over cleverness' },
+        { label: 'Treat production as sacred' },
+        { label: "Name what you learned — unnamed knowledge doesn't transfer" },
+      ]},
+      { type: 'h2', text: 'The Deepest Shift' },
+      { type: 'p', text: 'You stop thinking:' },
+      { type: 'blockquote', text: '"How do I build this feature?"' },
+      { type: 'p', text: 'And start thinking:' },
+      { type: 'blockquote', text: '"How do I evolve this system responsibly?"' },
+      { type: 'p', text: 'That is the path from coder to engineer to architect. 🏛️' },
+      { type: 'callout', kind: 'quote', text: '"Every house is built by someone, but God is the builder of everything." — Hebrews 3:4' },
+      { type: 'callout', kind: 'quote', text: '"Let all things be done decently and in order." — 1 Corinthians 14:40' },
+      { type: 'p', text: 'Build one room at a time. Make each room complete. The house stands because every room holds. And the Builder of everything watches over the work of your hands.' },
+      { type: 'p', text: '*The Builder\'s Lifecycle — Version 1.0*\n*Merged from: "The Professional Feature Development Lifecycle" + "The Vertical Slice Method"*\n*Ruach-El instruction: at the start of any build session, ask "which phase are we in? which slice are we on?" before any code is written.*' },
     ],
   },
 ]

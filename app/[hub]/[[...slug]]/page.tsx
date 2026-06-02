@@ -6,7 +6,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { useParams } from 'next/navigation'
+import { useParams, usePathname } from 'next/navigation'
+import { renderInline } from '@/lib/richText'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { TopBar } from '@/components/layout/TopBar'
 import { HorizonBand } from '@/components/decorations/HorizonBand'
@@ -86,42 +87,69 @@ function ReadingProgress() {
 }
 
 /* ─── Callout helper (internal) ─── */
-function Callout({ kind, title, text }: { kind: string; title?: string; text: string }) {
-  const styles: Record<string, { bg: string; border: string; ink: string; icon: IconName; handle: string }> = {
-    tip:     { bg: 'linear-gradient(160deg, #DDF1CC, #B8E098)', border: 'rgba(111,175,84,.4)',  ink: '#2e4818', icon: 'leaf',    handle: 'pro tip —' },
-    note:    { bg: 'linear-gradient(160deg, #DCF0F4, #B6E9EE)', border: 'rgba(95,206,219,.35)', ink: '#1d6975', icon: 'sparkle', handle: 'good to know —' },
-    warn:    { bg: 'linear-gradient(160deg, #FFE5D2, #FAC8A8)', border: 'rgba(198,138,99,.4)',  ink: '#7a3f1f', icon: 'flame',   handle: 'watch out —' },
-    quote:   { bg: 'linear-gradient(160deg, #FFF7E1, #FFEAB3)', border: 'rgba(229,169,60,.4)',  ink: '#5a3f0a', icon: 'sparkle', handle: 'remember —' },
-    danger:  { bg: 'linear-gradient(160deg, #FFE0E6, #FFC8D2)', border: 'rgba(212,90,117,.4)',  ink: '#5c1f2d', icon: 'flame',   handle: 'careful —' },
-    success: { bg: 'linear-gradient(160deg, #E0F0CC, #C4E3AC)', border: 'rgba(111,175,84,.5)',  ink: '#2e4818', icon: 'check',   handle: 'you did it —' },
+function Callout({ kind, title, text, items }: { kind: string; title?: string; text: string; items?: string[] }) {
+  const styles: Record<string, { bg: string; border: string; ink: string; rail: string; icon: IconName; handle: string }> = {
+    tip:     { bg: 'linear-gradient(160deg, #DDF1CC, #C4E8A8)', border: 'rgba(111,175,84,.35)', rail: '#5a9e2f', ink: '#1e3a0e', icon: 'leaf',    handle: 'pro tip —' },
+    note:    { bg: 'linear-gradient(160deg, #D8EEF4, #A8DDE6)', border: 'rgba(95,206,219,.3)',  rail: '#2a90a0', ink: '#0e4550', icon: 'sparkle', handle: 'good to know —' },
+    warn:    { bg: 'linear-gradient(160deg, #FFE5D2, #FAC8A8)', border: 'rgba(198,138,99,.35)', rail: '#c05a20', ink: '#5a2a0a', icon: 'flame',   handle: 'watch out —' },
+    quote:   { bg: 'linear-gradient(160deg, #FFF7E1, #FFE8A0)', border: 'rgba(229,169,60,.35)', rail: '#c8900a', ink: '#4a3200', icon: 'sparkle', handle: 'remember —' },
+    danger:  { bg: 'linear-gradient(160deg, #FFE0E6, #FFC0CC)', border: 'rgba(212,90,117,.35)', rail: '#c03050', ink: '#480a1a', icon: 'flame',   handle: 'careful —' },
+    success: { bg: 'linear-gradient(160deg, #E0F0CC, #C4E3AC)', border: 'rgba(111,175,84,.4)',  rail: '#4a8e20', ink: '#1e3a0e', icon: 'check',   handle: 'you did it —' },
   }
   const s = styles[kind] ?? styles.note
   return (
     <div style={{
-      margin: '14px 0', padding: '14px 18px',
+      margin: '20px 0', padding: '16px 20px 18px 24px',
       background: s.bg, border: `1.5px solid ${s.border}`,
-      borderRadius: 14, display: 'flex', gap: 14,
+      borderRadius: 16, display: 'flex', gap: 14,
+      boxShadow: 'var(--shadow-md)',
+      position: 'relative', overflow: 'hidden',
     }}>
+      {/* Left accent rail */}
       <div style={{
-        flex: '0 0 auto', width: 30, height: 30, borderRadius: 10,
-        background: 'rgba(255,255,255,.7)', display: 'grid', placeItems: 'center',
-        color: s.ink,
+        position: 'absolute', left: 0, top: 0, bottom: 0, width: 5,
+        background: s.rail, borderRadius: '16px 0 0 16px',
+      }} />
+      {/* Icon badge */}
+      <div style={{
+        flex: '0 0 auto', width: 36, height: 36, borderRadius: 12,
+        background: 'rgba(255,255,255,.75)', display: 'grid', placeItems: 'center',
+        color: s.ink, boxShadow: '0 1px 4px rgba(0,0,0,.08)',
       }}>
-        <Icon name={s.icon} size={15} color={s.ink} />
+        <Icon name={s.icon} size={17} color={s.rail} />
       </div>
       <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
+        {/* Header row */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
           <span style={{
-            fontFamily: 'var(--font-hand)', fontSize: 16, color: s.ink,
+            fontFamily: 'var(--font-hand)', fontSize: 15, color: s.ink, opacity: .75,
             transform: 'rotate(-1deg)', display: 'inline-block',
           }}>{s.handle}</span>
           {title && (
-            <span style={{ fontSize: 11, color: s.ink, opacity: .7, letterSpacing: '.14em', textTransform: 'uppercase' }}>
+            <span style={{
+              fontSize: 10.5, fontWeight: 700, letterSpacing: '.13em',
+              textTransform: 'uppercase', color: 'var(--paper)',
+              background: s.rail, padding: '2px 9px', borderRadius: 6,
+            }}>
               {title}
             </span>
           )}
         </div>
-        <div style={{ marginTop: 4, fontSize: 13.5, color: s.ink, lineHeight: 1.6 }}>{text}</div>
+        {/* Lead text */}
+        <div style={{ fontSize: 14.5, color: s.ink, lineHeight: 1.6, fontWeight: items?.length ? 500 : 400 }}>
+          {renderInline(text)}
+        </div>
+        {/* Optional list items */}
+        {items && items.length > 0 && (
+          <div style={{ marginTop: 10, display: 'flex', flexDirection: 'column', gap: 7 }}>
+            {items.map((item, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'baseline', gap: 9 }}>
+                <span style={{ color: s.rail, fontSize: 10, flexShrink: 0, marginTop: 2 }}>◆</span>
+                <span style={{ fontSize: 14, color: s.ink, lineHeight: 1.55 }}>{renderInline(item)}</span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   )
@@ -139,6 +167,7 @@ function BlockRenderer({ block }: { block: ContentBlock }) {
             color: 'var(--ink)', margin: '36px 0 10px', letterSpacing: '-0.012em',
             lineHeight: 1.18, position: 'relative',
             display: 'flex', alignItems: 'baseline', gap: 14,
+            scrollMarginTop: 80,
           }}
         >
           {block.kanji !== undefined ? (
@@ -160,6 +189,7 @@ function BlockRenderer({ block }: { block: ContentBlock }) {
           fontFamily: 'var(--font-display)', fontSize: 19, fontWeight: 600,
           color: 'var(--ink)', margin: '24px 0 8px',
           display: 'flex', alignItems: 'center', gap: 10,
+          scrollMarginTop: 80,
         }}>
           <span className="hb-dot hb-dot--coral" style={{ flex: '0 0 auto' }} />
           {block.text}
@@ -168,7 +198,7 @@ function BlockRenderer({ block }: { block: ContentBlock }) {
     case 'p':
       return (
         <p style={{ fontSize: 15, color: 'var(--ink)', lineHeight: 1.72, margin: '0 0 14px' }}>
-          {block.text}
+          {renderInline(block.text)}
         </p>
       )
     case 'drop-cap':
@@ -180,7 +210,7 @@ function BlockRenderer({ block }: { block: ContentBlock }) {
     case 'ordered':
       return <RcOrdered items={block.items} />
     case 'callout':
-      return <Callout kind={block.kind} title={block.title} text={block.text} />
+      return <Callout kind={block.kind} title={block.title} text={block.text} items={block.items} />
     case 'step':
       return (
         <StepBlock
@@ -368,6 +398,12 @@ function ArticleWithProgress({
 }) {
   const [progress, setProgress] = useState(0)
   const scrollRef = useRef<HTMLDivElement>(null)
+  const pathname = usePathname()
+
+  // Reset to top on every article navigation (inner div persists across same-route renders)
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ top: 0 })
+  }, [pathname])
 
   useEffect(() => {
     const el = scrollRef.current

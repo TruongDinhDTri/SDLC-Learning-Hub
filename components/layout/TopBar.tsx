@@ -76,7 +76,7 @@ function MobileHamburger() {
 
 export function TopBar({ breadcrumb = [], actions, onToggleSidebar, sidebarOpen = true, onToggleToc, tocOpen = true }: TopBarProps) {
   return (
-    <div style={{
+    <div className="hanami-topbar" style={{
       height: 60,
       display: 'flex',
       alignItems: 'center',
